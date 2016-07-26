@@ -1569,7 +1569,16 @@ function convertWxName($text) {
 function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
-    $this->log(json_encode($_GET),LOG_AUTH);
+
+    $log = [
+        "index" => "wx_create_user",
+        "type" => "create_user",
+        "msg" => $_GET,
+        "server" => $_SERVER
+    ];
+
+    add_logs_to_es($log);
+
     $frid = intval($_GET['frid']) ? intval($_GET['frid']) : 0;
     if (!empty($userInfo['headimgurl'])) {
         $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);
