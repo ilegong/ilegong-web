@@ -16,7 +16,7 @@
                     <img ng-src="&#123;&#123;image&#125;&#125;"/>
                     <span class="delete-btn" ng-click='vm.deleteImage(image)'>—</span>
                 </a>
-                <a ng-click="vm.chooseAndUploadImage()" ng-show="vm.candidate.images.length < 10">
+                <a ng-click="vm.chooseAndUploadImage()" ng-show="vm.candidate.images.length < 9">
                     <img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/>
                 </a>
             </li>

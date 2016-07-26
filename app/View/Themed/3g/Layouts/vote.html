@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/vote.css?v0.0.11" />
+    <link rel="stylesheet" type="text/css" href="/css/vote.css?v0.1.0" />
 </head>
 <body style="background-color: #F5F5F5">
 {{if !noFlash }}
@@ -75,6 +75,21 @@
         signature: wx_jssdk_signature,
         jsApiList: jsApiList
     });
+    wx.ready(function () {
+        wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: '我正在参加亲子联盟@新西兰之旅分享会，快来帮我点赞助力吧！！！',
+            link: to_friend_link,
+//            imgUrl: imgUrl,
+            success: function () {}
+        });
+        wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+//            imgUrl: imgUrl,
+            success: function () {}
+        });
+    });
 </script>
 {{/if}}
 <script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
@@ -83,7 +98,7 @@
 <script type="text/javascript" src="http://cdn.bootcss.com/angular-touch/1.5.6/angular-touch.min.js"></script>
 <script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.5.15"></script>
-<script src="{{$STATIC_HOST}}/static/weshares/js/vote.min.js?v0.0.11"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/vote.min.js?v0.1.0"></script>
 
 {{$this->fetch('scriptBottom')}}
 </body>

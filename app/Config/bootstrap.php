@@ -1569,7 +1569,7 @@ function convertWxName($text) {
 function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
-    error_log(json_encode($_GET).PHP_EOL,3,'/tmp/create.log');
+    $this->log(json_encode($_GET),LOG_AUTH);
     $frid = intval($_GET['frid']) ? intval($_GET['frid']) : 0;
     if (!empty($userInfo['headimgurl'])) {
         $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);
@@ -1601,7 +1601,25 @@ function createNewUserByWeixin($userInfo, $userModel) {
     ) {
         return 0;
     }
-    return $userModel->getLastInsertID();
+    $insertId = $userModel->getLastInsertID();
+
+    if($insertId && $frid)
+    {
+        if (empty($sharer_id) || empty($user_id)) {
+            return 0;
+        }
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $userSubLog = ClassRegistry::init('UserSubLog');
+        $has_relation = $userRelationM->hasAny(['user_id' => $frid, 'follow_id' => $insertId]);
+        if (!$has_relation) {
+            $userRelationM->saveAll(array('user_id' => $frid, 'follow_id' => $insertId, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'),'is_own' => 1));
+        } else {
+            $userRelationM->updateAll(array('deleted' => DELETED_NO), array('user_id' => $frid, 'follow_id' => $insertId));
+        }
+        $userSubLog->save(['user_id' => $frid, 'follow_id' => $insertId, 'type' => USER_SUB_LOG_TYPE, 'created' => date('Y-m-d H:i:s')]);
+    }
+
+    return $insertId;
 }
 
 
