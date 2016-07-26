@@ -77,16 +77,16 @@
     });
     wx.ready(function () {
         wx.onMenuShareAppMessage({
-            title: to_friend_title,
-            desc: '我正在参加亲子联盟@新西兰之旅分享会，快来帮我点赞助力吧！！！',
-            link: to_friend_link,
-//            imgUrl: imgUrl,
+            title: "{{$weixin_share_title}}",
+            desc: "{{$weixin_share_desc}}",
+            link: document.location.toString(),
+            imgUrl: "{{$weixin_share_image}}",
             success: function () {}
         });
         wx.onMenuShareTimeline({
-            title: to_timeline_title,
-            link: to_timeline_link,
-//            imgUrl: imgUrl,
+            title: title,
+            link: document.location.toString(),
+            imgUrl: "{{$weixin_share_image}}",
             success: function () {}
         });
     });

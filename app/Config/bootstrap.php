@@ -1561,6 +1561,12 @@ function convertWxName($text) {
     return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
 }
 
+function get_frid_from_request_uri(){
+    $str = urldecode($_SERVER['REQUEST_URI']);
+    preg_match("/frid=(\d*)/",$str , $res);
+    return $res[1] ? $res[1] : 0;
+}
+
 /**
  * @param $userInfo
  * @param $userModel
@@ -1569,8 +1575,17 @@ function convertWxName($text) {
 function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
-    $this->log(json_encode($_GET),LOG_AUTH);
-    $frid = intval($_GET['frid']) ? intval($_GET['frid']) : 0;
+
+    $log = [
+        "index" => "wx_create_user",
+        "type" => "create_user",
+        "msg" => $_GET,
+        "server" => $_SERVER
+    ];
+
+    add_logs_to_es($log);
+
+    $frid = get_frid_from_request_uri();
     if (!empty($userInfo['headimgurl'])) {
         $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);
         $download_url = $ali_avatar;

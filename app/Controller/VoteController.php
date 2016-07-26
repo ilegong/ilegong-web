@@ -93,6 +93,22 @@ class VoteController extends AppController {
         $this->set('candidators_users', $candidators_users);
         $this->set('event_available', $this->check_event_is_available($event_info));
         $this->set_wx_data($uid, $eventId);
+
+        if($is_sign_up){
+            $candidate_info = $this->Candidate->find('first', array(
+                'conditions' => array(
+                    'user_id' => $uid,
+                )
+            ));
+            $this->set('weixin_share_title', '我是第' . $candidate_info['Candidate']['id'] . '号' . $candidate_info['Candidate']['title'] . '，叔叔阿姨快来支持我一票啦');
+            $this->set('weixin_share_desc', '我正在参加亲子联盟@新西兰之旅分享会，快来帮我点赞助力吧！！！');
+        }
+        else{
+            $this->set('weixin_share_title', '我正在参加亲子联盟@新西兰之旅分享会，叔叔阿姨快来支持我一票啦');
+            $this->set('weixin_share_desc', '快来帮我点赞助力吧！！！');
+        }
+        $currentVoteConfig = $this->VoteSetting->getVoteConfig($this->eventId);
+        $this->set('weixin_share_image', $currentVoteConfig['common_params']['banner']);
     }
 
     private function save_sub_reason($candidateId, $eventId, $uid) {
@@ -202,6 +218,11 @@ class VoteController extends AppController {
         }
         $this->set_wx_data($uid, $eventId);
         $this->set('op_cate', 'sign_up');
+        $this->pageDesc = $this->VoteSetting->getVoteTitle($eventId);
+        $this->set('weixin_share_title', '我正在参加亲子联盟@新西兰之旅分享会，你也来参加吧！');
+        $this->set('weixin_share_desc', '这里有好看的好玩的哦！');
+        $currentVoteConfig = $this->VoteSetting->getVoteConfig($this->eventId);
+        $this->set('weixin_share_image', $currentVoteConfig['common_params']['banner']);
     }
 
     /**
@@ -255,6 +276,7 @@ class VoteController extends AppController {
      * 萌宝详情
      */
     public function candidate_detail($candidateId, $eventId) {
+        $this->layout = 'vote';
         $this->eventId = $eventId;
         $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         $uid = $this->currentUser['id'];
@@ -294,6 +316,10 @@ class VoteController extends AppController {
         $this->set('candidate_info', $candidate_info);
         $this->set('share_baby_info', true);
         $this->set('weixin_share_title', '我是第' . $candidateId . '号' . $candidate_info['Candidate']['title'] . '，叔叔阿姨快来支持我一票啦');
+        $this->set('weixin_share_desc', '我正在参加亲子联盟@新西兰之旅分享会，快来帮我点赞助力吧！！！');
+        if(count($images) > 0) {
+            $this->set('weixin_share_image', $images[0]);
+        }
         $this->set_wx_data($this->currentUser['id'], $eventId);
         $this->pageTitle = '我是' . $candidateId . '号,' . $candidate_info['Candidate']['title'];
         $this->set('event_available', $this->check_event_is_available($event_info));
