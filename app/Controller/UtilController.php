@@ -402,6 +402,7 @@ class UtilController extends AppController {
             $this->redirect('/weshares/pay/' . $order['Order']['id'] . '/0.html');
             return;
         } catch (Exception $e) {
+            $this->log('scan qr code gen order exception '.$e->getMessage());
             $dataSource->rollback();
         }
         $this->redirect('/weshares/view/' . $shareId . '.html');
