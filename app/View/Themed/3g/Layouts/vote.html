@@ -80,13 +80,13 @@
             title: "{{$weixin_share_title}}",
             desc: "{{$weixin_share_desc}}",
             link: document.location.toString(),
-//            imgUrl: imgUrl,
+            imgUrl: "{{$weixin_share_image}}",
             success: function () {}
         });
         wx.onMenuShareTimeline({
             title: title,
             link: document.location.toString(),
-//            imgUrl: imgUrl,
+            imgUrl: "{{$weixin_share_image}}",
             success: function () {}
         });
     });
