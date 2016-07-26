@@ -149,6 +149,14 @@ class WeixinController extends Controller {
                             $this->log('扫码支付跳转关注-2, uid' . $uid, LOG_INFO);
                             exit;
                         }
+                        if ($ticket == YLB_QR_CODE_SCENE_ID) {
+                            $this->log('易拉宝扫码关注, uid' . $uid . ' scene id ' . $ticket, LOG_INFO);
+                            exit;
+                        }
+                        if ($ticket == XCY_QR_CODE_SCENE_ID) {
+                            $this->log('宣传页扫码关注, uid' . $uid . ' scene id ' . $ticket, LOG_INFO);
+                            exit;
+                        }
                     }
                 } else if (strtoupper($req['Event']) == 'TEMPLATESENDJOBFINISH') {
                     if (strpos($req['Status'], 'failed')) {
