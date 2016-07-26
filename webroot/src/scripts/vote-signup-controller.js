@@ -103,14 +103,12 @@
               }
               vm.candidate.images.push(imageUrl);
             }).error(function (data) {
-              alert(res);
             });
             if (i < localIds.length) {
               upload(i+1);
             }
           },
           fail: function (res) {
-            alert(res);
             if (i < localIds.length) {
               upload(i+1);
             }
