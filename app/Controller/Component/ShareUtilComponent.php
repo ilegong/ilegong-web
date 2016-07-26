@@ -397,13 +397,7 @@ class ShareUtilComponent extends Component
                     'id' => $id
                 )
             ));
-            //proxy user buy
-            //todo remove it
-            if ($rebateTrackLog['RebateTrackLog']['type'] == PROXY_USER_PAID_REBATE_TYPE) {
-                $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\''), array('id' => $id, 'order_id' => $order_id));
-                return array('rebate_money' => $rebateTrackLog['RebateTrackLog']['rebate_money'], 'order_price' => $order['Order']['total_all_price'], 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
-            }
-
+            
             $ship_fee = $order['Order']['ship_fee'];
             $total_price = $order['Order']['total_all_price'];
             $ship_fee = round($ship_fee / 100, 2);
