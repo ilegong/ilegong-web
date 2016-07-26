@@ -339,7 +339,6 @@ class UtilController extends AppController {
             }else{
                 $this->redirect('/weshares/view/' . $shareId . '.html');
             }
-            return;
         }
         $this->loadModel('WeshareProduct');
         $this->loadModel('Weshare');
