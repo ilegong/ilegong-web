@@ -292,6 +292,7 @@ class ShareController extends AppController
             $order_total_price = $item['Order']['total_all_price'];
             $order_ship_fee = $item['Order']['ship_fee'];
             $order_coupon_total = $item['Order']['coupon_total'];
+            $order_rebate_total = $item['Order']['applied_rebate'];
             $order_product_price = $item['Order']['total_price'];
             if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
                 $refund_order_ids[] = $item['Order']['id'];
@@ -301,11 +302,12 @@ class ShareController extends AppController
                 $refund_orders[$member_id][] = $item;
             }
             if (!isset($summery_data[$member_id])) {
-                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
+                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0, 'use_rebate_total' => 0);
             }
             $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
             $summery_data[$member_id]['ship_fee'] = $summery_data[$member_id]['ship_fee'] + $order_ship_fee;
             $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
+            $summery_data[$member_id]['use_rebate_total'] = $summery_data[$member_id]['use_rebate_total'] + $order_rebate_total;
             $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
         }
         $refund_logs = $this->RefundLog->find('all', array(
@@ -439,6 +441,7 @@ class ShareController extends AppController
             $creator = $item['creator'];
             $refund_fee = floatval($weshare_refund_map[$share_id]);
             $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total'] / 100), 2);
+            $use_rebate_fee = round(floatval($weshare_summery[$share_id]['use_rebate_total'] / 100), 2);
             $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
             $rebate_fee = empty($weshare_rebate_map[$share_id]['rebate_money']) ? 0 : $weshare_rebate_map[$share_id]['rebate_money'];
             $proxy_rebate_fee = empty($weshare_proxy_rebate_map[$share_id]['rebate_money']) ? 0 : $weshare_proxy_rebate_map[$share_id]['rebate_money'];
@@ -449,7 +452,7 @@ class ShareController extends AppController
                 $current_share_repaid_money = 0;
             }
             $status = $item['settlement'] == 1 ? 1 : 0;
-            $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money;
+            $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money + $use_rebate_fee;
             $weshare_type = $item['type'];
             $type = 1;
             if ($weshare_type == 6) {
@@ -463,6 +466,7 @@ class ShareController extends AppController
                 'ship_fee' => $ship_fee,//快递费用
                 'refund_fee' => $refund_fee,//退款费用
                 'coupon_fee' => $coupon_fee,//优惠券费用
+                'use_rebate_fee' => $use_rebate_fee, //使用余额
                 'origin_total_fee' => $product_fee,//产品费用
                 'rebate_fee' => $rebate_fee,//返利费用
                 'total_fee' => $total_fee,//总费用

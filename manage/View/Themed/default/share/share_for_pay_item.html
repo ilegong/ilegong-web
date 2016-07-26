@@ -19,7 +19,8 @@
         }
     ?>
     <td style="color: blue">{{floatval($weshare_summery[$current_share_item['id']]['total_price'])}}</td>
-    <td style="color: #ff0000">{{floatval($weshare_summery[$current_share_item['id']]['total_price']) - floatval($weshare_refund_map[$current_share_item['id']]) - floatval($weshare_rebate_map[$current_share_item['id']])+$current_share_repaid_money}}</td>
+    <td style="color: blue">{{round(floatval($weshare_summery[$current_share_item['id']]['use_rebate_total']/100),2)}}</td>
+    <td style="color: #ff0000">{{floatval($weshare_summery[$current_share_item['id']]['total_price']) - floatval($weshare_refund_map[$current_share_item['id']]) - floatval($weshare_rebate_map[$current_share_item['id']])+$current_share_repaid_money+round(floatval($weshare_summery[$current_share_item['id']]['use_rebate_total']/100),2)}}</td>
     <td>{{floatval($weshare_summery[$current_share_item['id']]['product_total_price'])}}</td>
     <td>{{round(floatval($weshare_summery[$current_share_item['id']]['ship_fee']/100),2)}}</td>
     <td>{{round(floatval($weshare_summery[$current_share_item['id']]['coupon_total']/100),2)}}</td>
