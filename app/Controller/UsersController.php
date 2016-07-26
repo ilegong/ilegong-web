@@ -947,8 +947,9 @@ class UsersController extends AppController
                             }
                         }
                         if ($redi) {
-                            error_log('=====wx_oauth_'.PHP_EOL , 3 ,'/tmp/oauth.log');
-                            error_log(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO).PHP_EOL , 3 ,'/tmp/oauth.log');
+                            $this->log('=====wx_oauth_',LOG_AUTH);
+                            $this->log(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO),LOG_AUTH);
+
                             $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
                         }
                     }
