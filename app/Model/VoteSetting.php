@@ -59,11 +59,11 @@ class VoteSetting extends AppModel{
             'wx_params' => array(
                 'time_line_title' => '亲子联盟·新西兰之旅分享会',
                 'chat_title' => '亲子联盟·新西兰之旅分享会',
-                'share_pic' => 'http://static.tongshijia.com/static/img/vote/vote_11_banner.jpg?v2',
+                'share_pic' => 'http://static.tongshijia.com/static/img/vote/vote_11_banner.jpg?v3',
                 'desc' => '记录下最美的一瞬间...如梦如幻的世界，带上你的宝贝，你也可以当一回摄影大师!',
             ),
             'common_params' => array(
-                'banner' => 'http://static.tongshijia.com/static/img/vote/vote_11_banner.jpg?v2',
+                'banner' => 'http://static.tongshijia.com/static/img/vote/vote_11_banner.jpg?v3',
                 'prize_pic' => 'http://static.tongshijia.com/images/index/8920d130-f58b-11e5-8c9e-00163e1600b6.jpg?v1',
                 'server_reply_title' => '亲子联盟·新西兰之旅分享会',
                 'server_reply_img' => 'http://static.tongshijia.com/static/img/vote/vote_9_banner.jpg?v1',
