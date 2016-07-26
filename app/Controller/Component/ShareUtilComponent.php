@@ -605,13 +605,19 @@ class ShareUtilComponent extends Component
     }
 
     /**
-     * @param $order
      * save user use rebate log
      */
-    public function add_use_rebate_log($order)
+    public function add_use_rebate_log($order_id)
     {
+        $orderM = ClassRegistry::init('Order');
+        $order = $orderM->find('first', [
+            'conditions' => [
+                'id' => $order_id
+            ],
+            'fields' => ['id', 'creator', 'applied_rebate']
+        ]);
         $rebate = $order['Order']['applied_rebate'];
-        if($rebate > 0){
+        if ($rebate > 0) {
             $uid = $order['Order']['creator'];
             $order_id = $order['Order']['id'];
             $userM = ClassRegistry::init('User');
