@@ -86,7 +86,7 @@
           vm.uploadImage(res.localIds);
         },
         fail: function (res) {
-          vm.messages.push({name: 'choose image failed', detail: res});
+          alert('choose: ' + res);
         }
       });
     }
@@ -104,12 +104,14 @@
               }
               vm.candidate.images.push(imageUrl);
             }).error(function (data) {
+              alert('download: ' + res);
             });
             if (i < localIds.length) {
               upload(i+1);
             }
           },
           fail: function (res) {
+            alert('upload: ' + res);
             if (i < localIds.length) {
               upload(i+1);
             }
