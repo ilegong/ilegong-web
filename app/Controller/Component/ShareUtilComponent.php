@@ -605,6 +605,7 @@ class ShareUtilComponent extends Component
     }
 
     /**
+     * @param $order_id
      * save user use rebate log
      */
     public function add_use_rebate_log($order_id)
