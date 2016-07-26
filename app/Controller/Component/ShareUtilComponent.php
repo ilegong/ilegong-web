@@ -610,16 +610,14 @@ class ShareUtilComponent extends Component
      */
     public function add_use_rebate_log($order)
     {
-        if ($order['Order']['status'] == ORDER_STATUS_PAID) {
-            $rebate = $order['Order']['applied_rebate'];
-            if($rebate > 0){
-                $uid = $order['Order']['creator'];
-                $order_id = $order['Order']['id'];
-                $userM = ClassRegistry::init('User');
-                $rebateLogM = ClassRegistry::init('RebateLog');
-                $rebateLogM->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
-                $userM->add_rebate_money($uid, -$rebate);
-            }
+        $rebate = $order['Order']['applied_rebate'];
+        if($rebate > 0){
+            $uid = $order['Order']['creator'];
+            $order_id = $order['Order']['id'];
+            $userM = ClassRegistry::init('User');
+            $rebateLogM = ClassRegistry::init('RebateLog');
+            $rebateLogM->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
+            $userM->add_rebate_money($uid, -$rebate);
         }
     }
 
