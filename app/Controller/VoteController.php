@@ -272,6 +272,7 @@ class VoteController extends AppController {
      * 萌宝详情
      */
     public function candidate_detail($candidateId, $eventId) {
+        $this->layout = 'vote';
         $this->eventId = $eventId;
         $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         $uid = $this->currentUser['id'];
