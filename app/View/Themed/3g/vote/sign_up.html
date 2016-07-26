@@ -12,8 +12,8 @@
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">上传照片&nbsp;&nbsp;&nbsp;</li>
             <li class="images fl" style="width: 75%;">
-                <a href="#X" class="image" ng-repeat="image in vm.candidate.images">
-                    <img ng-src="&#123;&#123;image&#125;&#125;"/>
+                <a href="#X" class="image" ng-repeat="image in vm.candidate.images" ng-click="vm.viewImage(image)">
+                    <img ng-src="&#123;&#123;vm.thumbImage(image)&#125;&#125;"/>
                     <span class="delete-btn" ng-click='vm.deleteImage(image)'>—</span>
                 </a>
                 <a ng-click="vm.chooseAndUploadImage()" ng-show="vm.candidate.images.length < 10">

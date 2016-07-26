@@ -337,6 +337,10 @@ const USER_REBATE_MONEY_GOT = 1;
 
 const USER_REBATE_MONEY_USE = 2;
 
+
+const YLB_QR_CODE_SCENE_ID="y20160726"; //易拉宝二维码标示
+const XCY_QR_CODE_SCENE_ID="x20160726"; //宣传页二维码标示  
+
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);
@@ -1565,6 +1569,7 @@ function convertWxName($text) {
 function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
+    error_log(json_encode($_GET).PHP_EOL,3,'/tmp/create.log');
     $frid = intval($_GET['frid']) ? intval($_GET['frid']) : 0;
     if (!empty($userInfo['headimgurl'])) {
         $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);

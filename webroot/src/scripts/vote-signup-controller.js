@@ -8,6 +8,8 @@
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
+    vm.thumbImage = thumbImage;
+    vm.viewImage = viewImage;
     active();
     function active() {
       vm.candidate = {
@@ -90,14 +92,11 @@
     }
 
     function uploadImage(localIds) {
-      var i = 0, len = localIds.length;
-
-      function upload() {
+      function upload(i) {
         wx.uploadImage({
           localId: localIds[i],
           isShowProgressTips: 1,
           success: function (res) {
-            i++;
             $http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
               var imageUrl = data['download_url'];
               if (!imageUrl || imageUrl == 'false') {
@@ -106,20 +105,35 @@
               vm.candidate.images.push(imageUrl);
             }).error(function (data) {
             });
-            if (i < len) {
-              upload();
+            if (i < localIds.length) {
+              upload(i+1);
             }
           },
           fail: function (res) {
+            if (i < localIds.length) {
+              upload(i+1);
+            }
           }
         });
       }
 
-      upload();
+      if(localIds.length > 0){
+        upload(0);
+      }
     }
 
     function deleteImage(image) {
       vm.candidate.images = _.without(vm.candidate.images, image);
+    }
+
+    function thumbImage(image){
+      return image.replace('images/', 'images/s/');
+    }
+    function viewImage(imageUrl) {
+      wx.previewImage({
+        current: imageUrl,
+        urls: vm.candidate.images
+      });
     }
   }
 })(window, window.angular, window.wx);

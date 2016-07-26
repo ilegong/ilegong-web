@@ -42,6 +42,13 @@ class UtilController extends AppController {
         exit();
     }
 
+    public function create_qr_code_by_scene_id($sceneId){
+        $this->loadModel('WxOauth');
+        $result = $this->WxOauth->create_qrcode_by_sceneid($sceneId);
+        echo json_encode($result);
+        exit;
+    }
+
     /**
      * @param $user_id
      * @return array
