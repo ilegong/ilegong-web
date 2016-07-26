@@ -292,6 +292,11 @@ class UtilController extends AppController {
         return;
     }
 
+    /**
+     * @param $shareOfferId
+     * @param $share_id
+     * 手工发红包
+     */
     public function manual_send_coupon($shareOfferId, $share_id){
         $this->autoRender=false;
         $uids = $this->WeshareBuy->get_has_buy_user($share_id);
@@ -306,19 +311,99 @@ class UtilController extends AppController {
      *
      * 迁移写死的一些 用户权限配置数据
      */
-    public function transfer_share_operate_settings() {
-        $this->autoRender = false;
-        $shareUserBindM = ClassRegistry::init('ShareUserBind');
-        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
-        $allShareUserBindDatas = $shareUserBindM->getAllShareUserBind();
-        $saveData = array();
-        foreach ($allShareUserBindDatas as $shareId => $userIds) {
-            foreach ($userIds as $uid) {
-                $saveData[] = array('data_type' => SHARE_ORDER_OPERATE_TYPE, 'data_id' => $shareId, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE, 'scope_id' => $shareId, 'user' => $uid);
+//    public function transfer_share_operate_settings() {
+//        $this->autoRender = false;
+//        $shareUserBindM = ClassRegistry::init('ShareUserBind');
+//        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+//        $allShareUserBindDatas = $shareUserBindM->getAllShareUserBind();
+//        $saveData = array();
+//        foreach ($allShareUserBindDatas as $shareId => $userIds) {
+//            foreach ($userIds as $uid) {
+//                $saveData[] = array('data_type' => SHARE_ORDER_OPERATE_TYPE, 'data_id' => $shareId, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE, 'scope_id' => $shareId, 'user' => $uid);
+//            }
+//        }
+//        $shareOperateSettingM->saveAll($saveData);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
+
+
+
+    public function scan_qr_code_make_order($shareId){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            if ($this->is_weixin()) {
+                if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+                    $this->redirect($this->login_link());
+                }
+            }else{
+                $this->redirect('/weshares/view/' . $shareId . '.html');
             }
+            return;
         }
-        $shareOperateSettingM->saveAll($saveData);
-        echo json_encode(array('success' => true));
-        return;
+        $this->loadModel('WeshareProduct');
+        $this->loadModel('Weshare');
+        $this->loadModel('WeshareAddress');
+        $this->loadModel('Cart');
+        $this->loadModel('Order');
+        $dataSource = $this->Order->getDataSource();
+        $dataSource->begin();
+        try {
+            $weshare = $this->Weshare->find('first', [
+                'conditions' => [
+                    'id' => $shareId
+                ]
+            ]);
+            $product = $this->WeshareProduct->find('first', [
+                'conditions' => [
+                    'weshare_id' => $shareId,
+                    'delete' => DELETED_NO
+                ]
+            ]);
+            $address = $this->WeshareAddress->find('first', [
+                'conditions' => [
+                    'weshare_id' => $shareId,
+                    'deleted' => DELETED_NO
+                ]
+            ]);
+            $date_now = date('Y-m-d H:i:s');
+            $order_price = number_format($product['WeshareProduct']['price'] / 100, 2, '.', '');
+            $order = [
+                'creator' => $uid,
+                'consignee_address' => $address['WeshareAddress']['address'],
+                'member_id' => $shareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'created' => $date_now,
+                'updated' => $date_now,
+                'consignee_id' => $address['WeshareAddress']['id'],
+                'consignee_name' => $this->currentUser['nickname'],
+                'consignee_mobilephone' => $address['WeshareAddress']['phone'],
+                'total_all_price' => $order_price,
+                'total_price' => $order_price,
+                'brand_id' => $weshare['Weshare']['creator'],
+                'status' => ORDER_STATUS_WAITING_PAY,
+                'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG
+            ];
+            $order = $this->Order->save($order);
+            $cart = [
+                'name' => $product['WeshareProduct']['name'],
+                'num' => 1,
+                'price' => $product['WeshareProduct']['price'],
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'product_id' => $product['WeshareProduct']['id'],
+                'created' => $date_now,
+                'updated' => $date_now,
+                'creator' => $uid,
+                'order_id' => $order['Order']['id'],
+                'tuan_buy_id' => $shareId
+            ];
+            $this->Cart->save($cart);
+            $dataSource->commit();
+            $this->redirect('/weshares/pay/' . $order['Order']['id'] . '/0.html');
+            return;
+        } catch (Exception $e) {
+            $dataSource->rollback();
+        }
+        $this->redirect('/weshares/view/' . $shareId . '.html');
     }
 }
