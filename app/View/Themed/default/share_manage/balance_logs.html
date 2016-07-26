@@ -96,6 +96,7 @@
                             <th>团长<br/>优惠</th>
                             <th>退款<br/>金额</th>
                             <th>推广<br/>佣金</th>
+                            <th>余额<br/>支付</th>
                             <th>交易<br/>金额</th>
                             <th>平台<br/>佣金</th>
                             <th>结算<br/>金额</th>
@@ -159,6 +160,9 @@
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: red;">
                                 {{$weshare_item['BalanceLog']['rebate_fee']}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: #0000ff;">
+                                {{$weshare_item['BalanceLog']['use_rebate_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: #000088;">
                                 {{$weshare_item['BalanceLog']['transaction_fee']}}
