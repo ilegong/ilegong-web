@@ -1576,15 +1576,6 @@ function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
 
-    $log = [
-        "index" => "wx_create_user",
-        "type" => "create_user",
-        "msg" => $_GET,
-        "server" => $_SERVER
-    ];
-
-    add_logs_to_es($log);
-
     $frid = get_frid_from_request_uri();
     if (!empty($userInfo['headimgurl'])) {
         $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);
@@ -1620,9 +1611,6 @@ function createNewUserByWeixin($userInfo, $userModel) {
 
     if($insertId && $frid)
     {
-        if (empty($sharer_id) || empty($user_id)) {
-            return 0;
-        }
         $userRelationM = ClassRegistry::init('UserRelation');
         $userSubLog = ClassRegistry::init('UserSubLog');
         $has_relation = $userRelationM->hasAny(['user_id' => $frid, 'follow_id' => $insertId]);
