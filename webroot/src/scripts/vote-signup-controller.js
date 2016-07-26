@@ -85,7 +85,7 @@
           vm.uploadImage(res.localIds);
         },
         fail: function (res) {
-          alert('choose: ' + res);
+          alert('选择照片错误，请重试');
         }
       });
     }
@@ -103,14 +103,14 @@
               }
               vm.candidate.images.push(imageUrl);
             }).error(function (data) {
-              alert('download: ' + res);
+              alert(res);
             });
             if (i < localIds.length) {
               upload(i+1);
             }
           },
           fail: function (res) {
-            alert('upload: ' + res);
+            alert(res);
             if (i < localIds.length) {
               upload(i+1);
             }
