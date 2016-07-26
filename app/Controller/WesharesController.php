@@ -746,6 +746,7 @@ class WesharesController extends AppController
      * @param $order_id
      * @param $uid
      * 使用余额
+     * 还没有真正减去用户余额，用户使用之后减去
      */
     private function use_rebate_money($order_id, $uid)
     {
