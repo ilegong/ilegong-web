@@ -1191,6 +1191,9 @@
             vm.consignee = data['consignee'];
             vm.myCoupons = data['my_coupons'];
             vm.rebateTotal = parseInt(data['user_rebate_total']);
+            if(vm.rebateTotal > 0){
+                vm.useRebate = 1;
+            }
             vm.weshareSettings = data['weshare_ship_settings'];
             if(data['sub_status']){
                 $rootScope.proxies.push(parseInt(vm.weshare.creator.id));
