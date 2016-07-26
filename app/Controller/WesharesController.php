@@ -688,6 +688,7 @@ class WesharesController extends AppController
                     $this->order_use_coupon($coupon_id, $orderId, $uid);
                 }
                 $useRebate = $postDataArray['useRebate'];
+                //余额
                 if($useRebate == 1){
                     $this->use_rebate_money($orderId, $uid);
                 }

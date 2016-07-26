@@ -20,7 +20,7 @@
                 return '您推荐的' + data['nickname'] + '报名了[' + data['title'] + ']';
             }
             if(data['reason'] == 2){
-
+                return '您报名了[' + data['title'] + ']';
             }
         }
 
