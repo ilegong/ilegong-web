@@ -1620,9 +1620,6 @@ function createNewUserByWeixin($userInfo, $userModel) {
 
     if($insertId && $frid)
     {
-        if (empty($sharer_id) || empty($user_id)) {
-            return 0;
-        }
         $userRelationM = ClassRegistry::init('UserRelation');
         $userSubLog = ClassRegistry::init('UserSubLog');
         $has_relation = $userRelationM->hasAny(['user_id' => $frid, 'follow_id' => $insertId]);
