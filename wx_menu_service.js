@@ -21,7 +21,7 @@
           {
             "type":"view",
             "name":"团长加入指南",
-            "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400858287&idx=1&sn=5f0049e7a0d2f9387cbb1ef9188ee079&scene=1"
+            "url":"https://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=2662456048&idx=1&sn=65cffecb4f3f36b453b8911187be4bfe"
           },
           {
             "type":"view",
