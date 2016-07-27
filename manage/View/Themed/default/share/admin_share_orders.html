@@ -179,7 +179,7 @@
                 {{if $all_users[$current_order['creator']]['own_id'] == $current_share_creator['id']}}
                     <td class="warning">{{$current_order['creator']}}<br/>
                         {{$all_users[$current_order['creator']]['nickname']}}<br/>
-                        自有粉丝
+                        <span style="color:red;">自有粉丝</span>
                     </td>
                 {{else}}
                     <td>{{$current_order['creator']}}<br/>
