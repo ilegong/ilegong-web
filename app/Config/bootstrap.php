@@ -1572,7 +1572,7 @@ function get_frid_from_request_uri(){
  * @param $userModel
  * @return int if created failed return 0
  */
-function createNewUserByWeixin($userInfo, $userModel) {
+function createNewUserByWeixin($userInfo, $userModel,$weshareBuyComponent = null) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
 
@@ -1618,6 +1618,9 @@ function createNewUserByWeixin($userInfo, $userModel) {
             $userRelationM->saveAll(array('user_id' => $frid, 'follow_id' => $insertId, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'),'is_own' => 1));
         } else {
             $userRelationM->updateAll(array('deleted' => DELETED_NO), array('user_id' => $frid, 'follow_id' => $insertId));
+        }
+        if($weshareBuyComponent){
+            $weshareBuyComponent->subscribe_sharer($frid,$insertId);
         }
         $userSubLog->save(['user_id' => $frid, 'follow_id' => $insertId, 'type' => USER_SUB_LOG_TYPE, 'created' => date('Y-m-d H:i:s')]);
     }
