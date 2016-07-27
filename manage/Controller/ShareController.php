@@ -853,7 +853,7 @@ class ShareController extends AppController
                 'conditions' => array(
                     'id' => $allUserIds
                 ),
-                'fields' => array('id', 'nickname', 'mobilephone')
+                'fields' => array('id', 'nickname', 'mobilephone', 'own_id')
             ));
             $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
             $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
