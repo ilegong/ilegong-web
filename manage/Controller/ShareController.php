@@ -1275,8 +1275,8 @@ class ShareController extends AppController
             if ($start_date == $end_date) {
                 $cond['DATE(created)'] = $query_date;
             } else {
-                $cond['DATE(created) >='] = $start_date;
-                $cond['DATE(created) <='] = $end_date;
+                $cond['DATE(created) >'] = $start_date;
+                $cond['DATE(created) <'] = $end_date;
             }
         }
         $order_status = $_REQUEST['order_status'];
@@ -1286,15 +1286,15 @@ class ShareController extends AppController
             $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_REFUND);
         }
         $order_flag = $_REQUEST['order_from_flag'];
-        if ($order_flag != -1) {
+        if ($order_flag != -1 && !empty($order_flag)) {
             $cond['flag'] = $order_flag;
         }
-        $order_repaid_status = $_REQUEST['order_prepaid_status'];
-        if ($order_repaid_status != 0) {
-            $cond['process_prepaid_status'] = array($order_repaid_status);
-        } else {
-            $cond['process_prepaid_status'] = array(0, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
-        }
+//        $order_repaid_status = $_REQUEST['order_prepaid_status'];
+//        if ($order_repaid_status != 0) {
+//            $cond['process_prepaid_status'] = array($order_repaid_status);
+//        } else {
+//            $cond['process_prepaid_status'] = array(0, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
+//        }
         $order_query_condition = array(
             'conditions' => $cond,
             'order' => array('created DESC'));
@@ -1304,7 +1304,7 @@ class ShareController extends AppController
         $this->handle_query_orders($order_query_condition);
         $this->set('start_date', $_REQUEST['start_date']);
         $this->set('end_date', $_REQUEST['end_date']);
-        $this->set('order_prepaid_status', $order_repaid_status);
+        //$this->set('order_prepaid_status', $order_repaid_status);
         $this->set('share_id', $query_share_id);
         $this->set('order_status', $order_status);
         $this->set('order_id', $request_order_id);

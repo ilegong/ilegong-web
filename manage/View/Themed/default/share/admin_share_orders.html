@@ -98,7 +98,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="order_prepaid_status">订单来源</label>
+                <label>订单来源</label>
                 <select class="form-control" id="order_from_flag" name="order_from_flag" value="{{$order_from_flag}}">
                     <option value="-1">全部</option>
                     <option value="0">直接购买</option>
@@ -114,17 +114,17 @@
                     <option value="19">其他</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="order_prepaid_status">尾款状态</label>
-                <select class="form-control" id="order_prepaid_status" name="order_prepaid_status" value="{{$order_prepaid_status}}">
-                    <option value="0">全部</option>
-                    <option value="25">待确认价格</option>
-                    <option value="26">待补款</option>
-                    <option value="27">补款成功</option>
-                    <option value="30">待退款</option>
-                    <option value="29">退款成功</option>
-                </select>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<label for="order_prepaid_status">尾款状态</label>-->
+                <!--<select class="form-control" id="order_prepaid_status" name="order_prepaid_status" value="{{$order_prepaid_status}}">-->
+                    <!--<option value="0">全部</option>-->
+                    <!--<option value="25">待确认价格</option>-->
+                    <!--<option value="26">待补款</option>-->
+                    <!--<option value="27">补款成功</option>-->
+                    <!--<option value="30">待退款</option>-->
+                    <!--<option value="29">退款成功</option>-->
+                <!--</select>-->
+            <!--</div>-->
             <button type="submit" class="btn btn-default">查询</button>
         </form>
     </div>
