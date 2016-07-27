@@ -329,6 +329,7 @@ class UtilController extends AppController {
 
 
 
+    //二维码快捷支付
     public function scan_qr_code_make_order($shareId){
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
