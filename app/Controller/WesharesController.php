@@ -2150,7 +2150,6 @@ class WesharesController extends AppController
         $this->set('type', 1);
         $this->set('title', '我的粉丝');
         $this->set('userId',$uid);
-        $this->render('u_list');
     }
 
     public function sub_list($uid)
@@ -2161,7 +2160,6 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('type', 1);
         $this->set('title', '我关注的');
-        //$this->render('u_list');
     }
 
     public function get_fans_data($type = 1,$page = 1)
