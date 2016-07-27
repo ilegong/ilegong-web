@@ -1,7 +1,7 @@
 (function (window, angular) {
     angular.module('weshares')
         .controller('UserRebateListCtrl', UserCouponListCtrl);
-    function UserCouponListCtrl($http, $log, $templateCache, $rootScope) {
+    function UserCouponListCtrl($http, $log, $templateCache, $rootScope, Utils) {
         var vm = this;
         vm.loading = false;
         vm.dataOver = false;
@@ -10,6 +10,7 @@
         vm.toShareDetail = toShareDetail;
         vm.pageNum = 1;
         vm.rebates = [];
+        vm.staticFilePath = Utils.staticFilePath();
         active();
         function active() {
             $rootScope.loadingPage = false;
