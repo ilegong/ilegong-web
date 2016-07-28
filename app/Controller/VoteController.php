@@ -435,7 +435,7 @@ class VoteController extends AppController
 
     private function get_candidate_rank($candidate_id, $event_id)
     {
-        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id=' . $event_id . ') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll FROM cake_candidates c WHERE c.id=' . $candidate_id . ' ORDER BY c.vote_num ASC';
+        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id fromF cake_candidate_events WHERE event_id=' . $event_id . ') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll FROM cake_candidates c WHERE c.id=' . $candidate_id . ' ORDER BY c.vote_num ASC';
         $rank_data = $this->Candidate->query($query_sql);
         return $rank_data;
     }

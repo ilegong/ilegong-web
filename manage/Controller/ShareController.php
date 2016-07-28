@@ -600,6 +600,9 @@ class ShareController extends AppController
             'order' => 'rand()',
             'limit' => $num
         ]);
+        if(count($users) < $num){
+            $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id.'?error='.urlencode('想生成'.$num.'个订单，然而该团长只有'.count($users).'个粉丝，无法生成订单'));
+        }
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -644,6 +647,9 @@ class ShareController extends AppController
             'order' => 'rand()',
             'limit' => $num
         ]);
+        if(count($users) < $num){
+            $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id.'?error='.urlencode('想生成'.$num.'个订单，然而该团长只有'.count($users).'个粉丝，无法生成订单'));
+        }
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -698,6 +704,7 @@ class ShareController extends AppController
         $this->log('orders: '.count($orders));
         $this->set('weshare', $weshare);
         $this->set('orders', $orders);
+        $this->set('error', $_GET['error']);
     }
 
     public function admin_index()
