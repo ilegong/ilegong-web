@@ -66,7 +66,7 @@
     }
 
     function setDefaultProxyRebatePercent() {
-      vm.proxy_rebate_percent = {status: 0, percent: 0};
+      vm.proxy_rebate_percent = {status: 1, percent: 0};
     }
 
     function setDefaultDeliveryTemplate() {
