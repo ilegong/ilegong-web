@@ -355,10 +355,9 @@
 
         <div class="hide" ng-class="{'show-b': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}" ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
             <footer class="channel_bottom" ng-if="{'show-b':!vm.isShareManager()}">
-                <a class="btm_item item-opt small-item" href="/share_opt/index.html">
-                    <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:0px;left:60%;position:absolute; display: block;"></i>
-                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-search"></i></p>
-                    <b>发现</b>
+                <a class="btm_item item-opt small-item" href="/weshares/index.html">
+                    <p style="height: 20px;"><i class="iconfont icon-home"></i></p>
+                    <b>首页</b>
                 </a>
                 <a class="btm_item item-buy large-item" ng-if="!vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
                 <a class="btm_item item-buy middle-item" ng-if="vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
@@ -370,10 +369,9 @@
                 </a>
             </footer>
             <footer class="channel_bottom" ng-if="vm.isShareManager()">
-                <a class="btm_item item-opt small-item" href="/share_opt/index.html">
-                    <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:0px;left:60%;position:absolute; display: block;"></i>
-                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-search"></i></p>
-                    <b>发现</b>
+                <a class="btm_item item-opt small-item" href="/weshares/index.html">
+                    <p style="height: 20px;"><i class="iconfont icon-home"></i></p>
+                    <b>首页</b>
                 </a>
                 <a class="btm_item item-buy middle-item" ng-if="vm.weshare.status == 0" ng-click="vm.buyProducts()" style="margin-left: 0px;">我要报名</a>
                 <a class="btm_item item-stop middle-item" ng-if="vm.weshare.status == 0" ng-click='vm.stopShare();'>截止报名</a>
