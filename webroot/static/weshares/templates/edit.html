@@ -106,46 +106,6 @@
         </div>
     </div>
 
-    <div class="ziti section" ng-hide="vm.weshare.type == 6">
-        <dl class="clearfix section-title">
-            <dd class="fl">
-                <input class="input-type1" type="checkbox" ng-checked="vm.self_ziti_data.status==1"
-                       ng-click="vm.toggleBoxZitiChecked()"/>
-            </dd>
-            <dd class="fl">自己的自提点</dd>
-        </dl>
-        <div class="section-detail" ng-show="vm.self_ziti_data.status==1">
-            <div class="shrink-container" ng-class="{'shrinking':vm.getAvailableAddresses().length > 1}"
-                 ng-repeat="address in vm.getAvailableAddresses()">
-                <div class="multi-line-form shrink-left">
-                    <div class="line clearfix form-group" ng-class="{'has-error': product.nameHasError}">
-                        <label>取货地点</label>
-                        <input class="form-control" type="text" placeholder="请输入取货地点" ng-model="address.address"
-                               ng-blur='vm.validateAddress()'/>
-                    </div>
-                    <div class="line clearfix form-group" ng-class="{'has-error': product.priceHasError}">
-                        <label>联系人</label>
-                        <input class="form-control" type="text" placeholder="请输入联系人姓名" ng-model="address.name"
-                               ng-blur='vm.validateAddress()'>
-                    </div>
-                    <div class="line clearfix form-group">
-                        <label>联系电话</label>
-                        <input class="reminder form-control" type="text" placeholder="请输入联系人电话"
-                               ng-model="address.phone" ng-blur='vm.validateAddress()'>
-                    </div>
-                </div>
-                <a class="shrink-right" href="javascript:;" ng-click="vm.deleteAddress(address)">删除</a>
-            </div>
-            <a href="javascript:;" class="add-btn clearfix" ng-show="vm.self_ziti_data.status==1"
-               ng-click="vm.addAddress()">
-                    <span>
-                        <img ng-src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
-                        <label>添加自提点</label>
-                    </span>
-            </a>
-        </div>
-    </div>
-
     <div class="expressage section">
         <dl class="clearfix section-title">
             <dd class="fl"><input class="input-type1" type="checkbox" ng-checked="vm.kuai_di_data.status==1"
@@ -234,17 +194,51 @@
 
         </div>
     </div>
-    <dl class="clearfix haolinju section" ng-if="!vm.hideOfflineStore" ng-hide="vm.weshare.type == 6">
-        <div class="section-title">
-            <dd class="fl"><input class="input-type1" disabled type="checkbox"/></dd>
-            <dd class="fl">好邻居</dd>
-            <small class="fr" style="line-height: 20px;">使用前请先联系微信<br/><span>[yangxiaoguang]</span>沟通物流</small>
+
+    <div class="ziti section" ng-hide="vm.weshare.type == 6">
+        <dl class="clearfix section-title">
+            <dd class="fl">
+                <input class="input-type1" type="checkbox" ng-checked="vm.self_ziti_data.status==1"
+                       ng-click="vm.toggleBoxZitiChecked()"/>
+            </dd>
+            <dd class="fl">自己的自提点</dd>
+        </dl>
+        <div class="section-detail" ng-show="vm.self_ziti_data.status==1">
+            <div class="shrink-container" ng-class="{'shrinking':vm.getAvailableAddresses().length > 1}"
+                 ng-repeat="address in vm.getAvailableAddresses()">
+                <div class="multi-line-form shrink-left">
+                    <div class="line clearfix form-group" ng-class="{'has-error': product.nameHasError}">
+                        <label>取货地点</label>
+                        <input class="form-control" type="text" placeholder="请输入取货地点" ng-model="address.address"
+                               ng-blur='vm.validateAddress()'/>
+                    </div>
+                    <div class="line clearfix form-group" ng-class="{'has-error': product.priceHasError}">
+                        <label>联系人</label>
+                        <input class="form-control" type="text" placeholder="请输入联系人姓名" ng-model="address.name"
+                               ng-blur='vm.validateAddress()'>
+                    </div>
+                    <div class="line clearfix form-group">
+                        <label>联系电话</label>
+                        <input class="reminder form-control" type="text" placeholder="请输入联系人电话"
+                               ng-model="address.phone" ng-blur='vm.validateAddress()'>
+                    </div>
+                </div>
+                <a class="shrink-right" href="javascript:;" ng-click="vm.deleteAddress(address)">删除</a>
+            </div>
+            <a href="javascript:;" class="add-btn clearfix" ng-show="vm.self_ziti_data.status==1"
+               ng-click="vm.addAddress()">
+                    <span>
+                        <img ng-src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
+                        <label>添加自提点</label>
+                    </span>
+            </a>
         </div>
-    </dl>
+    </div>
+
     <div class="commission section">
         <dl class="clearfix section-title">
             <dd class="fl"><input class="input-type1" type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1"
-                       ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/></dd>
+                                  ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/></dd>
             <dd class="fl">设置团长的佣金比例<small>(推广好办法)</small></dd>
         </dl>
         <div class="section-detail multi-line-form" ng-show="vm.proxy_rebate_percent.status==1">
@@ -254,8 +248,21 @@
                        ng-blur="vm.validateRebatePercent()" ng-change='vm.validateRebatePercent()'>
                 <span>%</span>
             </div>
+            <div style="padding: 5px 2px 2px 2px">
+                平台粉丝和他人自有粉丝购买你商品的时候，你需要支付费用即为推广佣金；<br/>
+                平台粉丝：指的是通过平台关注你的粉丝
+            </div>
         </div>
     </div>
+
+    <dl class="clearfix haolinju section" ng-if="!vm.hideOfflineStore" ng-hide="vm.weshare.type == 6">
+        <div class="section-title">
+            <dd class="fl"><input class="input-type1" disabled type="checkbox"/></dd>
+            <dd class="fl">好邻居</dd>
+            <small class="fr" style="line-height: 20px;">使用前请先联系微信<br/><span>[yangxiaoguang]</span>沟通物流</small>
+        </div>
+    </dl>
+
 </div>
 <a class="nextstepBtn channel_bottom" ng-click="vm.saveWeshare()" ng-show='vm.showShippmentInfo'>Oh，搞定了！</a>
 
