@@ -6,14 +6,14 @@ Pyshuo.share.utils = {
   },
   checkHasUnreadInfo: function () {
     var me = this;
-    $.getJSON('/share_opt/check_opt_has_new', function (data) {
-      //reset bottom nav
-      if (data['has_new']) {
-        me.markUnRead.show();
-      } else {
-        me.markUnRead.hide();
-      }
-    });
+    //$.getJSON('/share_opt/check_opt_has_new', function (data) {
+    //  //reset bottom nav
+    //  if (data['has_new']) {
+    //    me.markUnRead.show();
+    //  } else {
+    //    me.markUnRead.hide();
+    //  }
+    //});
   },
   saveToLocalStorage: function (key, value) {
     if (this.storage) {

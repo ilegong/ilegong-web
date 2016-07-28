@@ -42,11 +42,11 @@
       $rootScope.$broadcast('page_clicked', {});
     }
     $rootScope.checkHasUnRead = function(){
-      $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
-        if (data['has_new']) {
-          $rootScope.showUnReadMark = true;
-        }
-      });
+      //$http.get('/share_opt/check_opt_has_new.json').success(function (data) {
+      //  if (data['has_new']) {
+      //    $rootScope.showUnReadMark = true;
+      //  }
+      //});
     }
 
   }
