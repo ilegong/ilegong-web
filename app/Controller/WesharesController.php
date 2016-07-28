@@ -161,6 +161,25 @@ class WesharesController extends AppController
     }
 
     /**
+     * @param $uid
+     * @param $weshare_id
+     * @return array
+     * 生成返利日志
+     */
+    private function create_rebate_log($uid, $weshare_id, $weshare_creator)
+    {
+        if ($uid == 0) {
+            return [0, 0];
+        }
+        $u_own_id = empty($this->currentUser['own_id']) ? PYS_CUSTOMER_SERVICE_ID : $this->currentUser['own_id'];
+        if ($u_own_id == $weshare_creator) {
+            return [0, 0];
+        }
+        $rebateLogId = $this->ShareUtil->save_rebate_log($u_own_id, $uid, $weshare_id);
+        return [$rebateLogId, $u_own_id];
+    }
+
+    /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
      * 跳转到分享的详情页
@@ -195,17 +214,13 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('weshare_id', $weshare_id);
 
-        //获取推荐人
-        $recommend = $_REQUEST['recommend'];
-        //添加推荐日志
-        //自己推荐人购买不能加入推荐
-        if ($this->ShareUtil->is_proxy_user($recommend) && $recommend != $uid) {
-            if (!empty($recommend) && !empty($uid)) {
-                $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
-                $this->set('recommend_id', $recommend);
-                $this->set('rebateLogId', $rebateLogId);
-            }
+        //根据粉丝来源生成返利日志
+        list($rebate_log_id, $u_own_id) = $this->create_rebate_log($uid, $weshare_id, $weshare['creator']);
+        if ($rebate_log_id > 0 && $u_own_id > 0) {
+            $this->set('recommend_id', $u_own_id);
+            $this->set('rebateLogId', $rebate_log_id);
         }
+
         //用户点击评论模板消息自动弹出评论对话框
         $comment_order_id = $_REQUEST['comment_order_id'];
         $replay_comment_id = $_REQUEST['reply_comment_id'];
