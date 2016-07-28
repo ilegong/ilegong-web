@@ -1271,10 +1271,9 @@ class ShareManageController extends AppController
     /**
      * @param $id
      * @param $share_id
-     * @param $data_id
      * 删除分享权限
      */
-    public function delete_share_operate_setting($id, $share_id, $data_id)
+    public function delete_share_operate_setting($id, $share_id)
     {
         $data = $this->ShareOperateSetting->find('first', array('conditions' => array('id' => $id)));
         if (!empty($data)) {
@@ -1282,8 +1281,7 @@ class ShareManageController extends AppController
             if ($data['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE) {
                 Cache::write(SHARE_ORDER_OPERATE_CACHE_KEY . '_' . $share_id, '');
             } else {
-                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id, '');
-                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id . '_' . $data_id, '');
+                delete_redis_data_by_key(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id);
             }
         }
         $this->redirect(array('action' => 'share_operate_set_view', '?' => array('share_id' => $share_id)));
