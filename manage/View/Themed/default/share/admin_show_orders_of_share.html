@@ -1,3 +1,10 @@
+{{if $error}}
+    <div class="alert alert-danger" role="alert">
+        <strong>错误：</strong>{{$error}}
+    </div>
+
+{{/if}}
+
 <h1 class="page-header">待支付订单</h1>
 <ul>
    <li>团长：{{$weshare['Weshare']['creator']}}</li>
