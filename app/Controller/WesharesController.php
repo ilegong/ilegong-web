@@ -168,7 +168,7 @@ class WesharesController extends AppController
      */
     private function create_rebate_log($uid, $weshare_id, $weshare_creator)
     {
-        if ($uid == 0) {
+        if (empty($uid)) {
             return [0, 0];
         }
         $u_own_id = empty($this->currentUser['own_id']) ? PYS_CUSTOMER_SERVICE_ID : $this->currentUser['own_id'];
