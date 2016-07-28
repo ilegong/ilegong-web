@@ -30,7 +30,11 @@
         <li class="every-who">快进去看看谁在社群里吧</li>
     </ul>
     <div class="photo"><img src="{{STATIC_HOST}}/static/img/invite-group/liucheng.jpg"></div>
-    <a href="http://www.tongshijia.com/pys/download_app" class="download-btn">下载APP，加入社群</a>
+    {{if $jWeixinOn}}
+        <a href="http://www.tongshijia.com/pys/download_app" class="download-btn">下载APP，加入社群</a>
+    {{else}}
+        <a href="itms-apps://itunes.apple.com/app/id975953152" class="download-btn">下载APP，加入社群</a>
+    {{/if}}
     <div class="logo-bottom"><img src="{{STATIC_HOST}}/static/img/invite-group/logo-bottom.png"/></div>
 </div>
 </body>
