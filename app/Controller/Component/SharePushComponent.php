@@ -19,6 +19,10 @@ class SharePushComponent extends Component
 
     static $MSG_NOTICE_OFFERED = 102;
 
+    static $MSG_SPREAD_SHARE = 201;
+
+    static $MSG_SPREAD_WEB_URL = 202;
+
 
     public function push_buy_msg($buyOptLog, $share)
     {
@@ -74,6 +78,19 @@ class SharePushComponent extends Component
 //        } catch (Exception $e) {
 //            $this->log('push_share_offered_msg jpush error ' . $e->getMessage());
 //        }
+    }
+
+    public function push_spread_msg($title, $msg, $data_type, $data_val, $uids = null)
+    {
+        try {
+            if ($uids) {
+                $this->JPush->push($uids, $title, $msg, self::$TEXT_MSG_TYPE, ['data' => $data_val, 'type' => $data_type]);
+            } else {
+                $this->JPush->push_all($title, $msg, self::$TEXT_MSG_TYPE, ['data' => $data_val, 'type' => $data_type]);
+            }
+        } catch (Exception $e) {
+            $this->log('push_spread_msg jpush error ' . $e->getMessage());
+        }
     }
 
 

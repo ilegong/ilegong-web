@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">推送列表</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                推送信息
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="well">
+                    <a type="button" href="/app_push_manage/msg_form.html" class="btn btn-outline btn-primary">添加消息</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="10%">标题</th>
+                            <th width="15%">描述</th>
+                            <th width="10%">类型</th>
+                            <th width="10%">内容</th>
+                            <th width="10%">创建时间</th>
+                            <th width="10%">推送时间</th>
+                            <th width="10%">是否发布</th>
+                            <th width="15%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{loop $datas $data}}
+                        <tr>
+                            <td>{{$data['PushMessage']['title']}}</td>
+                            <td>{{$data['PushMessage']['description']}}</td>
+                            <td>{{if $data['PushMessage']['type']==0}}平台分享{{/if}}{{if
+                                $data['PushMessage']['type']==1}}图文链接{{/if}}
+                            </td>
+                            <td>{{$data['PushMessage']['data_val']}}</td>
+                            <td>{{$data['PushMessage']['created']}}</td>
+                            <td>{{$data['PushMessage']['push_time']}}</td>
+                            <td>{{if $data['PushMessage']['published']==1}}是{{else}}否{{/if}}</td>
+                            <td>
+                                <a type="button" href="/app_push_manage/msg_form.html?id={{$data['PushMessage']['id']}}"
+                                   class="btn btn-outline btn-default">更新</a>
+                                <button type="button" class="btn btn-outline btn-primary" name="previewButton"
+                                        data-id="{{$data['PushMessage']['id']}}"
+                                        data-title="{{$data['PushMessage']['title']}}">预览
+                                </button>
+                                <button type="button" class="btn btn-outline btn-success" name="pushButton"
+                                        data-id="{{$data['PushMessage']['id']}}"
+                                        data-title="{{$data['PushMessage']['title']}}">立即群发
+                                </button>
+                            </td>
+                        </tr>
+                        {{/loop}}
+                        </tbody>
+                    </table>
+                    <div class="inline pull-right page">
+                        <?php echo $pager;?>
+                    </div>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="previewModalLabel">用户预览</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">预览用户ID:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                        <p class="help-block">多个用户使用英文逗号分隔.</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" name="sendPreviewData">发送</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="confirm-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p>确定群发？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" name="pushMsg">发送</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    $(document).ready(function(){
+        var $recipientName = $('#recipient-name');
+        var $confirmTitle = $('#confirm-title');
+        var currentMsgId = 0;
+        var currentMsgTitle = '';
+        $('button[name="previewButton"]').on('click', function (e) {
+            e.preventDefault();
+            currentMsgId = $(this).data('id');
+            currentMsgTitle = $(this).data('title');
+            $('#previewModal').modal('show');
+        });
+
+        $('button[name="pushButton"]').on('click', function(e){
+            e.preventDefault();
+            currentMsgId = $(this).data('id');
+            currentMsgTitle = $(this).data('title');
+            $confirmTitle.text(currentMsgTitle);
+            $('#confirmModal').modal('show');
+        });
+
+        $('button[name="pushMsg"]').on('click', function(e){
+            $.post('/app_push_manage/push_all.html', {'msg_id' : currentMsgId}, function(data){
+                alert('发送成功');
+                $('#confirmModal').modal('hide');
+            }, 'json');
+        });
+
+        $('button[name="sendPreviewData"]').on('click', function(e){
+            var recipientNames = $recipientName.val();
+            if(recipientNames.trim()){
+                $.post('/app_push_manage/preview.html', {'msg_id' : currentMsgId, 'receivers' : recipientNames}, function(data){
+                    alert('发送成功');
+                    $('#previewModal').modal('hide');
+                }, 'json');
+            }
+        });
+
+
+
+    });
+</script>

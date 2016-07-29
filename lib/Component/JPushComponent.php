@@ -42,6 +42,20 @@ class JPushComponent extends Component
         return $result;
     }
 
+    public function push_all($title, $content, $type, $extras = []){
+        $type = strval($type);
+        $client = $this->get_push_client();
+        $result  = $client->push()
+            ->setPlatform($this->all_platforms)
+            ->setNotificationAlert($title)
+            ->addIosNotification($title, 'iOS sound', '+1', true, 'iOS category', $extras)
+            ->setMessage($content, $title, $type, $extras)
+            ->setOptions(mt_rand(), $this->time_to_live, null, JPUSH_IS_PRODUCT, null)
+            ->send();
+
+        $this->log('push msg result ' . json_encode($result), LOG_DEBUG);
+    }
+
     public function filter_user($user_ids){
         $result = [];
         $client = $this->get_push_client();
