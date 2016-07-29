@@ -19,9 +19,9 @@ class SharePushComponent extends Component
 
     static $MSG_NOTICE_OFFERED = 102;
 
-    static $MSG_SPREAD_SHARE = 201;
+    static $MSG_SPREAD_SHARE = 202;
 
-    static $MSG_SPREAD_WEB_URL = 202;
+    static $MSG_SPREAD_WEB_URL = 201;
 
 
     public function push_buy_msg($buyOptLog, $share)
