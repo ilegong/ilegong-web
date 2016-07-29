@@ -2232,7 +2232,7 @@ class WeshareBuyComponent extends Component
         ]);
         $this_month_order_count = $this->get_month_total_count($uid);
         $date = date('Y-m') . '-01 00:00:00';
-        $this_month_trade_money = $orderM->query("SELECT sum(total_price) as trade_money  FROM cake_orders where status > 0 and creator = " . $uid . " and created > '" . $date . "' and type=9");
+        $this_month_trade_money = $orderM->query("SELECT sum(total_price) as trade_money  FROM cake_orders where status > ".ORDER_STATUS_WAITING_PAY." and status != ".ORDER_STATUS_CANCEL." and creator = " . $uid . " and created > '" . $date . "' and type=9");
         $this_month_trade_money = empty($this_month_trade_money[0][0]['trade_money']) ? 0 : $this_month_trade_money[0][0]['trade_money'];
         $authorize_count = intval($authorize_count[0][0]['a_count']);
         return ['wait_ship_order_count' => $wait_ship_order_count, 'month_order_count' => $this_month_order_count, 'month_trade_money' => $this_month_trade_money, 'share_count' => $share_count, 'authorize_count' => $authorize_count];
@@ -2253,7 +2253,7 @@ class WeshareBuyComponent extends Component
         $count = $orderM->find('count', [
             'conditions' => [
                 'creator' => $uid,
-                'status > 0',
+                'status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY],
                 'type' => ORDER_TYPE_WESHARE_BUY,
             ]
         ]);
@@ -2263,7 +2263,7 @@ class WeshareBuyComponent extends Component
     public function get_days_order_summary($uid, $start_date, $end_date)
     {
         $orderM = ClassRegistry::init('Order');
-        $sql = "SELECT date(created) as day_date, count(id) as order_count, format(sum(total_all_price),2) as total_fee FROM cake_orders WHERE brand_id = $uid AND status > 0 AND created > '$start_date' AND created < '$end_date' AND type = 9 GROUP BY date(created) order by day_date desc";
+        $sql = "SELECT date(created) as day_date, count(id) as order_count, format(sum(total_all_price),2) as total_fee FROM cake_orders WHERE brand_id = $uid AND status > ".ORDER_STATUS_WAITING_PAY." AND status != ".ORDER_STATUS_CANCEL." AND created > '$start_date' AND created < '$end_date' AND type = 9 GROUP BY date(created) order by day_date desc";
         $data = $orderM->query($sql);
         $result = [];
         foreach ($data as $data_item) {
@@ -2276,7 +2276,7 @@ class WeshareBuyComponent extends Component
     {
         $orderM = ClassRegistry::init('Order');
         $weshareM = ClassRegistry::init('Weshare');
-        $sql = "select member_id, count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where brand_id = $uid and type = 9 and status > 0 and created > '$start_date' and created < '$end_date' group by member_id order by member_id desc";
+        $sql = "select member_id, count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where brand_id = $uid and type = 9 and status > ".ORDER_STATUS_WAITING_PAY." and status != ".ORDER_STATUS_CANCEL." and created > '$start_date' and created < '$end_date' group by member_id order by member_id desc";
         $data = $orderM->query($sql);
         $member_id = [];
         $summary = [];
@@ -3085,7 +3085,7 @@ class WeshareBuyComponent extends Component
 
     public function get_sharer_order_summary($uid, $start_date, $end_date)
     {
-        $sql = "select count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where type=9 and status > 0 and brand_id=$uid and created > '$start_date' and created < '$end_date'";
+        $sql = "select count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where type=9 and status > ".ORDER_STATUS_WAITING_PAY." and status != ".ORDER_STATUS_CANCEL." and brand_id=$uid and created > '$start_date' and created < '$end_date'";
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($sql);
         $order_count = $result[0][0]['order_count'];

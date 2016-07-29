@@ -34,8 +34,8 @@ class ShareCountlyController extends AppController
         }
         $register_data = $userM->query("SELECT count(id) as l_count, date(created) as q_date FROM cake_users WHERE date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
         //$login_data = $userM->query("SELECT count(id) as r_count, date(last_login) as q_date FROM cake_users where date(last_login) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
-        $buy_data = $orderM->query("SELECT count(DISTINCT creator) as u_count, date(created) as q_date FROM cake_orders WHERE type=9 and status > 0 and date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
-        $new_user_buy_data = $orderM->query("SELECT count(id) as o_count,date(created) as q_date FROM cake_orders as t_o where type=9 and status > 0 and t_o.creator in (select t_u.id from cake_users as t_u where date(t_u.created)=date(t_o.created)) and date(t_o.created) between '" . $start_date . "' and '" . $end_date . "' group by date(t_o.created)");
+        $buy_data = $orderM->query("SELECT count(DISTINCT creator) as u_count, date(created) as q_date FROM cake_orders WHERE type=9 and status > 0 and status != 10 and date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
+        $new_user_buy_data = $orderM->query("SELECT count(id) as o_count,date(created) as q_date FROM cake_orders as t_o where type=9 and status > 0 and status !=10 and t_o.creator in (select t_u.id from cake_users as t_u where date(t_u.created)=date(t_o.created)) and date(t_o.created) between '" . $start_date . "' and '" . $end_date . "' group by date(t_o.created)");
         $register_data = Hash::combine($register_data, '{n}.0.q_date', '{n}.0.l_count');
         //$login_data = Hash::combine($login_data, '{n}.0.q_date', '{n}.0.r_count');
         $buy_data = Hash::combine($buy_data, '{n}.0.q_date', '{n}.0.u_count');
@@ -63,7 +63,7 @@ class ShareCountlyController extends AppController
         $orderM = ClassRegistry::init('Order');
         $weshareM = ClassRegistry::init('Weshare');
         $userM = ClassRegistry::init('User');
-        $data = $orderM->query("SELECT count(co.id) as s_c, co.member_id as weshare_id FROM cake_orders as co JOIN cake_weshares as cw on (cw.id = co.member_id and cw.status in (" . $status . ")) where date(co.created)>='" . $startDate . "' AND date(co.created)<='" . $endDate . "' AND co.status > 0 and co.type=9 group by co.member_id order by s_c desc");
+        $data = $orderM->query("SELECT count(co.id) as s_c, co.member_id as weshare_id FROM cake_orders as co JOIN cake_weshares as cw on (cw.id = co.member_id and cw.status in (" . $status . ")) where date(co.created)>='" . $startDate . "' AND date(co.created)<='" . $endDate . "' AND co.status > 0 and co.status != 10 and co.type=9 group by co.member_id order by s_c desc");
         $this->set('data', $data);
         $weshare_ids = array_unique(Hash::extract($data, '{n}.co.weshare_id'));
         $weshares = $weshareM->find('all', [

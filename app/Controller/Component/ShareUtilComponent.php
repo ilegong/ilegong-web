@@ -58,7 +58,7 @@ class ShareUtilComponent extends Component
     {
         $offset = ($page - 1) * $limit;
         $sql = "select cu.id, cu.nickname, cu.image, cu.avatar, ifnull(order_summary.o_count,0) as order_count, format(ifnull(total_fee, 0),2) as order_total_fee from cake_user_relations as cur ";
-        $sql .= "left join (select creator as o_creator, count(id) as o_count, sum(total_all_price) as total_fee from cake_orders where brand_id=$sharer_id and type=9 and status > 0 group by creator) as order_summary on order_summary.o_creator = cur.follow_id ";
+        $sql .= "left join (select creator as o_creator, count(id) as o_count, sum(total_all_price) as total_fee from cake_orders where brand_id=$sharer_id and type=9 and status > ".ORDER_STATUS_WAITING_PAY." and status !=".ORDER_STATUS_CANCEL." group by creator) as order_summary on order_summary.o_creator = cur.follow_id ";
         $sql .= "left join cake_users as cu on cu.id=cur.follow_id ";
         $sql .= "where cur.user_id=$sharer_id and cur.deleted=0 ";
         if (!empty($keyword)) {
@@ -2428,7 +2428,7 @@ class ShareUtilComponent extends Component
         $orders_and_creators = $OrderM->find('all', [
             'conditions' => [
                 'Order.member_id' => $related_share_ids,
-                'Order.status > 0',
+                'Order.status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY],
             ],
             'fields' => array('Order.id', 'User.id', 'User.nickname', 'User.avatar', 'User.image'),
             'joins' => [
