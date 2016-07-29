@@ -345,6 +345,46 @@ class ShareManageController extends AppController
         return $data['Weshare'];
     }
 
+    public function pool_product_item_pick($id , $sid)
+    {
+        // 在cake_pool_products表里面恢复数据
+        $model = ClassRegistry::init('WeshareProduct');
+        $model->update([
+            'deleted' => 0
+        ], [
+            'id' => $id,
+        ]);
+
+        //关联的weshares 恢复
+        $weshareProductModel = ClassRegistry::init('WeshareProduct');
+        $weshareProductModel->update([
+            'deleted' => 0
+        ],[
+            'OR' => [
+                'id' => $id,
+                'origin_product_id' => $id
+            ]
+        ]);
+
+        $weshare_ids = $weshareProductModel->find('all',
+            [
+                'conditions' => [
+                    'OR' => [
+                        'id' => $id,
+                        'origin_product_id' => $id
+                    ]
+                ],
+                'fields' => ['weshare_id'],
+            ]
+        );
+
+        foreach ($weshare_ids as $weshare_id) {
+            Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id['WeshareProduct']['weshare_id'],'');
+        }
+
+        $this->redirect("/shareManage/pool_product_edit/$sid.html");
+    }
+
     public function pool_product_item_ban($id, $sid)
     {
         // 在cake_pool_products表里面删除数据
@@ -354,6 +394,33 @@ class ShareManageController extends AppController
         ], [
             'id' => $id,
         ]);
+
+        //关联的weshares 删除
+        $weshareProductModel = ClassRegistry::init('WeshareProduct');
+        $weshareProductModel->update([
+            'deleted' => 1
+        ],[
+            'OR' => [
+                'id' => $id,
+                'origin_product_id' => $id
+            ]
+        ]);
+
+        $weshare_ids = $weshareProductModel->find('all',
+            [
+                'conditions' => [
+                    'OR' => [
+                        'id' => $id,
+                        'origin_product_id' => $id
+                    ]
+                ],
+                'fields' => ['weshare_id'],
+            ]
+        );
+
+        foreach ($weshare_ids as $weshare_id) {
+            Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id['WeshareProduct']['weshare_id'],'');
+        }
 
         $this->redirect("/shareManage/pool_product_edit/$sid.html");
     }
@@ -383,6 +450,20 @@ class ShareManageController extends AppController
             'status' => POOL_PRODUCT_UN_PUBLISH
         ], [
             'id' => $id,
+        ]);
+
+        //todo
+        //关联的分享 下架
+        $shareModel = ClassRegistry::init('Weshare');
+        $shareModel->update([
+            'status' => WESHARE_STATUS_STOP
+        ],[
+            [
+                'OR' => [
+                    'root_share_id' => $id,
+                    'id' => $id
+                ]
+            ]
         ]);
 
         $this->redirect('/shareManage/pool_products');

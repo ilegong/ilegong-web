@@ -6,6 +6,13 @@ $(function () {
             console.log('手贱, 不好意思');
         }
     });
+    $('.product-pick').on('click', function () {
+        if (confirm('确定上架?')) {
+            window.location.href = '/shareManage/pool_product_item_pick/' + $(this).attr('data-upid') + "/" + $('#share-id-hidden').val();
+        } else {
+            console.log('手贱, 不好意思');
+        }
+    });
     $('#hidden-show-ban-item').click(function () {
         console.log('clicked....');
         $('.row.pool-product-item').each(function () {

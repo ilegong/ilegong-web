@@ -79,7 +79,7 @@
                 </td>
                 <td class='share-btns'>
                   <a class="btn btn-info" href="/shareManage/pool_product_edit/{{$product['PoolProduct']['id']}}.html" role="button">编辑</a>&nbsp;|&nbsp;
-                  <a class="btn btn-primary" href="/share_manage/pool_product_order?share_id={{$product['PoolProduct']['weshare_id']}}" role="button">订单管理</a>&nbsp;|&nbsp;
+                  <a class="btn btn-primary" href="/share_manage/pool_product_order?share_id={{$product['PoolProduct']['weshare_id']}}&q_share_id=-1" role="button">订单管理</a>&nbsp;|&nbsp;
                   <a class="btn btn-danger ban-pool-product" href="javascript:void(0);" data-upid={{$product['PoolProduct']['id']}} role="button">下架</a>&nbsp;|&nbsp;
                   <a class="btn btn-danger delete-pool-product" href="javascript:void(0);" data-upid="{{$product['PoolProduct']['id']}}" role="button">删除</a>&nbsp;|&nbsp;
                   <a class="btn btn-info" href="/shareManage/share_from_pool/{{$product['PoolProduct']['weshare_id']}}.html" role="button">指定人开团</a>

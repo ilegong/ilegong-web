@@ -139,9 +139,15 @@
                     操作
                   </label>
                   <div class=''>
+                    {{if $WeshareProduct['deleted']}}
+                    <a href='javascript:void(0)' class='product-pick btn btn-danger' data-upid="{{$WeshareProduct['id']}}">
+                      上架
+                    </a>
+                    {{else}}
                     <a href='javascript:void(0)' class='product-ban btn btn-danger' data-upid="{{$WeshareProduct['id']}}">
                       下架
                     </a>
+                    {{/if}}
                   </div>
                 </div>
               </div>
