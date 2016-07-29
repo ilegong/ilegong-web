@@ -2421,7 +2421,8 @@ class ShareUtilComponent extends Component
             'conditions' => array(
                 'data_id' => $related_share_ids,
                 'parent_id' => 0,
-                'order_id >' => 0
+                'order_id >' => 0,
+                'type' => COMMENT_SHARE_TYPE
             )
         ));
         $orders_and_creators = $OrderM->find('all', [
