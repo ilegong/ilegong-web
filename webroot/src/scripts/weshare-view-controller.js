@@ -1096,11 +1096,11 @@
         }
 
         function checkHasUnRead() {
-            $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
-                if (data['has_new']) {
-                    vm.showUnReadMark = true;
-                }
-            });
+            //$http.get('/share_opt/check_opt_has_new.json').success(function (data) {
+            //    if (data['has_new']) {
+            //        vm.showUnReadMark = true;
+            //    }
+            //});
         }
 
         function isShowShipCode(order) {
