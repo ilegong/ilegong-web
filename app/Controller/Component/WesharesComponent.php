@@ -425,6 +425,7 @@ class WesharesComponent extends Component
         $ProxyRebatePercentM->deleteAll(['share_id' => $weshareId]);
         $weshareProxyPercent['id'] = null;
         $weshareProxyPercent['share_id'] = $weshareId;
+        $weshareProxyPercent['percent'] = empty($weshareProxyPercent['percent']) ? 0 : $weshareProxyPercent['percent'];
         return $ProxyRebatePercentM->save($weshareProxyPercent);
     }
 
