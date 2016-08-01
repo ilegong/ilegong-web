@@ -19,6 +19,33 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
+if (getenv('TONGSHIJIA_ENV') == 'product') {
+    define('STATIC_HOST', 'http://static.tongshijia.com');
+    define('IMAGES_HOST', 'http://images.tongshijia.com');
+    define('JPUSH_APP_KEY', '32a7a17d552b6dd3d7736c72');
+    define('JPUSH_APP_SECRET', '08be41e830d5faf1d5f6b660');
+    define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
+    define('MEMCACHE_HOST', 'mem.tongshijia.com');
+    define('REDIS_HOST', 'redis.tongshijia.com');
+} elseif (getenv('TONGSHIJIA_ENV') == 'test') {
+    define('STATIC_HOST', 'http://static-test.tongshijia.com');
+    define('IMAGES_HOST', 'http://images-test.tongshijia.com');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('MYSQL_SERVER_HOST', 'test.tongshijia.com');
+    define('MEMCACHE_HOST', 'test.tongshijia.com');
+    define('REDIS_HOST', 'test.tongshijia.com');
+} else {
+    define('STATIC_HOST', 'http://dev.tongshijia.com');
+    define('IMAGES_HOST', 'http://dev.tongshijia.com');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('MYSQL_SERVER_HOST', '127.0.0.1');
+    define('MEMCACHE_HOST', '127.0.0.1');
+    define('REDIS_HOST', '127.0.0.1');
+}
+
 /**
  * Use the DS to separate the directories in other defines
  */
@@ -115,31 +142,7 @@ if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/favicon.ico') {
     return;
 }
 
-if (getenv('TONGSHIJIA_ENV') == 'product') {
-    define('STATIC_HOST', 'http://static.tongshijia.com');
-    define('IMAGES_HOST', 'http://images.tongshijia.com');
-    define('JPUSH_APP_KEY', '32a7a17d552b6dd3d7736c72');
-    define('JPUSH_APP_SECRET', '08be41e830d5faf1d5f6b660');
-    define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
-    define('MEMCACHE_HOST', 'mem.tongshijia.com');
-    define('REDIS_HOST', 'redis.tongshijia.com');
-} elseif (getenv('TONGSHIJIA_ENV') == 'test') {
-    define('STATIC_HOST', 'http://static-test.tongshijia.com');
-    define('IMAGES_HOST', 'http://images-test.tongshijia.com');
-    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
-    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
-    define('MYSQL_SERVER_HOST', 'test.tongshijia.com');
-    define('MEMCACHE_HOST', 'test.tongshijia.com');
-    define('REDIS_HOST', 'test.tongshijia.com');
-} else {
-    define('STATIC_HOST', 'http://dev.tongshijia.com');
-    define('IMAGES_HOST', 'http://dev.tongshijia.com');
-    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
-    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
-    define('MYSQL_SERVER_HOST', '127.0.0.1');
-    define('MEMCACHE_HOST', '127.0.0.1');
-    define('REDIS_HOST', '127.0.0.1');
-}
+
 
 //	App::uses('Dispatcher', 'Routing');
 App::uses('AppDispatcher', 'Lib');
