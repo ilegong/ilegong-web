@@ -444,6 +444,7 @@ class ShareManageController extends AppController
 
     public function pool_product_ban($id)
     {
+        $id = intval($id);
         // 在cake_pool_products表里面状态设置为下架
         $model = ClassRegistry::init('PoolProduct');
         $model->update([
@@ -451,6 +452,8 @@ class ShareManageController extends AppController
         ], [
             'id' => $id,
         ]);
+
+        $weshare_id = $model->query("SELECT weshare_id FROM cake_pool_products WHERE id = {$id}");
 
         //todo
         //关联的分享 下架
@@ -460,8 +463,8 @@ class ShareManageController extends AppController
         ],[
             [
                 'OR' => [
-                    'root_share_id' => $id,
-                    'id' => $id
+                    'root_share_id' => $weshare_id[0]['cake_pool_products']['weshare_id'],
+                    'id' => $weshare_id[0]['cake_pool_products']['weshare_id']
                 ]
             ]
         ]);
