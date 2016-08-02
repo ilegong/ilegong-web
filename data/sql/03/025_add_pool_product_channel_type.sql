@@ -1,0 +1,1 @@
+ALTER TABLE `cake_pool_products` ADD `channel_type` TINYINT(4) UNSIGNED NOT NULL COMMENT '1自营2第三方' AFTER `valid_users`;

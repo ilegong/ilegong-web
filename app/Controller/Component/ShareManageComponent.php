@@ -166,7 +166,7 @@ class ShareManageComponent extends Component
     {
         // 更新cake_pool_products表
         $poolProductM = ClassRegistry::init('PoolProduct');
-        $res = $poolProductM->save($data);
+        $res = $poolProductM->save($data['PoolProduct']);
         // 更新cake_weshare_products表
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         foreach ($data['WeshareProduct'] as $item) {
