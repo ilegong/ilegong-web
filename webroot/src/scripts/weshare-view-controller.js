@@ -83,7 +83,7 @@
         vm.getBannerImage = getBannerImage;
         vm.getBannerLink = getBannerLink;
         vm.getRecommendWeshares = getRecommendWeshares;
-        vm.isIOSDeveice = isIOSDevice;
+        vm.isIOSDevice = isIOSDevice;
         activate();
 
         OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
