@@ -1,3 +1,11 @@
+<div class="refer-back-bg menu-top">
+    分享详情
+    <a href="{{$back_url}}">
+        <img ng-src="{{STATIC_HOST}}/static/img/back.png"/>
+        <label>返回</label>
+    </a>
+    <span class="btn" onclick="window.location.href='/weshares/add.html?from=detail'">我也要分享</span>
+</div>
 <div class="weshare-view-page" ng-controller="WesharesViewCtrl as vm" id='weshareView' data-uid="{{$uid}}"  data-weshare-id="{{$weshare_id}}"
      data-from-type="{{$from}}" data-shared-offer="{{$shared_offer_id}}" data-rebate-log-id="{{$rebateLogId}}"
      data-recommend-id="{{$recommend_id}}" data-comment-order-id="{{$comment_order_id}}"
@@ -9,7 +17,7 @@
     {{literal}}
     <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;"
          ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
-        <a href="{{vm.getBannerLink()}}" class="banners">
+        <a href="{{vm.getBannerLink()}}" class="banners" ng-if="vm.isIOSDevice()">
             <img ng-src="{{vm.getBannerImage()}}"/>
         </a>
 
@@ -525,6 +533,6 @@ $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.14'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.23'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.24'
 ), array('block' => 'scripts'))
 ?>

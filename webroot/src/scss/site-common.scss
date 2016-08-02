@@ -290,6 +290,17 @@ a:-webkit-any-link {
       margin-top: 14px;
     }
   }
+  .btn{
+    position: absolute;
+    right: 12px;
+    color: #ff6485;
+    font-size: 13px;
+    border: 1px solid #ff6485;
+    border-radius: 2px;
+    margin-top: 6px;
+    padding: 0 6px;
+    line-height: 30px;
+  }
 }
 
 .form-group.has-error {
@@ -745,6 +756,7 @@ a:-webkit-any-link {
 }
 
 .weshare-view-page {
+  margin-top: 48px;
   .share .share-summary {
     border-top: 0;
   }

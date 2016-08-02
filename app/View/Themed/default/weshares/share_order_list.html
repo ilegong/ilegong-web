@@ -1,10 +1,10 @@
 <link href="{{$STATIC_HOST}}/static/weshares/css/order-list.css?v0.1.4" rel="stylesheet">
-<div class="row">
-    <div class="classlist">
-        <a href="/weshares/view/{{$weshareId}}" class="back"></a>
-        订单统计
-        <a href="/weshares/user_share_info/{{$user_id}}" class="home"></a>
-    </div>
+<div class="refer-back-bg menu-top">
+    订单统计
+    <a href="{{$back_url}}">
+        <img src="{{STATIC_HOST}}/static/img/back.png"/>
+        <label>返回</label>
+    </a>
 </div>
 <div style="margin-top: 50px;">
     {{if !empty($summery['details'])}}

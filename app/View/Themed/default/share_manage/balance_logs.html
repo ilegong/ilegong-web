@@ -43,7 +43,7 @@
                             <label>产品渠道</label>
                             <select class="form-control" name="shareType">
                                 <option value="0" {{if $shareType==0}}selected{{/if}}>全部</option>
-                                <option value="1" {{if $shareType==1}}selected{{/if}}>团长</option>
+                                <option value="1" {{if $shareType==1}}selected{{/if}}>分享人</option>
                                 <option value="2" {{if $shareType==2}}selected{{/if}}>产品街</option>
                             </select>
                         </div>
@@ -82,6 +82,7 @@
                         <thead>
                         <tr>
                             <th>分享ID</th>
+                            <th>产品<br/>渠道</th>
                             <th width="5%">分享者</th>
                             <th width="8%">名称</th>
                             <th width="7%">截团<br>时间</th>
@@ -110,7 +111,9 @@
                         <tr {{if $index%2==0}}class="warning"{{/if}}>
                             {{if $loop_flag==0}}
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
-                                {{$weshare_item['Weshare']['id']}}<br>
+                                {{$weshare_item['Weshare']['id']}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
                                 {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
                                 <span style="color: red;">产品街</span>
                                 {{else}}

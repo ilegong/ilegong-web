@@ -83,6 +83,7 @@
         vm.getBannerImage = getBannerImage;
         vm.getBannerLink = getBannerLink;
         vm.getRecommendWeshares = getRecommendWeshares;
+        vm.isIOSDeveice = isIOSDevice;
         activate();
 
         OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
@@ -1224,7 +1225,7 @@
 
         function getBannerImage(){
             if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
-                return vm.staticFilePath + '/static/weshares/images/share-banner-ios-app.gif';
+                return vm.staticFilePath + '/static/weshares/images/download-ios-app-banner.jpg';
             }
             return vm.staticFilePath + '/static/weshares/images/share-banner-new.gif';
         }
@@ -1234,6 +1235,13 @@
                 return '/pys/download_app?from=share_view';
             }
             return '/weshares/add?from=share_view';
+        }
+
+        function isIOSDevice(){
+            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+                return true;
+            }
+            return false;
         }
 
         function getRecommendWeshares(weshareId, proxyId){

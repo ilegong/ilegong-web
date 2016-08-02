@@ -272,5 +272,14 @@ class AppController extends Controller {
         }
     }
 
+    protected function set_history(){
+        $refer = $this->referer();
+        if ($refer && strpos($refer, 'tongshijia.com')) {
+            $this->set('back_url', $refer);
+        } else {
+            $this->set('back_url', '/');
+        }
+    }
+
 }
 ?>

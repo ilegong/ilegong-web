@@ -242,9 +242,10 @@ class WesharesController extends AppController
         $shared_offer_id = $this->handle_weshare_view_has_shared_offer($uid, $weshare['creator']);
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
-        $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
+        $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, null, $shared_offer_id, $summary, $ordersDetail);
         $this->set('page_title', $weshare['title']);
         $this->set('click_from', $view_from);
+        $this->set_history();
         $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 
@@ -1422,6 +1423,7 @@ class WesharesController extends AppController
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
         $this->set('weshareId', $weshareId);
+        $this->set_history();
     }
 
     /**
