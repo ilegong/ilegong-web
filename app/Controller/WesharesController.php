@@ -2158,13 +2158,19 @@ class WesharesController extends AppController
     public function fans_list()
     {
         $uid = $this->currentUser['id'];
-        $res_self = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 1 AND deleted = 0 AND user_id = ".$uid);
-        $res_comm = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 0 AND deleted = 0 AND user_id = ".$uid);
-        $this->set('total_self',$res_self[0][0]['total']);
-        $this->set('total_comm',$res_comm[0][0]['total']);
+        $total_self = 0;
+        $total_comm = 0;
+        if ($uid) {
+            $res_self = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 1 AND deleted = 0 AND user_id = " . $uid);
+            $res_comm = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 0 AND deleted = 0 AND user_id = " . $uid);
+            $total_self = $res_self[0][0]['total'];
+            $total_comm = $res_comm[0][0]['total'];
+        }
+        $this->set('total_self', $total_self);
+        $this->set('total_comm', $total_comm);
         $this->set('type', 1);
         $this->set('title', '我的粉丝');
-        $this->set('userId',$uid);
+        $this->set('userId', $uid);
     }
 
     public function sub_list($uid)
