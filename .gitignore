@@ -15,3 +15,4 @@ ZendDebugger.so
 
 # 前端构建工程, HOW ?
 node_modules
+/webroot/test.php

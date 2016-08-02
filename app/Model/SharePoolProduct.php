@@ -58,27 +58,35 @@ class SharePoolProduct extends AppModel
         return $this->get_all_pool_products($category);
     }
 
-    public function get_all_available_products()
+    public function get_all_available_products($share_name = "")
     {
         $model = ClassRegistry::init('PoolProduct');
+        $conditions = [
+            'PoolProduct.deleted' => DELETED_NO,
+            'PoolProduct.status' => PUBLISH_YES
+        ];
+        if($share_name){
+            $conditions['PoolProduct.share_name LIKE'] = '%'.$share_name.'%';
+        }
         $data = $model->find('all', [
-            'conditions' => [
-                'PoolProduct.deleted' => DELETED_NO,
-                'PoolProduct.status' => PUBLISH_YES,
-            ],
+            'conditions' => $conditions,
             'order' => ['PoolProduct.sort ASC'],
         ]);
         return $this->rearrange_data($data);
     }
 
-    public function get_all_deleted_products()
+    public function get_all_deleted_products($share_name = "")
     {
         $model = ClassRegistry::init('PoolProduct');
+        $conditions = [
+            'PoolProduct.deleted' => DELETED_NO,
+            'PoolProduct.status' => PUBLISH_YES
+        ];
+        if($share_name){
+            $conditions['PoolProduct.share_name'] = 'LIKE "%'.$share_name.'%"';
+        }
         $data = $model->find('all', [
-            'conditions' => [
-                'PoolProduct.deleted' => DELETED_NO,
-                'PoolProduct.status' => PUBLISH_NO,
-            ],
+            'conditions' => $conditions,
             'order' => ['PoolProduct.sort ASC'],
         ]);
         return $this->rearrange_data($data);

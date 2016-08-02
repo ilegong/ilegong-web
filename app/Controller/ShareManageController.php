@@ -128,12 +128,15 @@ class ShareManageController extends AppController
      */
     public function search_shares()
     {
+        require_once(APPLIBS . 'MyPaginator.php');
         $s_id = $_REQUEST['id'];
         $s_title = $_REQUEST['title'];
         $creator_id = $_REQUEST['creator_id'];
         $creator_name = $_REQUEST['creator_name'];
         $share_status = $_REQUEST['share_status'];
+        $page = intval($_REQUEST['page']) ? : 1;
         $WeshareM = ClassRegistry::init('Weshare');
+        $cartM = ClassRegistry::init('Cart');
         $cond = [];
         $joins[] = [
             'table' => 'users',
@@ -162,17 +165,42 @@ class ShareManageController extends AppController
         if ($creator_name) {
             $cond['User.nickname'] = $creator_name;
         }
-
+        $count = $WeshareM->find('count', [
+            'conditions' => $cond,
+            'joins' => $joins
+        ]);
         $results = $WeshareM->find('all', array(
             'conditions' => $cond,
             'fields' => [
                 'User.*',
                 'Weshare.*',
             ],
-            'limit' => 300,
+            'page' => $page,
+            'limit' => 10,
             'joins' => $joins,
+            'order' => 'Weshare.id DESC'
         ));
 
+        $url = "/share_manage/search_shares?page=(:num)&creator_name={$_REQUEST['creator_name']}&id={$_REQUEST['id']}&share_status={$_REQUEST['share_status']}&title={$_REQUEST['title']}&creator_id={$_REQUEST['creator_id']}";
+        $pager = new MyPaginator($count, 10, $page, $url);
+
+        foreach ($results as $index => $result) {
+            $sql = "SELECT
+  name,
+  product_id,
+  price,
+  sum(num) AS num
+FROM cake_carts
+WHERE order_id IN (
+  SELECT id
+  FROM cake_orders
+  WHERE member_id = {$result['Weshare']['id']} AND `type` = 9 AND `status` IN (9, 1, 2, 3, 14, 4) AND `deleted` = '0'
+)
+GROUP BY product_id";
+            $results[$index]['products'] = $cartM->query($sql);
+        }
+
+        $this->set('pager', $pager);
         $this->set('results', $results);
     }
 
@@ -891,15 +919,17 @@ class ShareManageController extends AppController
      */
     public function pool_product_order($type = 0)
     {
-        $share_id = $_REQUEST['share_id'];
+        $share_id = $_REQUEST['share_id'] > 0 ? $_REQUEST['share_id'] : $_REQUEST['id'];
         $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
         if ($type == 0) {
-            $all_pool_products = $sharePoolProductM->get_all_available_products();
+            $all_pool_products = $sharePoolProductM->get_all_available_products($_REQUEST['share_name']);
         } else {
-            $all_pool_products = $sharePoolProductM->get_all_deleted_products();
+            $all_pool_products = $sharePoolProductM->get_all_deleted_products($_REQUEST['share_name']);
         }
         $this->set('all_pool_products', $all_pool_products);
         $this->set('type',$type);
+        $this->set('id',$_REQUEST['id']);
+        $this->set('share_name',$_REQUEST['share_name']);
         if (!empty($share_id)) {
             $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
             $all_fork_shares = $sharePoolProductM->get_fork_share_ids($share_id);
@@ -938,6 +968,10 @@ class ShareManageController extends AppController
         $user_data = $this->ShareManage->get_users_data($user_ids);
         $user_data = Hash::combine($user_data, '{n}.User.id', '{n}.User');
         $share_data = $this->WeshareBuy->get_weshare_info($share_id);
+        $order_ids = Hash::extract($orders,'{n}.Order.id');
+        $order_products = $this->ShareManage->get_order_products($order_ids);
+
+        $this->set('order_products',$order_products);
         $this->set('orders', $orders);
         $this->set('user_data', $user_data);
         $this->set('share_data', $share_data);

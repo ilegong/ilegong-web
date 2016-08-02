@@ -18,6 +18,17 @@ class ShareManageComponent extends Component
         return $indexProducts;
     }
 
+    public function get_order_products($order_ids)
+    {
+        $cartM = ClassRegistry::init('Cart');
+        if (!$order_ids)
+        {
+            return false;
+        }
+        $sql = "SELECT name,product_id,price,sum(num) AS num FROM cake_carts WHERE order_id IN (".implode(',',$order_ids).") GROUP BY product_id";
+        return $cartM->query($sql);
+    }
+
     public function get_pool_product($id)
     {
         $indexProductM = ClassRegistry::init('PoolProduct');

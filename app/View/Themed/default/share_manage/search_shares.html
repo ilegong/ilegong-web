@@ -52,6 +52,7 @@
                         <tr>
                             <th>#ID</th>
                             <th>标题</th>
+                            <th>销售明细</th>
                             <th>创建者</th>
                             <th>创建者名称</th>
                             <th>类型</th>
@@ -63,6 +64,13 @@
                         <tr>
                             <td>{{$item['Weshare']['id']}}</td>
                             <td>{{$item['Weshare']['title']}}</td>
+                            <td>
+                                <?php foreach($item['products'] as $v):?>
+                                        {{$v['cake_carts']['name']}}—
+                                        ¥{{$v['cake_carts']['price']/100}}—
+                                        {{$v[0]['num']}}份<br/>
+                                <?php endforeach;?>
+                            </td>
                             <td>{{$item['Weshare']['creator']}}</td>
                             <td>{{$item['User']['nickname']}}</td>
                             <td>{{map_share_type_text($item['Weshare']['type'])}}</td>
@@ -78,6 +86,7 @@
                         {{/loop}}
                         </tbody>
                     </table>
+                    <?php echo $pager;?>
                 </div>
                 <!-- /.table-responsive -->
             </div>
