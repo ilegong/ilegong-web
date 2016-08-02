@@ -25,7 +25,56 @@
             <li><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
         </ul>
     </div>
-    <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/get-other-info.html?v1.8.9'"></div>
+        <div class="other-share">
+            <ul class="clearfix">
+                <li ng-class="{'other-share_focus':vm.focus == 'share'}" ng-click="vm.focus = 'share';">TA分享的</li>
+                <li ng-class="{'other-share_focus':vm.focus == 'attend'}" ng-click="vm.focus = 'attend';">TA报名的</li>
+            </ul>
+            {{if $user_info['User']['id'] == 701201}}
+                <a href="/vote/vote_event_view/11.html?from=osu"><img style="width: 100%;margin-top: 5px;margin-bottom: 10px;" src="{{STATIC_HOST}}/static/weshares/images/spec/spec-vote.jpg"/></a>
+            {{/if}}
+            {{literal}}
+            <div class="shares-container hide" ng-class="{'show-b':vm.focus == 'share'}" infinite-scroll='vm.shareNextPage()'
+                 infinite-scroll-disabled='vm.sharesOver||vm.loading'
+                 infinite-scroll-distance='0'>
+                <div class="share show-summary" ng-repeat="share in vm.shares.list">
+                    <a class="image-container" href="/weshares/view/{{share.id}}.html?from=userInfo">
+                        <img class="image" lazy-src="{{share.default_image}}"
+                             fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'">
+                    </a>
+                    <a class="share-content" href="/weshares/view/{{share.id}}.html?from=userInfo">
+                        <h1 class="share-title" ng-bind="share.title"></h1>
+
+                        <p class="share-description" ng-if="!_.isEmpty(share.description)">
+                            <span class="text-danger" ng-bind="vm.username+'说:'"> </span>
+                            <span ng-bind-html="share.description | unsafe"></span>
+                        </p>
+                    </a>
+                    <dl class="share-summary clearfix ">
+                        <dd class="order-count clearfix">
+                            <img class="avatar radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4"
+                                 lazy-src="{{buyer.avatar}}"
+                                 fallback-src="{{vm.staticFilePath}}/avatar/s/default.jpg"/>
+                            <label class="fl">已<span>{{share.summary.order_count}}</span>个人报名</label>
+                        </dd>
+                        <dd class="view-count">浏览{{share.summary.view_count}}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="hide" ng-class="{'show-b':vm.focus == 'attend'}" infinite-scroll='vm.attendNextPage()'
+                 infinite-scroll-disabled='vm.attendOver||vm.loading'
+                 infinite-scroll-distance='0'>
+                <div class="mine_order" ng-repeat="attend in vm.attends.list">
+                    <a class="clearfix share-goodlist" ng-click="vm.goToShare(attend.id);">
+                        <div class="fl"><img lazy-src="{{attend.default_image}}" fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'"/></div>
+                        <h1>{{attend.title}}</h1>
+                        <em>进行中</em>
+                        <label><span>{{attend.created}}</span></label>
+                    </a>
+                </div>
+            </div>
+            {{/literal}}
+        </div>
     <div class="mine-story-more" style="display: none" ng-class="{'show-b':vm.show_desc}">
         <p>{{$user_info['User']['description']}}</p>
     </div>
