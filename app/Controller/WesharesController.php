@@ -54,6 +54,7 @@ class WesharesController extends AppController
         $this->set('coupon_count', $coupon_count);
         $hide_nav = $_REQUEST['hide_nav'];
         $this->set('hide_nav', $hide_nav);
+        $this->set('owner', $this->currentUser['own_id']);
     }
 
     public function read_share_count_api($page)

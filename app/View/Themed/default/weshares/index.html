@@ -25,7 +25,11 @@
     </div>
     <div class="topic">
         <ul class="clearfix">
+            {{if $owner}}
+            <li><a href="/weshares/get_other_info/{{$owner}}.html"><img src="{{$STATIC_HOST}}/static/img/topic-shequ.jpg" /></a></li>
+            {{else}}
             <li><a href="/weshares/index_special/6.html"><img src="{{$STATIC_HOST}}/static/img/topic-shichi.jpg" /></a></li>
+            {{/if}}
             <li><a href="/weshares/index_special/7.html"><img src="{{$STATIC_HOST}}/static/img/topic-changxian.jpg" /></a></li>
         </ul>
     </div>
