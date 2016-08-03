@@ -166,22 +166,46 @@ class ShareManageComponent extends Component
     {
         // 更新cake_pool_products表
         $poolProductM = ClassRegistry::init('PoolProduct');
+        $wesharesM = ClassRegistry::init('Weshare');
+
+        $sql = "SELECT id
+FROM cake_weshares
+WHERE root_share_id = {$data['Weshares']['id']}";
+
+        $clone_weshares = $wesharesM->query($sql);
+
         $res = $poolProductM->save($data['PoolProduct']);
         // 更新cake_weshare_products表
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         foreach ($data['WeshareProduct'] as $item) {
-            if (!isset($item['id'])) {
+            if (!isset($item['id'])) {//add
                 $item['id'] = null;
                 $item['weshare_id'] = $data['Weshares']['id'];
+                $item['price'] *= 100;
+                $item['channel_price'] *= 100;
+                $item['wholesale_price'] *= 100;
+                $weshareProductM->save($item);
+                $item['origin_product_id'] = $weshareProductM->id;
+
+                foreach ($clone_weshares as $clone_weshare) {
+                    $item['weshare_id'] = $clone_weshare['cake_weshares']['id'];
+                    $weshareProductM->save($item);
+                }
+            }else{//update
+                $item['price'] *= 100;
+                $item['channel_price'] *= 100;
+                $item['wholesale_price'] *= 100;
+                $weshareProductM->save($item);
+
+                $sql = "UPDATE `51daifan`.`cake_weshare_products`
+SET `name` = '{$item['name']}', `price` = {$item['price']}, `channel_price` = {$item['channel_price']}, `wholesale_price` = {$item['wholesale_price']}
+WHERE `51daifan`.`cake_weshare_products`.`origin_product_id` = '{$item['id']}'";
+                $weshareProductM->query($sql);
             }
-            $item['price'] *= 100;
-            $item['channel_price'] *= 100;
-            $item['wholesale_price'] *= 100;
-            $weshareProductM->save($item);
+
         }
 
         // 更新cake_weshares表
-        $wesharesM = ClassRegistry::init('Weshare');
         $data['Weshares']['title'] = $data['PoolProduct']['share_name'];
         $wesharesM->save($data['Weshares']);
 
