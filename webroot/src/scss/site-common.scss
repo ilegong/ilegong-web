@@ -179,6 +179,9 @@ a:-webkit-any-link {
   .btm_item.middle-item {
     width: 28%;
   }
+  .btm_item.middle-item-2 {
+    width: 59% !important;
+  }
   .btm_item.large-item {
     width: 56%;
   }
@@ -220,6 +223,7 @@ a:-webkit-any-link {
     float: left;
     color: #fff;
   }
+
   .btm_item.item-stop.processing {
     background-color: #ccc;
   }
