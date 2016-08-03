@@ -1471,6 +1471,7 @@ GROUP BY product_id";
 
     public function pool_balance_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '商家结算');
         $this->balance_logs();
         $this->render('share_manage/balance_logs');
@@ -1478,6 +1479,7 @@ GROUP BY product_id";
 
     public function sharer_balance_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '分享人结算');
         $this->balance_logs();
         $this->render('share_manage/balance_logs');
@@ -1485,6 +1487,7 @@ GROUP BY product_id";
 
     public function wait_balanced_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '待结算分享');
         $this->set('show_time_filter', true);
         $_REQUEST['balanceStatus'] = '0,1';
@@ -1494,6 +1497,7 @@ GROUP BY product_id";
 
     public function has_balanced_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '已经结算分享');
         $_REQUEST['balanceStatus'] = '2';
         $this->balance_logs();
@@ -1502,6 +1506,7 @@ GROUP BY product_id";
 
     public function no_order_balance_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '零订单分享');
         $_REQUEST['balanceFee'] = '0';
         $this->balance_logs();
@@ -1511,14 +1516,17 @@ GROUP BY product_id";
 
     public function brand_wait_balance_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '商家待结算');
         $_REQUEST['balanceStatus'] = '0,1';
         $this->brand_balance_logs();
         $this->render('share_manage/brand_balance_logs');
+        return;
     }
 
     public function brand_has_balanced_logs()
     {
+        $this->autoRender = false;
         $this->set('title', '商家已结算');
         $_REQUEST['balanceStatus'] = 2;
         $this->brand_balance_logs();
@@ -2189,6 +2197,7 @@ GROUP BY product_id";
 
     public function add_balance_log()
     {
+        $this->autoRender = false;
         $data = ['BalanceLog' => []];
         $type = $_REQUEST['type'];
         $data['BalanceLog']['type'] = $type;
@@ -2203,6 +2212,7 @@ GROUP BY product_id";
 
     public function update_balance_log($id)
     {
+        $this->autoRender = false;
         $this->loadModel('BalanceLog');
         $data = $this->BalanceLog->findById($id);
         $this->set('data', $data);
@@ -2211,6 +2221,7 @@ GROUP BY product_id";
     }
 
     public function add_brand_balance_log(){
+        $this->autoRender = false;
         $data = ['BalanceLog' => []];
         $type = $_REQUEST['type'];
         $data['BalanceLog']['type'] = $type;
@@ -2224,6 +2235,7 @@ GROUP BY product_id";
     }
 
     public function update_brand_balance_log($id){
+        $this->autoRender = false;
         $this->loadModel('BalanceLog');
         $data = $this->BalanceLog->findById($id);
         $this->set('data', $data);
