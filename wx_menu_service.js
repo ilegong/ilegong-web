@@ -8,15 +8,15 @@
     {
         "name":"我要分享",
         "sub_button":[
+            {
+                "type":"view",
+                "name":"下载APP",
+                "url":"http://www.tongshijia.com/pys/download_app.html?from=weixin"
+            },
           {
             "type":"view",
             "name":"我要分享",
             "url":"http://www.tongshijia.com/weshares/add.html?from=weixin"
-          },
-          {
-            "type":"view",
-            "name":"我的分享",
-            "url":"http://www.tongshijia.com/weshares/my_shares_list.html?from=weixin"
           },
           {
             "type":"view",
