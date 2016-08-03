@@ -125,6 +125,7 @@ class UserApiController extends Controller
         $user_summery['rebate_money'] = $rebate_money;
         $user_level = $this->ShareUtil->get_user_level($user_id);
         $userInfo['level'] = $user_level;
+        $userInfo['rebate_money'] = $userInfo['rebate_money']/100;
         echo json_encode(array('my_profile' => array('User' => $userInfo), 'user_summery' => $user_summery));
         exit();
     }
