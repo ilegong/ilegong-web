@@ -1,6 +1,6 @@
 ﻿window.SINGLE_TAB = "  ";
-window.ImgCollapsed = "/static/sharer/json/Collapsed.gif";
-window.ImgExpanded = "/static/sharer/json/Expanded.gif";
+window.ImgCollapsed = "http://static.tongshijia.com/static/sharer/json/Collapsed.gif";
+window.ImgExpanded = "http://static.tongshijia.com/static/sharer/json/Expanded.gif";
 window.QuoteKeys = true;
 function $id(id){ return document.getElementById(id); }
 function IsArray(obj) {
