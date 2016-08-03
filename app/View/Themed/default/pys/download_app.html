@@ -5,7 +5,11 @@
     <title>朋友说APP下载</title>
 </head>
 <body>
+{{if preg_match("/iPhone|iPad|iPod/", $_SERVER['HTTP_USER_AGENT'])}}
 <img style="width: 100%;" src="{{STATIC_HOST}}/static/weshares/images/ios_download.jpg" alt="iOS APP下载"/>
+{{else}}
+<img style="width: 100%;" src="{{STATIC_HOST}}/static/weshares/images/android_download.jpg" alt="android APP下载"/>
+{{/if}}
 <script>
     window.location.href = "itms-apps://itunes.apple.com/app/id975953152";
 </script>
