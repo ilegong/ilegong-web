@@ -40,6 +40,11 @@
             },
             {
                 "type":"view",
+                "name":"我的分享",
+                "url":"http://www.tongshijia.com/weshares/my_shares_list.html?from=weixin"
+            },
+            {
+                "type":"view",
                 "name":"售后服务",
                 "url":"https://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=2662456057&idx=1&sn=0671ead1422ddf8ba3e4c1e7032be10a"
             }
