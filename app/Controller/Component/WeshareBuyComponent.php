@@ -14,7 +14,7 @@ class WeshareBuyComponent extends Component
 
     var $query_user_simple_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'mobilephone', 'is_proxy', 'avatar');
 
-    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark', 'flag');
+    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark', 'flag', 'applied_rebate');
 
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 
@@ -1674,7 +1674,6 @@ class WeshareBuyComponent extends Component
      * @param $weshareId
      * @param $is_me
      * @param bool $division 根据发货方式 分类订单
-     * @param bool $export
      * @return array
      * 获取分享的订单信息
      *
@@ -1770,8 +1769,7 @@ class WeshareBuyComponent extends Component
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => $orderIds,
-                    'type' => ORDER_TYPE_WESHARE_BUY,
-                    'not' => array('order_id' => null, 'order_id' => '')
+                    'type' => ORDER_TYPE_WESHARE_BUY
                 ),
                 'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
             ));
@@ -1779,11 +1777,13 @@ class WeshareBuyComponent extends Component
             $summeryTotalPrice = 0;
             $couponPrice = 0;
             $shipFee = 0;
+            $useRebateFee = 0;
             foreach ($orders as $order_item) {
                 $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
                 $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
                 $couponPrice = $couponPrice + $order_item['coupon_total'];
                 $shipFee = $shipFee + $order_item['ship_fee'];
+                $useRebateFee = $useRebateFee + $order_item['applied_rebate'];
             }
             foreach ($carts as $item) {
                 $order_id = $item['Cart']['order_id'];
@@ -1802,6 +1802,7 @@ class WeshareBuyComponent extends Component
             $product_buy_num['all_total_price'] = $summeryTotalPrice;
             $product_buy_num['real_total_price'] = $realTotalPrice;
             $product_buy_num['all_coupon_price'] = $couponPrice / 100;
+            $product_buy_num['all_use_rebate_fee'] = $useRebateFee / 100;
             $product_buy_num['all_ship_fee'] = $shipFee;
             if ($division) {
                 usort($orders, function ($a, $b) {

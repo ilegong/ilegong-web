@@ -1397,13 +1397,13 @@ class WesharesController extends AppController
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
         }
-        $child_share_summery_datas = array();
-        foreach ($child_share_data['child_share_ids'] as $child_share_id) {
-            $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
-        }
+//        $child_share_summery_datas = array();
+//        foreach ($child_share_data['child_share_ids'] as $child_share_id) {
+//            $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
+//        }
 
         //$this->set('child_share_summery_datas', $child_share_summery_datas);
-        $this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
+        //$this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
         $share_ids = $child_share_data['child_share_ids'];
         $share_ids[] = $weshareId;
 
@@ -1745,7 +1745,6 @@ class WesharesController extends AppController
      * @param $weshareId
      * @param $is_me
      * @param bool $division
-     * @param bool $export
      * @return mixed
      * 获取分享的订单信息
      */

@@ -63,15 +63,17 @@
             {{if count($tags) > 0}}
             {{if $show_tag_all}}
             <tr class="order-data-summery" name="order-data-summery-all">
-                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>{{if
-                    $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
-                    $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                <td colspan="3">
+                    总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>
+                    {{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}
+                    {{if $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                    {{if $summery['all_use_rebate_fee'] > 0}}&nbsp;&nbsp;余额支付金额:&nbsp;<font color="red">{{$summery['all_use_rebate_fee']}}</font>{{/if}}
                     {{if $repaid_order_money!=0}}
-                    {{if $repaid_order_money>0}}
-                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
-                    {{else}}
-                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
-                    {{/if}}
+                        {{if $repaid_order_money>0}}
+                        &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
+                        {{else}}
+                        &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
+                        {{/if}}
                     {{/if}}
                     &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                             color="red">{{$summery['all_buy_user_count']}}</font></td>
@@ -98,15 +100,16 @@
             {{/loop}}
             {{else}}
             <tr class="order-data-summery" name="order-data-summery-all">
-                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>{{if
-                    $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
-                    $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>
+                    {{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}
+                    {{if $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                    {{if $summery['all_use_rebate_fee'] > 0}}&nbsp;&nbsp;余额支付金额:&nbsp;<font color="red">{{$summery['all_use_rebate_fee']}}</font>{{/if}}
                     {{if $repaid_order_money!=0}}
-                    {{if $repaid_order_money>0}}
-                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
-                    {{else}}
-                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
-                    {{/if}}
+                        {{if $repaid_order_money>0}}
+                        &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
+                        {{else}}
+                        &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
+                        {{/if}}
                     {{/if}}
                     &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                             color="red">{{$summery['all_buy_user_count']}}</font></td>
