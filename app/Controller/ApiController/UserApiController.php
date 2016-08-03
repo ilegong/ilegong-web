@@ -229,13 +229,13 @@ class UserApiController extends Controller
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar')));
+            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar', 'rebate_money')));
         $datainfo['User']['image'] = get_user_avatar($datainfo);
 
-        $payment = json_decode($datainfo['User']['payment'],true);
+        $payment = json_decode($datainfo['User']['payment'], true);
         $payment['type'] = strval($payment["type"]);
         $datainfo['User']['payment'] = json_encode($payment);
-        
+
         return $datainfo;
     }
 
@@ -398,6 +398,48 @@ class UserApiController extends Controller
         };
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '绑定失败，亲联系客服'));
         exit();
+    }
+
+    public function rebate_detail($limit, $page) {
+        $uid = $this->currentUser['id'];
+        $this->loadModel('RebateLog');
+        $logs = $this->RebateLog->find('all', [
+            'conditions' => [
+                'RebateLog.user_id' => $uid
+            ],
+            'joins' => [
+                [
+                    'table' => 'cake_orders',
+                    'type' => 'left',
+                    'alias' => 'Order',
+                    'conditions' => 'Order.id = RebateLog.order_id'
+                ],
+                [
+                    'table' => 'cake_users',
+                    'type' => 'left',
+                    'alias' => 'User',
+                    'conditions' => 'User.id = Order.creator'
+                ],
+                [
+                    'table' => 'cake_weshares',
+                    'type' => 'left',
+                    'alias' => 'Weshare',
+                    'conditions' => 'Weshare.id = Order.member_id'
+                ]
+            ],
+            'fields' => ['RebateLog.reason', 'RebateLog.money', 'RebateLog.description', 'Weshare.title', 'Weshare.default_image', 'User.nickname', 'Order.created', 'Order.member_id', 'Order.id'],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => 'RebateLog.id DESC'
+        ]);
+        $result = [];
+        foreach ($logs as $logItem) {
+            $item = array_merge([], $logItem['RebateLog'], $logItem['Weshare'], $logItem['User'], $logItem['Order']);
+            $item['money'] = get_format_number(abs($item['money']) / 100);
+            $result[] = $item;
+        }
+        echo json_encode($result);
+        exit;
     }
 
     protected function get_post_raw_data()
