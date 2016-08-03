@@ -1,5 +1,62 @@
 <div ng-controller="ShareProductViewCtrl as vm" id='shareProductView' data-weshare-id="{{$weshare_id}}">
-    <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/pool-product-view.html?v0.0.9'"></div>
+    {{literal}}
+    <div class="classlist">
+        <a class="back" href="/share_product_pool/share_products_index"></a>
+        {{::vm.weshare.title | limitTo: 10}}{{vm.weshare.title.length > 10 ? '...' : ''}}
+        <a class="home" href="/"></a>
+    </div>
+    <div class="weshare-view" style="margin-top: 40px;">
+        <div class="introduction margin-bottom-12">
+            <div class="status" ng-bind="::vm.shareStatusText"></div>
+            <h1 class='title margin-bottom-12' ng-bind="::vm.weshare.title"></h1>
+            <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
+                <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=t01719wisq4&tiny=0&auto=0" allowfullscreen></iframe>
+            </div>
+            <div ng-if="vm.weshare.refer_share_id==3822 || vm.weshare.id==3822">
+                <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=f0194qcpnvt&tiny=0&auto=0" allowfullscreen></iframe>
+            </div>
+            <div ng-if="vm.weshare.refer_share_id==4008 || vm.weshare.id==4008">
+                <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=e0195mejuea&tiny=0&auto=0"
+                        allowfullscreen></iframe>
+            </div>
+
+            <p class="margin-bottom-12"  ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html="vm.weshare.description | unsafe"></p>
+
+            <dl class="clearfix images margin-bottom-12">
+                <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>
+            </dl>
+            <div class="product-group">
+                <div ng-repeat="(tag, products) in vm.weshare.products">
+                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="::vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="::vm.toggleState[tag]['statusText']"></a></div>
+                    <div class="products form-group">
+                        <div ng-show="vm.toggleState[tag]['open']">
+                            <div ng-repeat="product in products">
+                                <dl class="clearfix product form-control">
+                                    <dd ng-bind="::product.name"></dd>
+                                </dl>
+                                <dl class="clearfix product form-control">
+                                    <dd><strong>零售价:</strong><span style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></span>&nbsp;&nbsp;<strong>渠道价:</strong><span style="color: #29AC0E;"  ng-bind="::product.channel_price/100 | currency:'￥'"></span></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='send-info text-center margin-bottom-12'><strong>发货时间: </strong>{{::vm.weshare.send_info}}</div>
+            <div class='send-info text-center margin-bottom-12'><strong>物流方式: </strong>{{::vm.weshare.ship_info}}</div>
+        </div>
+        <div style="text-align: center;">
+            <a href="/"><img ng-src="{{::vm.staticFilePath}}/static/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
+        </div>
+    </div>
+    <div class="clearfix clone-share-btn">
+        <a ng-if="vm.weshare.status!=2&&!vm.weshare['buy_config']" ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a>
+        <ul class="clearfix" ng-if="vm.weshare.status!=2&&vm.weshare['buy_config']">
+            <li style="width: 50%;float: left;"><a ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a></li>
+            <li style="width: 50%;float: right;"><a ng-click='vm.toBuyShare()' style="background-color: #29ac0e; width: 100%;">{{::vm.buyButtonText}}</a></li>
+        </ul>
+    </div>
+    {{/literal}}
 </div>
 
 
