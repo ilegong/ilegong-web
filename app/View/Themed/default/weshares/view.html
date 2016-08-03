@@ -383,9 +383,9 @@
                 </a>
                 <a class="btm_item item-buy middle-item" ng-if="vm.weshare.status == 0" ng-click="vm.buyProducts()" style="margin-left: 0px;">我要报名</a>
                 <a class="btm_item item-stop middle-item" ng-if="vm.weshare.status == 0" ng-click='vm.stopShare();'>截止报名</a>
-                <a class="btm_item item-cut-off middle-item" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)"
+                <a class="btm_item item-cut-off middle-item" ng-class="{'middle-item-2':vm.weshare.type == 6}" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)"
                    style="margin-left: 0px;">报名已截止</a>
-                <a class="btm_item item-stop middle-item" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)" ng-class="{'processing': vm.cloneShareProcessing}"
+                <a class="btm_item item-stop middle-item" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)&&vm.weshare.type != 6" ng-class="{'processing': vm.cloneShareProcessing}"
                    ng-click="vm.cloneShare()">重新开团</a>
                 <a class="btm_item small-item" href="/weshares/user_share_info" ng-if="vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1">
                     <p class="iconfont" style="height: 20px;"><i class="iconfont icon-user"></i></p>
@@ -529,7 +529,7 @@
 <?php
     $this->assign('title',$page_title);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.14'
+$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.15'
 ), null, array('inline' => false));
 
 $this->Html->script(array(

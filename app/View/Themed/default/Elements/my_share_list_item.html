@@ -11,6 +11,6 @@
     <li ng-if="vm.canManageShareInfo(share)"><a ng-click="vm.delShare(share)">删除</a></li>
     <li ng-if="vm.canManageShareInfo(share)"><a href="/weshares/update/&#123;&#123;share.id&#125;&#125;">修改</a></li>
     <li ng-if="share.status == 0 && vm.canManageShareInfo(share)"><a ng-click="vm.stopShare(share.id)">截止团购</a></li>
-    <li ng-if="share.status == 1 && vm.loadShareType == 0"><a ng-click="vm.reOpenShare(share.id)">重新开团</a></li>
+    <li ng-if="share.status == 1 && vm.loadShareType == 0 && share.type != 6"><a ng-click="vm.reOpenShare(share.id)">重新开团</a></li>
     <li ng-if="vm.canManageShareOrder(share)"><a href="/weshares/share_order_list/&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
 </ul>
