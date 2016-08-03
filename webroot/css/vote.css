@@ -35,7 +35,9 @@ ul li { list-style: none; }
 .babylist ul li b{ display: block; width: 4.2em; height: 2.083em; background: url("/img/vote/iconbg.png"); background-size: 4.2em 2.083em; font-weight: normal; color: #ffffff; text-align: center; line-height: 20px; position: absolute; right: 10px; top: 0;}
 .babylist_page a{ display: block; text-decoration: none; float: left; margin-right: 10px; margin-top: 10px; width: 32px; height: 32px; line-height: 32px; background-color: #ff7c6e; color: #ffffff; text-align: center; font-size: 14px;}
 .babylist_page a.cur{ background-color: #ffffff; color: #ff7c6e;}
-.babyrule{}
+.babyrule{
+    margin-top: 10px;
+}
 .babyrule h1 {
     width: 100px;
     margin: 0 auto;
