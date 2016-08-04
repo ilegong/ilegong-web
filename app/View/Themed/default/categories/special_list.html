@@ -71,12 +71,12 @@
     var imgUrl = "{{$this->Html->assetUrl($special_list['SpecialList']['share_img']?$special_list['SpecialList']['share_img'] : '/img/logo.png')}}";
     var lineLink = "{{WX_HOST}}{{special_link($special_list['SpecialList']['slug'])}}";
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-        WeixinJSBridge.on('menu:share:appmessage', function(argv){
-            utils.wx_to_friend(appid, imgUrl, lineLink, shareTitle, '');
-        });
-        WeixinJSBridge.on('menu:share:timeline', function(argv){
-            utils.wx_to_timeline(appid, imgUrl, lineLink, '', shareTitle);
-        });
+//        WeixinJSBridge.on('menu:share:appmessage', function(argv){
+//            utils.wx_to_friend(appid, imgUrl, lineLink, shareTitle, '');
+//        });
+//        WeixinJSBridge.on('menu:share:timeline', function(argv){
+//            utils.wx_to_timeline(appid, imgUrl, lineLink, '', shareTitle);
+//        });
     }, false);
 </script>
 
