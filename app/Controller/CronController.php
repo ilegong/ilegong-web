@@ -51,8 +51,9 @@ class CronController extends AppController
 
     function cron_update_overtime_order_status() {
         $this->autoRender = false;
-        $query_limit_time = date('Y-m-d H:i:s', strtotime('-2 hour'));
+        $query_limit_time = date('Y-m-d H:i:s', strtotime('-4 hour'));
         $orderM = ClassRegistry::init('Order');
+        $updated = date('Y-m-d H:i:s');
         $update_result = $orderM->updateAll(array('status' => ORDER_STATUS_CANCEL, 'business_remark' => 'concat(business_remark, "_canceled_by_sys")'), array('status' => ORDER_STATUS_WAITING_PAY, 'created < ' => $query_limit_time));
         echo json_encode(array('success' => true, 'result' => $update_result));
         return;
