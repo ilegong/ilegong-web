@@ -131,6 +131,7 @@ class MiaoView extends View{
 			$viewFileName = Cache::read($cache_key);
 			
 			if($viewFileName === false){
+                $this->__viewFileName = $view;
 				$viewFileName = $this->_getViewFileName($view);
 				Cache::write($cache_key, $viewFileName);
 			}

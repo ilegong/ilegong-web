@@ -1595,7 +1595,7 @@ GROUP BY product_id";
     /**
      * 分享结算日志
      */
-    public function balance_logs()
+    private function balance_logs()
     {
         require_once(APPLIBS . 'MyPaginator.php');
         $this->loadModel('Weshare');
