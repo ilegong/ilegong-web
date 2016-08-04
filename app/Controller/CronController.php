@@ -368,7 +368,11 @@ class CronController extends AppController
 
     function delete_complete_curl_job(){
         $redisCli = createRedisCli();
-        
+        $it = NULL; /* Initialize our iterator to NULL */
+        $redisCli->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY); /* retry when we get no keys back */
+        $result = $redisCli->scan($it, '*q:job:*', 20);
+        echo json_encode($result);
+        exit;
     }
 
 }

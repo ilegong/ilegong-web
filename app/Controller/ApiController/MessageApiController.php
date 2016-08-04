@@ -474,7 +474,6 @@ class MessageApiController extends Controller
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
         $this->WeshareFaq->create_faq($postData);
-
         echo json_encode(['success' => true]);
         exit();
     }
