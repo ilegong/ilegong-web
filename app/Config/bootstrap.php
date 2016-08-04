@@ -141,15 +141,12 @@ const ZITI_TAG = 'ziti';
 const KUAIDI_TAG = 'kuaidi';
 
 const PYS_BRAND_ID = 92;
-
 const PYS_BY_PRICE = 99;
-
 const PYS_SHIP_FEE = 15;
 
 const POOL_PRODUCT_PUBLISH = 1;
 const POOL_PRODUCT_UN_PUBLISH = 0;
 const POOL_PRODUCT_DRAFT = 2;
-
 
 const WESHARE_STATUS_DELETED = -1;
 const WESHARE_STATUS_NORMAL = 0;
@@ -160,8 +157,6 @@ const WESHARE_SETTLEMENT_NO = 0;
 const WESHARE_SETTLEMENT_YES = 1;
 
 const SEND_TEMPLATE_MSG_ACTIVE_STATUS = 1;
-const SEND_TEMPLATE_MSG_COMPLETE_STATUS = 2;
-
 
 const COMMENT_SHARE_TYPE = 'Share'; //评论的类型
 
