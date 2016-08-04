@@ -1,7 +1,7 @@
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
-        var share_string = '{{$share_string ? $share_string :"baby_vote"}}';
+        var share_string = '{{$share_string ? $share_string :"0"}}';
         {{if $share_baby_info}}
             var to_timeline_title = "{{$weixin_share_title}}";
             var to_friend_title = "{{$weixin_share_title}}";

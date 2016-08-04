@@ -8,9 +8,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
-    <meta name="chinaz-site-verification" content="081e7651-48c6-4c2f-a569-99321685eab1" />
-    <meta name="baidu-site-verification" content="mGej7ZzIc1" />
-    <meta name="360-site-verification" content="11513c90635fb70282692446172cae58" />
     <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}"/>
     <meta name="Description"
           content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
@@ -84,7 +81,7 @@
             success: function () {}
         });
         wx.onMenuShareTimeline({
-            title: title,
+            title:"{{$weixin_share_title}}",
             link: document.location.toString(),
             imgUrl: "{{$weixin_share_image}}",
             success: function () {}
