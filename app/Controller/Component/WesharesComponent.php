@@ -372,16 +372,14 @@ class WesharesComponent extends Component
 
     private function on_weshare_stopped($uid, $weshare_id)
     {
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
-        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id, '');
+        delete_redis_data_by_key('_'.$weshare_id);
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         Cache::write(USER_RECOMMEND_WESHARES_CACHE_KEY . '_' . $uid, '');
     }
 
     private function on_weshare_publish($uid, $weshare_id)
     {
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
-        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id, '');
+        delete_redis_data_by_key('_'.$weshare_id);
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
     }
 
@@ -408,10 +406,7 @@ class WesharesComponent extends Component
 
     private function clear_cache_for_weshare($uid, $weshare){
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
-        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
-        Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
-        Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+        delete_redis_data_by_key('_'.$weshare['Weshare']['id']);
     }
 
     /**

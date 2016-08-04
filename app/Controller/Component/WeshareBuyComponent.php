@@ -219,7 +219,7 @@ class WeshareBuyComponent extends Component
                 'settlement' => $settlement
             ],
             'fields' => $this->query_list_share_fields,
-            'order' => array('created DESC'),
+            'order' => array('id DESC'),
             'limit' => $limit,
             'page' => $page
         ]);
