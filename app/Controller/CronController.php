@@ -370,7 +370,7 @@ class CronController extends AppController
         $redisCli = createRedisCli();
         $it = NULL; /* Initialize our iterator to NULL */
         $redisCli->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY); /* retry when we get no keys back */
-        $keys = $redisCli->scan($it, '*q:job:*', 20);
+        $keys = $redisCli->scan($it, '*q:job:*', 1000);
         $deletes = [];
         foreach ($keys as $key) {
             $item = $redisCli->hGetAll($key);
