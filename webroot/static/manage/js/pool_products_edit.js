@@ -59,13 +59,26 @@ $(function () {
         $('#image-preview-modal').modal('show');
     });
 
-    $('.delete-image').on("click", function () {
+    $(document).on("click",".delete-image",function(){
         var arr = $('#store-images-string').val().split('|');
         var idx = arr.splice(arr.indexOf($(this).attr('src-data')), 1);
         var nstring = arr.join('|');
         $('#store-images-string').val(nstring);
         $(this).parent('div').parent('div.image-area').remove();
     });
+
+    $(document).on("click",".set-first-image",function(){
+        var obj = $(this).parent().parent();
+        var clone = obj.clone();
+        src = $(this).attr('src-data');
+        $(".image-area:first").before(clone);
+        obj.remove();
+        var arr = $('#store-images-string').val().split('|');
+        var idx = arr.splice(arr.indexOf(src), 1);
+        var nstring = arr.join('|');
+        $('#store-images-string').val(src+'|'+nstring);
+
+    })
 
     $('.delete-m-banner-image').on("click", function () {
         $('#m-banner-images-string').val('');

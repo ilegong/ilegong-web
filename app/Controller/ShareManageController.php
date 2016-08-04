@@ -1110,9 +1110,6 @@ GROUP BY product_id";
         if (!$data['PoolProduct']['category']) {
             $error = "产品的类型不能为空";
         }
-        if (!$data['PoolProduct']['channel_type']) {
-            $error = "渠道类型不能为空";
-        }
         foreach ($data['WeshareProduct'] as $key => $value) {
             if ($value['channel_price'] == "") {
                 $error = "渠道价不能为空";

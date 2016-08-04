@@ -15,6 +15,20 @@ $(document).ready(function () {
             $('#share-images').val(nstring);
             $(this).parent('div').parent('div.image-area').remove();
         });
+
+        $(document).on("click",".set-first-image",function(){
+            var obj = $(this).parent().parent();
+            var clone = obj.clone();
+            src = $(this).attr('src-data');
+            $(".image-area:first").before(clone);
+            obj.remove();
+            var arr = $('#share-images').val().split('|');
+            var idx = arr.splice(arr.indexOf(src), 1);
+            var nstring = arr.join('|');
+            $('#share-images').val(src+'|'+nstring);
+
+        })
+
     }
 
     bindImgEvent();

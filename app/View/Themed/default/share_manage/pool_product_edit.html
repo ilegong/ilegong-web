@@ -49,21 +49,6 @@
               </div>
               <div class="form-group">
                 <label>
-                  渠道类型
-                </label>
-                <?php if($index_product[PoolProduct]['channel_type'] == 1):?>
-                自营<input type="radio" name="data[PoolProduct][channel_type]" value="1" checked="checked">
-                第三方<input type="radio" name="data[PoolProduct][channel_type]" value="2">
-                <?php elseif($index_product[PoolProduct]['channel_type'] == 2):?>
-                自营<input type="radio" name="data[PoolProduct][channel_type]" value="1">
-                第三方<input type="radio" name="data[PoolProduct][channel_type]" value="2" checked="checked">
-                <?php else:?>
-                自营<input type="radio" name="data[PoolProduct][channel_type]" value="1">
-                第三方<input type="radio" name="data[PoolProduct][channel_type]" value="2">
-                <?php endif;?>
-              </div>
-              <div class="form-group">
-                <label>
                   显示名称
                 </label>
                 <input type="text" class="form-control" name="data[PoolProduct][share_name]" value="{{$index_product['PoolProduct']['share_name']}}">
@@ -182,6 +167,9 @@
                   <div class="operator">
                     <a class="btn btn-primary preview-image" src-data="{{$image}}" href="javascript:void(0)">
                       预览
+                    </a>
+                    <a class="btn btn-primary set-first-image" src-data="{{$image}}" href="javascript:void(0)">
+                      设为首图
                     </a>
                     <a class="btn btn-danger delete-image" src-data="{{$image}}" href="javascript:void(0)">
                       删除
