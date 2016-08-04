@@ -371,12 +371,18 @@ class CronController extends AppController
         $it = NULL; /* Initialize our iterator to NULL */
         $redisCli->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY); /* retry when we get no keys back */
         $keys = $redisCli->scan($it, '*q:job:*', 20);
-        $data = [];
-        foreach($keys as $key){
+        $deletes = [];
+        foreach ($keys as $key) {
             $item = $redisCli->hGetAll($key);
-            $data[] = $item;
+            if ($item['state'] == 'complete') {
+                $deletes[] = $key;
+                $data_keys = $redisCli->hKeys($key);
+                foreach ($data_keys as $data_key_item) {
+                    $redisCli->hDel($key, $data_key_item);
+                }
+            }
         }
-        echo json_encode(['keys' => $keys, 'data' => $data]);
+        echo json_encode(['keys' => $deletes]);
         exit;
     }
 
