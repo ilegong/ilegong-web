@@ -171,8 +171,12 @@ class ChatApiController extends Controller
 
     public function join_group_by_code($group_code)
     {
-        $user = $this->currentUser  ['id'];
+        $user = $this->currentUser['id'];
         list($group_id, $hx_group_id) = $this->get_group_by_code($group_code);
+        if (empty($group_id) || empty($hx_group_id)) {
+            echo json_encode(array('statusCode' => -2, 'statusMsg' => '添加失败'));
+            exit;
+        }
         $date_now = date('Y-m-d H:i:s');
         $save_result = true;
         if (!$this->UserGroup->hasAny(array('user_id' => $user, 'group_id' => $group_id))) {
