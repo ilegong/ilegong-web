@@ -83,12 +83,11 @@
         </div>
     </div>
 </div>
-        <script>
-            $(document).ready(function(){
-                $([_pys_notify_img_url]).preload();
-                $('#wx_login_a1, #wx_login_a2').click(function(e){
-                    utils.progress_notify('正在登录，请稍候...');
-                });
-            });
-        </script>
+<script>
+    $(document).ready(function(){
+        $('#wx_login_a1, #wx_login_a2').click(function(e){
+            utils.progress_notify('正在登录，请稍候...');
+        });
+    });
+</script>
 
