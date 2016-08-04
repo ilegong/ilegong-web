@@ -8,14 +8,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
-    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}"/>
-    <meta name="Description"
-          content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
-    <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     {{$this->Html->script(array(
-    'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
+    'http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js',
     'jquery/jquery.cookie.js',
     'i18n/language-zh-CN.js',));}}
     <script type="text/javascript">
