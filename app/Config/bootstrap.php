@@ -159,6 +159,9 @@ const WESHARE_STATUS_DRAFT = 10;
 const WESHARE_SETTLEMENT_NO = 0;
 const WESHARE_SETTLEMENT_YES = 1;
 
+const SEND_TEMPLATE_MSG_ACTIVE_STATUS = 1;
+const SEND_TEMPLATE_MSG_COMPLETE_STATUS = 2;
+
 
 const COMMENT_SHARE_TYPE = 'Share'; //评论的类型
 
@@ -2972,10 +2975,15 @@ function get_order_from_flag($from)
 }
 
 function delete_redis_data_by_key($match){
-    $redis = new Redis();
-    $redis->connect(REDIS_HOST);
+    $redis = createRedisCli();
     $keys = $redis->keys('*'.$match.'*');
     $redis->delete($keys);
+}
+
+function createRedisCli() {
+    $r = new Redis();
+    $r->connect(REDIS_HOST);
+    return $r;
 }
 
 //add logs

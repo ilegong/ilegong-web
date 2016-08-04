@@ -321,7 +321,6 @@ class CronController extends AppController
     }
 
 
-
     function process_download_wx_photo($oathBinds) {
         $this->log('download avatar length : '.(count($oathBinds)));
         $resultCount = 0;
@@ -364,6 +363,12 @@ class CronController extends AppController
             }
         }
         return $resultCount;
+    }
+
+
+    function delete_complete_curl_job(){
+        $redisCli = createRedisCli();
+        
     }
 
 }
