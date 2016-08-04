@@ -4,16 +4,135 @@
         <br/>客服微信号：<a href="javascript:;">pyshuo2015</a>
         <br />服务热线: {{SERVICE_LINE}}
 </footer>
-{{$this->Html->script(array(
-			'jquery/jquery.lazyload.min.js',
-            'bootstrap.min.js','bootbox/bootbox.min.js'
-        ));
-}}
+<script>
+    var utils = {
+        notify_dialog : null,
+        get_notify_img_url : function() {
+            if (typeof '_pys_notify_img_url' != 'undefined' && _pys_notify_img_url) {
+                return _pys_notify_img_url;
+            } else {
+                return '/img/progress_notify.gif';
+            }
+        },
+
+
+        close_notify : function() {
+            if (utils.notify_dialog) {
+                utils.notify_dialog.modal('hide');
+            }
+        },
+
+        progress_done : function(msg) {
+            if (utils.notify_dialog) {
+                utils.notify_dialog.find('div.bootbox-body').text(msg);
+            }
+        },
+
+        progress_notify: function(msg) {
+            if (msg) {
+                msg = '<br/>' + msg;
+            } else {
+                msg = '';
+            }
+            utils.notify_dialog = bootbox.dialog({
+                'closeButton': false,
+                message: '<img src="'+ this.get_notify_img_url()+'"/>' + msg
+            });
+
+            var modal_dialog = utils.notify_dialog.find('.modal-dialog');
+            modal_dialog.css('width', '200px').addClass('text-center');
+            utils.notify_dialog.css({
+                'overflow-y': 'auto',
+                'padding-top': function () {
+                    return (($(this).height() - modal_dialog.height()) / 2);
+                }
+            })
+        },
+
+        alert:function(msg, callback, timeout, close_callback) {
+
+            if (!callback) callback = function(){};
+
+            var $dlg = bootbox.alert({'message':msg, 'callback':callback, 'closeButton':false});
+            var modal_dialog = $dlg.find('.modal-dialog');
+            $dlg.css({
+                'overflow-y': 'auto'//,
+            });
+
+            utils.__auto_close(timeout, $dlg, close_callback);
+        },
+
+        __auto_close : function (timeout, $dlg, close_callback) {
+            if (timeout && timeout > 0) {
+                $dlg.on('shown.bs.modal', function () {
+                    clearTimeout($dlg.data('hideInteval'));
+                    var id = setTimeout(function(){
+                        $dlg.modal('hide');
+                    }, timeout);
+                    $dlg.data('hideInteval', id);
+                });
+
+                if (typeof close_callback == 'function') {
+                    $dlg.on('hidden.bs.modal', function () {
+                        close_callback();
+                    });
+                }
+            }
+        },
+
+        alert_one : function(msg, defLabel, defCallback, options) {
+            return utils.alert_two(msg, defLabel, null, defCallback, null, options);
+        },
+
+        alert_two : function(msg, defLabel, impLabel, defCallback, impCallback, options){
+            defLabel = defLabel || '知道了';
+            var params = {
+                message: msg,
+                closeButton: false,
+                buttons: {
+                    main: {
+                        label: defLabel,
+                        className: impLabel ? "btn-default" : 'btn-danger',
+                        callback: function () {
+                            if (defCallback) defCallback();
+                        }
+                    }
+                }
+            };
+
+            if (impLabel) {
+                params['buttons']['danger'] = {
+                    label: impLabel,
+                    className: "btn-danger",
+                    callback: function () {
+                        if (impCallback) impCallback();
+                    }
+                };
+            }
+
+            var $dlg = bootbox.dialog(params).css({
+                'top': options && options['top'] ? options['top'] : '50%',
+                'margin-top': options && options['margin-top'] ? options['margin-top'] : function () {
+                    return -($(this).height() / 2);
+                }
+            }).find('div.modal-footer').css({'text-align': 'center'});
+
+            if (options) {
+                utils.__auto_close(options.timeout, $dlg, options.close_callback);
+            }
+        },
+
+        is_weixin: function(){
+            return (typeof '_pys_in_weixin' != 'undefined' && _pys_in_weixin);
+        }
+    };
+</script>
+{{$this->Html->script(array('http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js','http://cdn.bootcss.com/bootbox.js/4.4.0/bootbox.min.js'));}}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
     if (bootbox) {
-    bootbox.setDefaults({
-        locale: "zh_CN"
-    });
+        bootbox.setDefaults({
+            locale: "zh_CN"
+        });
     }
 {{$this->Html->scriptEnd()}}
 {{$this->fetch('bottomscript')}}

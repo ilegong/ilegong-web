@@ -10,10 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    {{$this->Html->script(array(
-    'http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js',
-    'jquery/jquery.cookie.js',
-    'i18n/language-zh-CN.js',));}}
+    {{$this->Html->script(array('http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js'));}}
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
         var ADMIN_BASEURL = BASEURL+"/manage";
