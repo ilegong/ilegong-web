@@ -38,6 +38,11 @@
     <script src="{{$STATIC_HOST}}/static/sharer/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 </head>
 <body>
+<?php
+if($CurrentUser['id'] == 801447 || $CurrentUser['id'] == 559795){
+    $isProductManage = true;
+}
+?>
 <div id="wrapper">
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
