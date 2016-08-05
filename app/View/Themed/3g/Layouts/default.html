@@ -18,38 +18,6 @@
         var _pys_notify_img_url = '{{$this->Html->assetUrl("/img/progress_notify.gif")}}';
         var wx_follow_url = '{{$wx_follow_url}}';
     </script>
-    <script type="text/javascript">
-        //<![CDATA[
-        // for debugging javascript!
-        (function (window) {
-            window.onerror = function (msg, url, ln) {
-                //transform errors
-                if (typeof(msg) === 'object' && msg.srcElement && msg.target) {
-                    if (msg.srcElement == '[object HTMLScriptElement]' && msg.target == '[object HTMLScriptElement]') {
-                        msg = 'Error loading script';
-                    } else {
-                        msg = 'Event Error - target:' + msg.target + ' srcElement:' + msg.srcElement;
-                    }
-                }
-
-                msg = msg.toString();
-
-                //ignore errors
-                if (msg.indexOf("Location.toString") > -1) {
-                    return;
-                }
-                if (msg.indexOf("Error loading script") > -1) {
-                    return;
-                }
-
-                //report errors
-                window.onerror = function () {
-                };
-                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&error_url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
-            };
-        })(window);
-        //]]>
-    </script>
     {{if $jWeixinOn}}
         <script>
             //hide footer bar
