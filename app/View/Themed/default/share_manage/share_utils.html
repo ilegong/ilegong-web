@@ -6,7 +6,7 @@
 </div>
 <!-- /.row -->
 
-{{if $isProductManage}}
+{{if is_product_manager($CurrentUser['id'])}}
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
