@@ -27,10 +27,6 @@ class UserFansComponent extends Component{
         return $result;
     }
 
-    public function get_fans_web($uid, $page, $limit, $is_own){
-
-    }
-
     public function get_fans($uid, $page = 1, $query = null, $limit = 0, $is_own = 0){
         $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
         $queryCond = ['conditions' => ['UserRelation.user_id' => $uid, 'UserRelation.deleted' => DELETED_NO, 'UserRelation.is_own' => $is_own], 'fields' => ['UserRelation.*']];

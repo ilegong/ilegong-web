@@ -278,18 +278,29 @@ class UserApiController extends Controller
      * @param $uid
      * @param $page
      * @param $limit
+     * @param $is_own
      */
-    public function get_u_list_data($type, $uid, $page, $limit)
+    public function get_u_list_data($type, $uid, $page, $limit, $is_own = 0)
     {
         $query = $_REQUEST['query'];
         if ($type == 0) {
-            $data = $this->UserFans->get_fans($uid, $page, $query, $limit);
+            $data = $this->UserFans->get_fans($uid, $page, $query, $limit, $is_own);
         } else {
             $data = $this->UserFans->get_subs($uid, $page, $query, $limit);
         }
         $data['users'] = Hash::extract($data['users'], '{n}.User');
         echo json_encode($data);
         exit();
+    }
+
+    /**
+     * 获取粉丝汇总信息
+     */
+    public function get_u_fans_summary(){
+        $uid = $this->currentUser['id'];
+        $summary = $this->UserFans->get_fans_count_summary($uid);
+        echo json_encode($summary);
+        exit;
     }
 
     /**
