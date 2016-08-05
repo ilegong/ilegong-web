@@ -4,32 +4,36 @@ class UserFansComponent extends Component{
 
     static $PAGE_LIMIT = 50;
 
-    public function get_fans_new($uid, $type = 0,$page = 1, $nickname = null, $limit = 0){
-        $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
-        $queryCond = [
+    public function get_fans_count_summary($uid){
+        $UserRelationM = ClassRegistry::init('UserRelation');
+        $summary = $UserRelationM->find('all', [
             'conditions' => [
-                'UserRelation.user_id' => $uid,
-                'UserRelation.deleted' => DELETED_NO,
-                'UserRelation.is_own' => $type
+                'user_id' => $uid,
+                'deleted' => DELETED_NO
             ],
-            'fields' => ['UserRelation.*']];
-        if (!empty($query)) {
-            $queryCond['joins'] = [[
-                'table' => 'users',
-                'alias' => 'User',
-                'type' => 'INNER',
-                'conditions' => [
-                    'User.id = UserRelation.follow_id',
-                ]
-            ]];
-            $queryCond['conditions']['User.nickname like'] = '%' . $nickname . '%';
+            'group' => 'is_own',
+            'fields' => ['count(`id`) as `u_c`', 'is_own']
+        ]);
+        $result = ['total_self' => 0, 'total_comm' => 0];
+        foreach ($summary as $item) {
+            $i_is_own = $item['UserRelation']['is_own'];
+            if ($i_is_own == 0) {
+                $result['total_self'] = $item['0']['u_c'];
+            }
+            if ($i_is_own == 1) {
+                $result['total_comm'] = $item['0']['u_c'];
+            }
         }
-        return $this->process_query_data($queryCond, 'follow_id', $uid, $page);
+        return $result;
     }
 
-    public function get_fans($uid, $page = 1, $query = null, $limit = 0){
+    public function get_fans_web($uid, $page, $limit, $is_own){
+
+    }
+
+    public function get_fans($uid, $page = 1, $query = null, $limit = 0, $is_own = 0){
         $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
-        $queryCond = ['conditions' => ['UserRelation.user_id' => $uid, 'UserRelation.deleted' => DELETED_NO], 'fields' => ['UserRelation.*']];
+        $queryCond = ['conditions' => ['UserRelation.user_id' => $uid, 'UserRelation.deleted' => DELETED_NO, 'UserRelation.is_own' => $is_own], 'fields' => ['UserRelation.*']];
         if (!empty($query)) {
             $queryCond['joins'] = [[
                 'table' => 'users',

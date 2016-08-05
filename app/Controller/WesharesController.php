@@ -2160,16 +2160,8 @@ class WesharesController extends AppController
     public function fans_list()
     {
         $uid = $this->currentUser['id'];
-        $total_self = 0;
-        $total_comm = 0;
-        if ($uid) {
-            $res_self = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 1 AND deleted = 0 AND user_id = " . $uid);
-            $res_comm = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 0 AND deleted = 0 AND user_id = " . $uid);
-            $total_self = $res_self[0][0]['total'];
-            $total_comm = $res_comm[0][0]['total'];
-        }
-        $this->set('total_self', $total_self);
-        $this->set('total_comm', $total_comm);
+        $summary = $this->UserFans->get_fans_count_summary($uid);
+        $this->set($summary);
         $this->set('type', 1);
         $this->set('title', '我的粉丝');
         $this->set('userId', $uid);
@@ -2200,22 +2192,17 @@ class WesharesController extends AppController
         {
             $condition = " AND u.nickname like '%{$nickname}%' ";
         }
-
         $sql = "SELECT u.nickname AS nickname ,u.id AS id,u.avatar as avatar, u.label as label FROM cake_user_relations r LEFT JOIN cake_users u ON r.follow_id = u.id WHERE r.deleted = 0 AND r.is_own = {$type} AND r.user_id = {$uid} {$condition} LIMIT ".($page-1)*$limit.",{$limit}";
         $users = $this->UserRelation->query($sql);
-        $user_ids = [];
-
-        foreach ($users as $k => $user) {
-            $users[$k] = $user['u'];
-            $user_ids[] = $user['u']['id'];
-        }
-
+        $result = [];
         foreach ($users as $index => $user) {
-            $users[$index]['avatar'] = get_user_avatar($user);
-            $users[$index]['label'] = $user['lable'] ? $user['lable'] : "吃货游客";
+            $item = $user['u'];
+            $item['avatar'] = get_user_avatar($item);
+            $item['label'] = $item['lable'] ? $item['lable'] : "吃货游客";
+            $result[] = $item;
         }
 
-        echo json_encode($users);
+        echo json_encode($result);
         die;
     }
 

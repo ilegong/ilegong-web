@@ -98,7 +98,7 @@
             $http({method: 'GET', url: url, cache: $templateCache}).success(function (data) {
 
                 if (vm.type == 1) {
-                    if(obj_len(data) == 0)
+                    if(data.length == 0)
                     {
                         vm.self.over = true;
                     }else{
@@ -106,7 +106,7 @@
                         vm.self.page = vm.self.page + 1;
                     }
                 } else {
-                    if(obj_len(data) == 0)
+                    if(data.length == 0)
                     {
                         vm.comm.over = true;
                     }else{
@@ -117,15 +117,6 @@
                 vm.loadingData = false;
             }).error(function (data, status) {
             });
-        }
-
-        function obj_len(obj){
-            var n = 0;
-            for(var i in obj){
-                n++;
-            }
-            console.log(n);
-            return n;
         }
     }
 })(window, window.angular);
