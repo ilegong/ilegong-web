@@ -210,8 +210,8 @@ class WeshareBuyComponent extends Component
     public function get_my_shares($uid, $status, $settlement, $page, $limit)
     {
         $weshareM = ClassRegistry::init('Weshare');
-        $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
-        $shares = $weshareM->find('all', [
+        $query_share_type = [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL];
+        $q_cond = [
             'conditions' => [
                 'creator' => $uid,
                 'status' => $status,
@@ -219,10 +219,14 @@ class WeshareBuyComponent extends Component
                 'settlement' => $settlement
             ],
             'fields' => $this->query_list_share_fields,
-            'order' => array('id DESC'),
+            'order' => ['id DESC'],
             'limit' => $limit,
             'page' => $page
-        ]);
+        ];
+        if ($status == WESHARE_STATUS_STOP && $settlement != WESHARE_SETTLEMENT_YES) {
+            $q_cond['order'] = ['close_date DESC'];
+        }
+        $shares = $weshareM->find('all', $q_cond);
         return $shares;
     }
 
