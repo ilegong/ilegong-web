@@ -110,8 +110,11 @@ class UsersController extends AppController
 
                     /*对密码加密*/
                     $src_password = $this->data['User']['password'];
-
-                    $this->data['User']['nickname'] = trim($this->data['User']['nickname']);
+                    $nickname = '朋友说用户';
+                    if($this->data['User']['mobilephone']){
+                        $nickname = substr_replace($this->data['User']['mobilephone'],'*****',3,5);;
+                    }
+                    $this->data['User']['nickname'] = $nickname;
                     $this->data['User']['username'] = NULL;
                     $this->data['User']['mobilephone'] = trim($this->data['User']['mobilephone']);
 
@@ -124,7 +127,7 @@ class UsersController extends AppController
                     } else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
                         $this->Session->setFlash(__('Password should be longer than 6 characters'));
                     } else if ($this->User->hasAny(array('User.mobilephone' => $this->data['User']['mobilephone']))) {
-                        $this->Session->setFlash(__('Mobilephone is taken by others.'));
+                        $this->Session->setFlash(__('手机号已经被注册.'));
                     } else if ($this->User->hasAny(array('User.username' => $this->data['User']['mobilephone']))) {
                         $this->Session->setFlash(__('你的账号已被注册'));
                     } else {

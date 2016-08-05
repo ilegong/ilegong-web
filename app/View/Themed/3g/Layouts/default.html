@@ -2,12 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no">
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     {{$this->Html->script(array('http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js'));}}
@@ -33,11 +28,9 @@
     </noscript>
 </head>
 <body style="background-color: #F5F5F5">
-        {{if !noFlash }}
         <div class="container">
             {{$this->Session->flash()}}
         </div>
-        {{/if}}
         {{$content_for_layout}}
         {{template Elements/footer}}
 {{$this->fetch('scriptBottom')}}
