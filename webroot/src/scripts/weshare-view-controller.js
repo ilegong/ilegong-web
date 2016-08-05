@@ -549,10 +549,15 @@
         }
 
         function buyProducts() {
+            if (_.isEmpty(vm.currentUser)) {
+                alert('请先登录！');
+                window.location.href = '/users/login.html';
+                return false;
+            }
             if (vm.validateProducts()) {
                 alert('请选择报名商品！');
                 var element = angular.element(document.getElementById('share-product-list'));
-                window.scrollTo(0, element[0].offsetTop - 100)
+                window.scrollTo(0, element[0].offsetTop - 100);
                 return false;
             }
             vm.showShareDetailView = false;
