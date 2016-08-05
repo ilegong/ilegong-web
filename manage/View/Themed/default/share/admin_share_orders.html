@@ -152,6 +152,8 @@
                 <th><input type="text" class="form-control" placeholder="分享人" disabled></th>
                 <th><input type="text" class="form-control" placeholder="商品" disabled></th>
                 <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
+                <th><input type="text" class="form-control" placeholder="红包" disabled></th>
+                <th><input type="text" class="form-control" placeholder="余额" disabled></th>
                 <th><input type="text" class="form-control" placeholder="订单来源" disabled></th>
                 <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
                 <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
@@ -196,6 +198,8 @@
                     {{$cart['price']*$cart['num']/100}}<br/>
                 </td>
                 <td>{{$current_order['total_all_price']}}</td>
+                <td>{{$current_order['coupon_total']/100}}</td>
+                <td>{{$current_order['applied_rebate']/100}}</td>
                 <td class="danger">
                     {{get_order_from_tag_by_flag($current_order['flag']);}}
                 </td>
