@@ -56,6 +56,7 @@ class WeshareApiController extends Controller
                     ],
                 ]
             ],
+            'order' => ['Comment.created DESC'],
             'fields' => ['Comment.*', 'User.id', 'User.nickname', 'User.avatar', 'User.image']
         ];
         $result = $this->WeshareBuy->query_comment2($query_cond);
@@ -77,7 +78,7 @@ class WeshareApiController extends Controller
             'fields' => ['id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'business_remark'],
             'limit' => $limit,
             'page' => $page,
-            'order' => ['id DESC', 'member_id DESC']
+            'order' => ['created DESC']
         ];
         $result = $this->WeshareBuy->get_app_detail_orders($cond);
         echo json_encode($result);
