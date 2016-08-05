@@ -157,6 +157,7 @@ class UsersController extends AppController
                             $this->after_create_user($this->data['User']['id']);
                             $data = $this->User->find('first', array('conditions' => array('id' => $this->data['User']['id'])));
                             $this->Session->write('Auth.User', $data['User']);
+                            $this->Auth->login();
                             $this->redirect('/');
                         } else {
                             $this->Session->setFlash('注册失败，用户名或手机号已存在');
