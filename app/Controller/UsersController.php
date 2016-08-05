@@ -707,7 +707,7 @@ class UsersController extends AppController
         $this->data['User']['referer'] = $redirect;
         $this->set('referer', $redirect);
         $this->set('errorType', $_REQUEST['type']);
-        $this->Session->write('coupon-id', $_REQUEST['coupon-id']);//领取优惠券
+        //$this->Session->write('coupon-id', $_REQUEST['coupon-id']);//领取优惠券
         $this->set('login_by_account', $login_by_account);
     }
 
@@ -715,7 +715,7 @@ class UsersController extends AppController
     {
 
         $this->logoutCurrUser();
-        $this->Session->setFlash(__('Logout Success', true) . $synlogout);
+        //$this->Session->setFlash(__('Logout Success', true) . $synlogout);
         $referer = $this->referer();
         $this->log("Refer:" . $referer);
         $this->redirect('/users/login.html');
