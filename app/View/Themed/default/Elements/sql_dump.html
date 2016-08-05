@@ -15,10 +15,10 @@ if (class_exists('ConnectionManager') && Configure::read('debug') > 1) {
 	}
 	
 	foreach($logs as $source=> $logInfo){
-		$text = $logInfo['count'] > 1 ? 'queries' : 'query';
+		$text = $logInfo['count'] == 1 ? 'queries' : 'query';
 		printf('<caption>(%s) %s %s took %s ms</caption>', $source, $logInfo['count'], $text, $logInfo['time']);
 
-		if(Configure::read('debug')>1){
+		if(Configure::read('debug') > 1){
 	?>
 	<table class="cake-sql-log" summary="Cake SQL Log" cellspacing="0">
 	<thead>
