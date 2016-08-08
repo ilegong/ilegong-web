@@ -133,6 +133,10 @@ class VoteController extends AppController
     public function to_sub($candidateId, $eventId)
     {
         $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $this->redirect('/users/login.html');
+            return;
+        }
         $this->save_sub_reason($candidateId, $eventId, $uid);
         $url = $this->VoteSetting->getSubVoteUrl($eventId);
         $this->redirect($url);
