@@ -80,7 +80,7 @@ class WeixinController extends Controller {
                 //add log
                 $log = [
                     "openId" => $openId,
-                    "index" => "wx_event_".$req['Event'],
+                    "index" => "wx_event_".strtolower($req['Event']),
                     "type" => $req['Event']
                 ];
                 add_logs_to_es($log);
