@@ -175,6 +175,8 @@ const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
 const ALIYUN_AVATAR_PREFIX = 'http://static.tongshijia.com';
 
+const ELK_REDIS_PORT = 33423;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -2999,7 +3001,7 @@ if(!function_exists("add_logs_to_es"))
         }
 
         $redis = new Redis();
-        $redis->connect(REDIS_HOST);
+        $redis->connect(REDIS_HOST, ELK_REDIS_PORT);
         //$log["timestamp"] = date("Y-m-d H:i:s");
         $log["session_id"] = $_COOKIE["PHPSESSID"];
         $redis->rPush("logstash-list",json_encode($log));
