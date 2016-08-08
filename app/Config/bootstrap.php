@@ -1732,7 +1732,7 @@ function send_weixin_message($post_data, $logObj = null) {
 
     $log = [
         "index" => "wx_msg_" . strtolower($tmp_type[$post_data['template_id']]),
-        "type" => $tmp_type[$post_data['template_id']],
+        "type" => strtolower($tmp_type[$post_data['template_id']]),
         "msg" => $post_data
     ];
     
