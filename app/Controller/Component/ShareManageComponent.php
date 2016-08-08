@@ -77,7 +77,7 @@ class ShareManageComponent extends Component
             'PoolProduct.deleted' => DELETED_NO,
         ];
         if (!empty($cond)) {
-            if (!empty($cond['status'])) {
+            if ($cond['status'] > -1) {
                 $q_cond['PoolProduct.status'] = $cond['status'];
             }
             if (!empty($cond['name'])) {
