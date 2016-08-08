@@ -2994,9 +2994,10 @@ if(!function_exists("add_logs_to_es"))
 {
     function add_logs_to_es($log){
         foreach ($log as $index => $item) {
-            if(is_numeric($item))
-            {
+            if (is_numeric($item)) {
                 $log[$index] = floatval($item);
+            } else {
+                $log[$index] = preg_replace("/\s|　/", "", strtolower($item));
             }
         }
 
