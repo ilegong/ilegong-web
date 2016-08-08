@@ -381,3 +381,12 @@ $(document).ready(function () {
        )
     });
 });
+var editor = new wangEditor('share-description');
+editor.config.uploadImgUrl = 'http://images.tongshijia.com/upload_images_to';
+editor.config.uploadImgFileName = 'images';
+
+editor.config.uploadParams = {
+    'category' : 'PYS_IMAGES_001',
+    'token' : null
+};
+editor.create();
