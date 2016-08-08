@@ -9,7 +9,7 @@ div.item-class {
 }
 div.item-class > span.title {
   display: inline-block;
-    width: 300px;
+    width: 290px;
       overflow: hidden;
         text-overflow: ellipsis;
           white-space: nowrap;
