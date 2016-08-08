@@ -1734,7 +1734,6 @@ function send_weixin_message($post_data, $logObj = null) {
         "index" => "wx_msg_" . strtolower($tmp_type[$post_data['template_id']]),
         "type" => strtolower($tmp_type[$post_data['template_id']]),
         "msg" => $post_data,
-        "touser" => $post_data['touser']
     ];
     
     add_logs_to_es($log);
