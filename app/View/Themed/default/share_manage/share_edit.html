@@ -1,4 +1,8 @@
 <link href="{{$STATIC_HOST}}/static/manage/css/share_edit.css?v0.0.1" rel="stylesheet">
+<link href="{{$STATIC_HOST}}/static/wang_editor/css/wangEditor.min.css" rel="stylesheet">
+<script type="text/javascript" src="{{$STATIC_HOST}}/static/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{{$STATIC_HOST}}/static/wang_editor/js/wangEditor.min.js"></script>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12">
@@ -71,7 +75,7 @@
                     </div>
                     <div class="form-group">
                       <label class="control-label">分享描述</label>
-                      <textarea class="form-control" rows="15" placeholder="分享描述" id="share-description">{{$this->data['Weshare']['description']}}</textarea>
+                      <textarea class="form-control" style="height:400px;" rows="15" placeholder="分享描述" id="share-description">{{$this->data['Weshare']['description']}}</textarea>
                     </div>
                     <button class="btn btn-primary btn-lg pull-right" type="button" id="save-share-basic-info">保存 </button>
                   </div>
