@@ -47,6 +47,7 @@ class JPushComponent extends Component
         $client = $this->get_push_client();
         $result  = $client->push()
             ->setPlatform($this->all_platforms)
+            ->addAllAudience()
             ->setNotificationAlert($title)
             ->addIosNotification($title, 'iOS sound', '+1', true, 'iOS category', $extras)
             ->setMessage($content, $title, $type, $extras)
