@@ -189,7 +189,7 @@ class WesharesComponent extends Component
         $weshareData['title'] = trim($postDataArray['title']);
         $weshareData['description'] = trim($postDataArray['description']);
         $weshareData['send_info'] = trim($postDataArray['send_info']);
-        $this->log('save share data status ' . $postDataArray['sttaus']);
+        $this->log('save share data status ' . $postDataArray['status']);
         if (!empty($postDataArray['status'])) {
             $weshareData['status'] = intval($postDataArray['status']);
         }
