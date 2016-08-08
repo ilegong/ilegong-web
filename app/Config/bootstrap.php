@@ -1729,9 +1729,9 @@ function send_weixin_message($post_data, $logObj = null) {
         'vffIekz48NrxDRNbiGP5_xTvCqBHusA_W5pidHhGaHs' => "PACKET_RECEIVED",
         'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE' => "send_faq_notify_template_msg"
     ];
-    
+
     $log = [
-        "index" => "wx_msg_".$tmp_type[$post_data['template_id']],
+        "index" => "wx_msg_" . strtolower($tmp_type[$post_data['template_id']]),
         "type" => $tmp_type[$post_data['template_id']],
         "msg" => $post_data
     ];
