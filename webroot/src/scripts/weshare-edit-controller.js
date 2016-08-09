@@ -54,6 +54,8 @@
         vm.currentDeliveryTemplate = null;
         vm.setDefaultImage = setDefaultImage;
         vm.onError = onError;
+        vm.confirmShipInfo = confirmShipInfo;
+        vm.confirmZitiInfo = confirmZitiInfo;
         vm.getAvailableProducts = getAvailableProducts;
         vm.getAvailableAddresses = getAvailableAddresses;
         vm.hideOfflineStore = false;
@@ -294,6 +296,14 @@
             vm.showShippmentInfo = false;
             vm.showZitiInfo = false;
             vm.showEditShareInfo = true;
+        }
+
+        function confirmShipInfo(){
+            vm.backStep();
+        }
+
+        function confirmZitiInfo(){
+            vm.backStep();
         }
 
         function saveWeshare() {

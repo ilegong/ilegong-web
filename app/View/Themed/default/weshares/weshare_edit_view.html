@@ -37,7 +37,7 @@
             <div class="multi-line-form shrink-left">
                 <div class="line-bottom-border clearfix form-group" ng-class="{'has-error': product.nameHasError}">
                     <label>分类</label>
-                    <input class="form-control" type="text" placeholder="请输入产品分类（非必填）">
+                    <input class="form-control" type="text" placeholder="请输入产品分类（非必填）" readonly>
                     <img class="fr nexticon" ng-src="{{::vm.staticFilePath}}/static/weshares/images/goto.png">
                 </div>
                 <div class="line-bottom-border clearfix form-group" ng-class="{'has-error': product.priceHasError}">
@@ -143,7 +143,7 @@
     <a class="nextstepBtn channel_bottom btn-extra-margin" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
 </div>
 <!--设置自提点-->
-<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showZitiInfo'>
+<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showZitiInfo' ng-class="{'show-b': vm.showZitiInfo}">
     <div class="refer-back-bg menu-top">
         设置自提信息
         <a ng-click="vm.backStep();">
@@ -184,11 +184,11 @@
         </div>
     </div>
     <div class="add-extra-margin-bottom"></div>
-    <a class="nextstepBtn channel_bottom btn-extra-margin" ng-click="">确认</a>
+    <a class="nextstepBtn channel_bottom btn-extra-margin" ng-click="vm.confirmZitiInfo()">确认</a>
 </div>
 
 <!--设置快递信息-->
-<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showShippmentInfo'>
+<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showShippmentInfo' ng-class="{'show-b': vm.showShippmentInfo}">
     <div class="refer-back-bg menu-top">
         设置配送信息
         <a ng-click="vm.backStep();">
@@ -278,10 +278,10 @@
         </div>
     </div>
     <div class="add-extra-margin-bottom"></div>
-    <a class="nextstepBtn channel_bottom btn-extra-margin" ng-click="">确认</a>
+    <a class="nextstepBtn channel_bottom btn-extra-margin" ng-click="vm.confirmShipInfo()">确认</a>
 </div>
 
-<div class="areas-info" ng-if="vm.isShowChooseCity">
+<div class="areas-info" ng-if="vm.isShowChooseCity" ng-class="{'show-b': vm.isShowChooseCity}">
     <div class="refer-back-bg menu-top">
         选择地区
         <a ng-click="vm.hideChooseCityView();">

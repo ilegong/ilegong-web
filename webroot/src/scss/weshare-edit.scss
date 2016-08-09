@@ -299,9 +299,10 @@
   }
 
   .shippment-info {
+    display: none;
     .input-type-check {
       margin-right: 5px;
-      margin-top: 5px;
+      margin-top: 3px;
     }
     .section.send-time {
       margin-right: 12px;
@@ -439,6 +440,7 @@
   .areas-info {
     background-color: #f9f9f9;
     margin-bottom: 50px;
+    display: none;
     // 公用
     .checkable-line {
       background-color: #fff;
