@@ -296,14 +296,12 @@
         color: red;
       }
     }
-    .btn-extra-margin{
-      margin-bottom: 40px;
-    }
   }
 
   .shippment-info {
-    .input-type1 {
-      margin-right: 3px;
+    .input-type-check {
+      margin-right: 5px;
+      margin-top: 5px;
     }
     .section.send-time {
       margin-right: 12px;
@@ -586,6 +584,24 @@
       margin: 0;
       color: #999999;
     }
+    .share-rebate-setting-label{
+      line-height: 32px;
+      padding-right: 5px;
+    }
+    .share-rebate-setting {
+      padding: 5px 10px;
+      width: 80px;
+    }
+    .share-rebate-setting-input{
+      padding-left: 0;
+    }
+    .share-rebate-setting-percent-label{
+      top:5px;
+    }
+    .share-rebate-tip-info{
+      padding: 10px 2px 2px 2px;
+      color: #999;
+    }
   }
   .haolinju-tip-info {
     padding: 15px 12px;
@@ -596,5 +612,11 @@
     span {
       text-decoration: underline;
     }
+    small {
+      line-height: 20px;
+    }
+  }
+  .btn-extra-margin{
+    margin-bottom: 40px;
   }
 }

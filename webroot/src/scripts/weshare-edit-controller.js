@@ -14,8 +14,9 @@
         vm.deleteImage = deleteImage;
         vm.toggleProduct = toggleProduct;
         vm.addAddress = addAddress;
-        vm.nextStep = nextStep;
         vm.backStep = backStep;
+        vm.editShipInfo = editShipInfo;
+        vm.editZitiInfo = editZitiInfo;
         vm.saveWeshare = saveWeshare;
         vm.validateTitle = validateTitle;
         vm.validateTitleAndAlert = validateTitleAndAlert;
@@ -104,6 +105,7 @@
             vm.resetProvinceAreaCheckStatus();
             vm.showEditShareInfo = true;
             vm.showShippmentInfo = false;
+            vm.showZitiInfo = false;
             vm.deliveryTemplateType = 0;
             vm.setDefaultDeliveryTemplate();
             vm.setDeliveryTemplates();
@@ -113,9 +115,6 @@
             var userId = angular.element(weshareEditView).attr('data-user-id');
             vm.currentUserId = userId;
             vm.sharerShipType = sharerShipType;
-            if (window.location.host == 'sh.tongshijia.com') {
-                vm.hideOfflineStore = true;
-            }
             if (weshareId) {
                 //update
                 $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
@@ -281,12 +280,24 @@
             vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
         }
 
+        function editShipInfo(){
+            vm.showEditShareInfo = false;
+            vm.showShippmentInfo = true;
+        }
+
+        function editZitiInfo(){
+            vm.showEditShareInfo = false;
+            vm.showZitiInfo = true;
+        }
+
         function backStep() {
             vm.showShippmentInfo = false;
+            vm.showZitiInfo = false;
             vm.showEditShareInfo = true;
         }
 
-        function nextStep() {
+        function saveWeshare() {
+
             var titleHasError = vm.validateTitle();
             var productHasError = false;
             _.each(vm.weshare.products, function (product) {
@@ -298,11 +309,7 @@
                 vm.onError('输入有误，请重新输入');
                 return;
             }
-            vm.showShippmentInfo = true;
-            vm.showEditShareInfo = false;
-        }
 
-        function saveWeshare() {
             vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
                 return !_.isEmpty(address.address);
             });
