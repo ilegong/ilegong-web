@@ -62,12 +62,18 @@ class WeixinUtilComponent extends Component {
     public function process_user_sub_weixin($from, $uid, $openId) {
         $replay_type = 0;
         $url = '';
+        $userM = ClassRegistry::init('User');
+        $sql = "SELECT nickname FROM cake_users WHERE deleted = 0 AND username = '{$from}' LIMIT 1";
+        $user = $userM->query($sql);
+        $userName = $user[0]['cake_users']['nickname'];
+
         if ($from == FROM_WX_SERVICE) {
-            $content = array(
+            /*$content = array(
                 array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
                     'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
                     'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd')
-            );
+            );*/
+            $content = 'Hi，'.$userName.'\n终于等到您了，欢迎加入[ 朋友说]社区。\n[朋友说] 是一家为您提供精挑细选产品的平台，通过熟人间信任关系来为您提供优质的产品，节省您选择的时间，并通过这种方式来保证您买到产品的品质。\n<a href="http://www.tongshijia.com/weshares/index?from=weixin">进入逛逛>></a>\n如您有任何问题或建议，请加客服小妹微信咨询，微信号：pyshuo2015';
             $reason = $this->get_user_sub_reason($uid);
             if (!empty($uid) && !empty($reason)) {
                 $url = $reason['UserSubReason']['url'];
@@ -118,11 +124,12 @@ class WeixinUtilComponent extends Component {
                 $this->create_weixin_user($openId);
             }
         } else {
-            $content = array(
+            /*$content = array(
                 array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
                     'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
                     'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=1&sn=e281fc56834fb0c2942f887d2edd8d48#rd')
-            );
+            );*/
+            $content = 'Hi，'.$userName.'\n终于等到您了，欢迎加入[ 朋友说]社区。\n[朋友说] 是一家为您提供精挑细选产品的平台，通过熟人间信任关系来为您提供优质的产品，节省您选择的时间，并通过这种方式来保证您买到产品的品质。\n<a href="http://www.tongshijia.com/weshares/index?from=weixin">进入逛逛>></a>\n如您有任何问题或建议，请加客服小妹微信咨询，微信号：pyshuo2015';
         }
         return array('replay_type' => $replay_type, 'content' => $content, 'url' => $url);
     }
