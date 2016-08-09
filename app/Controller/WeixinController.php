@@ -95,8 +95,8 @@ class WeixinController extends Controller {
                             echo $this->newArticleMsg($user, $me, $content);
                         }
                         if ($replay_type == 1) {
-                            $url = $process_result['url'];
-                            echo $this->newTextMsg($user, $me, $content . '，<a href="' . $url . '">点击查看详情</a>');
+                            //$url = $process_result['url'];
+                            echo $this->newTextMsg($user, $me, $content);
                         }
                     }
                     if ($from == FROM_WX_SERVICE) {

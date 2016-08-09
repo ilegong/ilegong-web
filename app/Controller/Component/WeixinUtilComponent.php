@@ -60,7 +60,7 @@ class WeixinUtilComponent extends Component {
      * @return array
      */
     public function process_user_sub_weixin($from, $uid, $openId) {
-        $replay_type = 0;
+        $replay_type = 1;
         $url = '';
         $userM = ClassRegistry::init('User');
         $sql = "SELECT nickname FROM cake_users WHERE deleted = 0 AND username = '{$openId}' LIMIT 1";
