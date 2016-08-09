@@ -3001,7 +3001,6 @@ if(!function_exists("add_logs_to_es"))
                 $log['index'] = preg_replace("/\s|　/", "", strtolower($item));
             }
         }
-
         $redis = new Redis();
         $redis->connect(REDIS_HOST, ELK_REDIS_PORT);
         //$log["timestamp"] = date("Y-m-d H:i:s");

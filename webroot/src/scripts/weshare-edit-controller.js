@@ -4,9 +4,9 @@
         .constant('wx', wx)
         .controller('WesharesEditCtrl', WesharesEditCtrl);
 
-
     function WesharesEditCtrl($scope, $rootScope, $log, $http, $timeout, wx, Utils) {
         var vm = this;
+
         vm.staticFilePath = Utils.staticFilePath();
         vm.dataCacheKey = 'cache_share_data';
         vm.chooseAndUploadImage = chooseAndUploadImage;
@@ -14,7 +14,6 @@
         vm.deleteImage = deleteImage;
         vm.toggleProduct = toggleProduct;
         vm.addAddress = addAddress;
-        vm.backStep = backStep;
         vm.editShipInfo = editShipInfo;
         vm.editZitiInfo = editZitiInfo;
         vm.saveWeshare = saveWeshare;
@@ -56,6 +55,8 @@
         vm.onError = onError;
         vm.confirmShipInfo = confirmShipInfo;
         vm.confirmZitiInfo = confirmZitiInfo;
+        vm.shipDataIntro = '';
+        vm.zitiDataIntro = '';
         vm.getAvailableProducts = getAvailableProducts;
         vm.getAvailableAddresses = getAvailableAddresses;
         vm.hideOfflineStore = false;
@@ -150,6 +151,8 @@
                         vm.defaultDeliveryTemplate['is_default'] = 1;
                         vm.deliveryTemplateType = vm.defaultDeliveryTemplate['unit_type'];
                     }
+                    setShipDataIntro();
+                    setZitiDataIntro();
                     $rootScope.loadingPage = false;
                 }).error(function (data) {
                     $rootScope.loadingPage = false;
@@ -182,6 +185,8 @@
                     Utils.Storage.save(vm.dataCacheKey, {}, 1);
                 }
                 setDefaultData();
+                setShipDataIntro();
+                setZitiDataIntro();
                 $rootScope.loadingPage = false;
             }
             vm.messages = [];
@@ -195,15 +200,6 @@
             }
 
             setWxParams();
-        }
-
-        function getUnitTypeText() {
-            if (vm.deliveryTemplateType == 0) {
-                return '件';
-            }
-            if (vm.deliveryTemplateType == 1) {
-                return 'kg';
-            }
         }
 
         function chooseAndUploadImage() {
@@ -282,6 +278,15 @@
             vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
         }
 
+        function getUnitTypeText() {
+            if (vm.deliveryTemplateType == 0) {
+                return '件';
+            }
+            if (vm.deliveryTemplateType == 1) {
+                return 'kg';
+            }
+        }
+
         function editShipInfo(){
             vm.showEditShareInfo = false;
             vm.showShippmentInfo = true;
@@ -292,18 +297,26 @@
             vm.showZitiInfo = true;
         }
 
-        function backStep() {
-            vm.showShippmentInfo = false;
-            vm.showZitiInfo = false;
-            vm.showEditShareInfo = true;
-        }
-
         function confirmShipInfo(){
-            vm.backStep();
+            vm.showShippmentInfo = false;
+            vm.showEditShareInfo = true;
+            setShipDataIntro();
         }
 
         function confirmZitiInfo(){
-            vm.backStep();
+            vm.showZitiInfo = false;
+            vm.showEditShareInfo = true;
+            setZitiDataIntro();
+        }
+
+        function setShipDataIntro() {
+            vm.shipDataIntro = '默认邮费' + vm.defaultDeliveryTemplate['start_units'] + ',' + vm.defaultDeliveryTemplate['start_fee'] + '元;每增加' + vm.defaultDeliveryTemplate['add_units'] + ',增加' + vm.defaultDeliveryTemplate['add_fee'] + '元';
+        }
+
+        function setZitiDataIntro() {
+            if (vm.weshare.addresses.length > 0) {
+                vm.zitiDataIntro = vm.weshare.addresses[0]['address'];
+            }
         }
 
         function saveWeshare() {
@@ -367,12 +380,12 @@
             $http.post('/weshares/save', vm.weshare).success(function (data) {
                 if (data.success) {
                     Utils.Storage.clear();
-                    window.location.href = '/weshares/view/' + data['id'];
+                    window.location.href = '/weshares/view/' + data['id'] + '.html';
                 } else {
-                    window.location.href = '/weshares/user_share_info/';
+                    window.location.href = '/weshares/user_share_info.html';
                 }
             }).error(function () {
-                window.location.href = '/weshares/add';
+                window.location.href = '/weshares/add.html';
             });
         }
 
@@ -498,6 +511,168 @@
                 return {"province_id": provinceId, "province_name": vm.provinceIdNameMap[provinceId]};
             });
             vm.currentDeliveryTemplate['regions'] = checkedProvinceData;
+        }
+
+        function setAreaCheckStatus(areaId) {
+            var areaChildProvinces = vm.provinceData[areaId];
+            var provinceIds = _.keys(areaChildProvinces);
+            var checkStatusResult = _.reduce(provinceIds, function (memo, provinceId) {
+                return memo && vm.provinceCheckStatus[provinceId];
+            }, true);
+            vm.areaCheckStatus[areaId] = checkStatusResult;
+        }
+
+        function showChooseCityView(deliveryTemplate) {
+            vm.resetProvinceAreaCheckStatus();
+            vm.showShippmentInfo = false;
+            vm.isShowChooseCity = true;
+            vm.currentDeliveryTemplate = deliveryTemplate;
+            var regions = deliveryTemplate['regions'];
+            _.each(regions, function (item) {
+                vm.provinceCheckStatus[item['province_id']] = true;
+            });
+            _.each(vm.areaIds, function (areaId) {
+                vm.setAreaCheckStatus(areaId);
+            });
+        }
+
+        function validateDeliveryTemplateData(deliveryTemplates) {
+            for (var i = 0; i < deliveryTemplates.length; i++) {
+                var deliveryTemplateItem = deliveryTemplates[i];
+                if (Utils.isBlank(deliveryTemplateItem['start_units'])) {
+                    deliveryTemplateItem['start_units'] = 1;
+                }
+                if (Utils.isBlank(deliveryTemplateItem['start_fee'])) {
+                    deliveryTemplateItem['start_fee'] = 0;
+                }
+                if (Utils.isBlank(deliveryTemplateItem['add_units'])) {
+                    deliveryTemplateItem['add_units'] = 1;
+                }
+                if (Utils.isBlank(deliveryTemplateItem['add_fee'])) {
+                    deliveryTemplateItem['add_fee'] = 0;
+                }
+                if (deliveryTemplateItem['is_default'] == 0) {
+                    if (_.isEmpty(deliveryTemplateItem['regions'])) {
+                        alert('非默认运费设置，需要指定地区');
+                        return false;
+                    }
+                }
+                if (!Utils.isNumber(deliveryTemplateItem['start_units']) || !Utils.isNumber(deliveryTemplateItem['start_fee']) || !Utils.isNumber(deliveryTemplateItem['add_units']) || !Utils.isNumber(deliveryTemplateItem['add_fee'])) {
+                    alert('运费设置需要输入数字');
+                    return false;
+                }
+                if (deliveryTemplateItem['start_units'] < 1 || deliveryTemplateItem['add_units'] < 1) {
+                    alert('运费设置商品件数必须大于1');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function validateRebatePercent() {
+            if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {
+                vm.rebatePercentHasError = true;
+            } else {
+                vm.rebatePercentHasError = false;
+            }
+            return vm.rebatePercentHasError;
+        }
+
+        function validateShipSetting($settings) {
+            var hasOne = _.find($settings, function (item) {
+                return item.status == 1;
+            });
+            if (hasOne) {
+                return true;
+            }
+            return false;
+        }
+
+        function resetZitiAddressData() {
+            if (_.isEmpty(vm.weshare.addresses)) {
+                vm.weshare.addresses = [
+                    {address: '', deleted: 0, name: '', phone: ''}
+                ];
+            }
+        }
+
+        function toggleBoxZitiChecked() {
+            if (vm.self_ziti_data.status == 1) {
+                vm.self_ziti_data.status = -1;
+            } else {
+                vm.self_ziti_data.status = 1;
+            }
+        }
+
+        function toggleBoxKuidiChecked() {
+            if (vm.kuai_di_data.status == 1) {
+                vm.kuai_di_data.status = -1;
+            } else {
+                vm.kuai_di_data.status = 1;
+            }
+        }
+
+        function setWxParams() {
+            if (wx) {
+                wx.ready(function () {
+                    var to_timeline_title = '朋友说—基于信任关系的分享平台';
+                    var to_friend_title = '朋友说—基于信任关系的分享平台';
+                    var to_friend_link = document.URL.split('?')[0];
+                    var to_timeline_link = document.URL.split('?')[0];
+                    var imgUrl = 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif';
+                    var desc = '来 [朋友说] 分享好吃的、好玩的、有趣的';
+                    wx.onMenuShareAppMessage({
+                        title: to_friend_title,
+                        desc: desc,
+                        link: to_friend_link,
+                        imgUrl: imgUrl,
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        }
+                    });
+                    wx.onMenuShareTimeline({
+                        title: to_timeline_title,
+                        link: to_timeline_link,
+                        imgUrl: imgUrl,
+                        success: function () {
+                        }
+                    });
+                });
+            }
+        }
+
+        function setDefaultImage(image) {
+            if (_.isEmpty(image)) {
+                return;
+            }
+            vm.weshare.images = _.without(vm.weshare.images, image);
+            vm.weshare.images.unshift(image);
+        }
+
+        function onError(message) {
+            $rootScope.showErrorMessageLayer = true;
+            $rootScope.errorMessage = message;
+            $timeout(function () {
+                $rootScope.showErrorMessageLayer = false;
+            }, 2000);
+        }
+
+        function getAvailableProducts() {
+            if (_.isEmpty(vm.weshare) || _.isEmpty(vm.weshare.products)) {
+                return [];
+            }
+            return _.filter(vm.weshare.products, function (p) {
+                return p.deleted == 0;
+            });
+        }
+
+        function getAvailableAddresses() {
+            if (_.isEmpty(vm.weshare) || _.isEmpty(vm.weshare.addresses)) {
+                return [];
+            }
+            return _.filter(vm.weshare.addresses, function (a) {
+                return a.deleted == 0;
+            });
         }
 
         function resetProvinceAreaCheckStatus() {
@@ -652,168 +827,6 @@
                     "820000": "澳门"
                 }
             };
-        }
-
-        function setAreaCheckStatus(areaId) {
-            var areaChildProvinces = vm.provinceData[areaId];
-            var provinceIds = _.keys(areaChildProvinces);
-            var checkStatusResult = _.reduce(provinceIds, function (memo, provinceId) {
-                return memo && vm.provinceCheckStatus[provinceId];
-            }, true);
-            vm.areaCheckStatus[areaId] = checkStatusResult;
-        }
-
-        function showChooseCityView(deliveryTemplate) {
-            vm.resetProvinceAreaCheckStatus();
-            vm.isShowChooseCity = true;
-            vm.showShippmentInfo = false;
-            vm.currentDeliveryTemplate = deliveryTemplate;
-            var regions = deliveryTemplate['regions'];
-            _.each(regions, function (item) {
-                vm.provinceCheckStatus[item['province_id']] = true;
-            });
-            _.each(vm.areaIds, function (areaId) {
-                vm.setAreaCheckStatus(areaId);
-            });
-        }
-
-        function validateDeliveryTemplateData(deliveryTemplates) {
-            for (var i = 0; i < deliveryTemplates.length; i++) {
-                var deliveryTemplateItem = deliveryTemplates[i];
-                if (Utils.isBlank(deliveryTemplateItem['start_units'])) {
-                    deliveryTemplateItem['start_units'] = 1;
-                }
-                if (Utils.isBlank(deliveryTemplateItem['start_fee'])) {
-                    deliveryTemplateItem['start_fee'] = 0;
-                }
-                if (Utils.isBlank(deliveryTemplateItem['add_units'])) {
-                    deliveryTemplateItem['add_units'] = 1;
-                }
-                if (Utils.isBlank(deliveryTemplateItem['add_fee'])) {
-                    deliveryTemplateItem['add_fee'] = 0;
-                }
-                if (deliveryTemplateItem['is_default'] == 0) {
-                    if (_.isEmpty(deliveryTemplateItem['regions'])) {
-                        alert('非默认运费设置，需要指定地区');
-                        return false;
-                    }
-                }
-                if (!Utils.isNumber(deliveryTemplateItem['start_units']) || !Utils.isNumber(deliveryTemplateItem['start_fee']) || !Utils.isNumber(deliveryTemplateItem['add_units']) || !Utils.isNumber(deliveryTemplateItem['add_fee'])) {
-                    alert('运费设置需要输入数字');
-                    return false;
-                }
-                if (deliveryTemplateItem['start_units'] < 1 || deliveryTemplateItem['add_units'] < 1) {
-                    alert('运费设置商品件数必须大于1');
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function validateRebatePercent() {
-            if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {
-                vm.rebatePercentHasError = true;
-            } else {
-                vm.rebatePercentHasError = false;
-            }
-            return vm.rebatePercentHasError;
-        }
-
-        function validateShipSetting($settings) {
-            var hasOne = _.find($settings, function (item) {
-                return item.status == 1;
-            });
-            if (hasOne) {
-                return true;
-            }
-            return false;
-        }
-
-        function resetZitiAddressData() {
-            if (_.isEmpty(vm.weshare.addresses)) {
-                vm.weshare.addresses = [
-                    {address: '', deleted: 0, name: '', phone: ''}
-                ];
-            }
-        }
-
-        function toggleBoxZitiChecked() {
-            if (vm.self_ziti_data.status == 1) {
-                vm.self_ziti_data.status = -1;
-            } else {
-                vm.self_ziti_data.status = 1;
-            }
-        }
-
-        function toggleBoxKuidiChecked() {
-            if (vm.kuai_di_data.status == 1) {
-                vm.kuai_di_data.status = -1;
-            } else {
-                vm.kuai_di_data.status = 1;
-            }
-        }
-
-        function setWxParams() {
-            if (wx) {
-                wx.ready(function () {
-                    var to_timeline_title = '朋友说—基于信任关系的分享平台';
-                    var to_friend_title = '朋友说—基于信任关系的分享平台';
-                    var to_friend_link = document.URL.split('?')[0];
-                    var to_timeline_link = document.URL.split('?')[0];
-                    var imgUrl = 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif';
-                    var desc = '来 [朋友说] 分享好吃的、好玩的、有趣的';
-                    wx.onMenuShareAppMessage({
-                        title: to_friend_title,
-                        desc: desc,
-                        link: to_friend_link,
-                        imgUrl: imgUrl,
-                        success: function () {
-                            // 用户确认分享后执行的回调函数
-                        }
-                    });
-                    wx.onMenuShareTimeline({
-                        title: to_timeline_title,
-                        link: to_timeline_link,
-                        imgUrl: imgUrl,
-                        success: function () {
-                        }
-                    });
-                });
-            }
-        }
-
-        function setDefaultImage(image) {
-            if (_.isEmpty(image)) {
-                return;
-            }
-            vm.weshare.images = _.without(vm.weshare.images, image);
-            vm.weshare.images.unshift(image);
-        }
-
-        function onError(message) {
-            $rootScope.showErrorMessageLayer = true;
-            $rootScope.errorMessage = message;
-            $timeout(function () {
-                $rootScope.showErrorMessageLayer = false;
-            }, 2000);
-        }
-
-        function getAvailableProducts() {
-            if (_.isEmpty(vm.weshare) || _.isEmpty(vm.weshare.products)) {
-                return [];
-            }
-            return _.filter(vm.weshare.products, function (p) {
-                return p.deleted == 0;
-            });
-        }
-
-        function getAvailableAddresses() {
-            if (_.isEmpty(vm.weshare) || _.isEmpty(vm.weshare.addresses)) {
-                return [];
-            }
-            return _.filter(vm.weshare.addresses, function (a) {
-                return a.deleted == 0;
-            });
         }
     }
 

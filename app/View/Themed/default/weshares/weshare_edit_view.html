@@ -35,7 +35,7 @@
     <div class="share-bg">
         <div class="shrink-container">
             <div class="multi-line-form shrink-left">
-                <div class="line-bottom-border clearfix form-group" ng-class="{'has-error': product.nameHasError}">
+                <div class="line-bottom-border clearfix form-group" ng-hide="true">
                     <label>分类</label>
                     <input class="form-control" type="text" placeholder="请输入产品分类（非必填）" readonly>
                     <img class="fr nexticon" ng-src="{{::vm.staticFilePath}}/static/weshares/images/goto.png">
@@ -108,12 +108,12 @@
                 </div>
                 <div class="line-bottom-border clearfix form-group" ng-show="vm.kuai_di_data.status==1" ng-click="vm.editShipInfo()">
                     <label>快递</label>
-                    <input class="form-control overwrite-input-left-padding" type="text" ng-value="" readonly placeholder="请填写物流信息">
+                    <input class="form-control overwrite-input-left-padding" type="text" ng-value="vm.shipDataIntro" readonly placeholder="请填写物流信息">
                     <img class="fr nexticon" ng-src="{{::vm.staticFilePath}}/static/weshares/images/goto.png">
                 </div>
-                <div class="line-bottom-border clearfix form-group" ng-show="vm.self_ziti_data.status==1&&vm.weshare.type != 6" ng-click="vm.editZitiInfo()">
+                <div class="line-bottom-border clearfix form-group" ng-show="vm.self_ziti_data.status==1&&vm.weshare.type != 6" ng-click="vm.editZitiInfo()" ng-class="{'has-error': vm.addressError}">
                     <label>自己的自提点</label>
-                    <input class="form-control overwrite-input-left-padding" type="text" ng-value="" readonly placeholder="填写自提点信息">
+                    <input class="form-control overwrite-input-left-padding" type="text" ng-value="vm.zitiDataIntro" readonly placeholder="填写自提点信息">
                     <img class="fr nexticon" ng-src="{{::vm.staticFilePath}}/static/weshares/images/goto.png">
                 </div>
             </div>
@@ -122,7 +122,7 @@
 
     <div class="commission">
         <div class="section-detail multi-line-form" ng-show="vm.proxy_rebate_percent.status==1">
-            <input type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1" style="display: none;"
+            <input type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1" ng-hide="true"
                    ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/>
             <dl class="clearfix">
                 <dt class="fl name">推广佣金</dt>
@@ -140,13 +140,13 @@
 
     <div class="haolinju-tip-info">使用 [好邻居] 配送方式，请联系微信<span>yangxiaoguang</span></div>
     <div class="add-extra-margin-bottom"></div>
-    <a class="nextstepBtn channel_bottom btn-extra-margin" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
+    <a class="nextstepBtn channel_bottom" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
 </div>
 <!--设置自提点-->
 <div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showZitiInfo' ng-class="{'show-b': vm.showZitiInfo}">
     <div class="refer-back-bg menu-top">
         设置自提信息
-        <a ng-click="vm.backStep();">
+        <a ng-click="vm.confirmZitiInfo()">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
@@ -191,7 +191,7 @@
 <div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showShippmentInfo' ng-class="{'show-b': vm.showShippmentInfo}">
     <div class="refer-back-bg menu-top">
         设置配送信息
-        <a ng-click="vm.backStep();">
+        <a ng-click="vm.confirmShipInfo()">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
@@ -282,7 +282,7 @@
 </div>
 
 <div class="areas-info" ng-if="vm.isShowChooseCity" ng-class="{'show-b': vm.isShowChooseCity}">
-    <div class="refer-back-bg menu-top">
+    <div class="refer-back-bg  menu-top">
         选择地区
         <a ng-click="vm.hideChooseCityView();">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
