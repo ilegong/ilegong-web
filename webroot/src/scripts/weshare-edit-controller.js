@@ -314,7 +314,7 @@
         }
 
         function setShipDataIntro() {
-            vm.shipDataIntro = '默认邮费' + vm.defaultDeliveryTemplate['start_units'] + ',' + vm.defaultDeliveryTemplate['start_fee'] + '元;每增加' + vm.defaultDeliveryTemplate['add_units'] + ',增加' + vm.defaultDeliveryTemplate['add_fee'] + '元';
+            vm.shipDataIntro = '默认邮费' + vm.defaultDeliveryTemplate['start_units'] + getUnitTypeText() + ',' + vm.defaultDeliveryTemplate['start_fee'] + '元;每增加' + vm.defaultDeliveryTemplate['add_units'] + getUnitTypeText() + ',增加' + vm.defaultDeliveryTemplate['add_fee'] + '元';
         }
 
         function setZitiDataIntro() {
