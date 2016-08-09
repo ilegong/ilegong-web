@@ -297,13 +297,17 @@
             vm.showZitiInfo = true;
         }
 
-        function confirmShipInfo(){
+        function confirmShipInfo() {
+            var deliveryTemplates = vm.deliveryTemplates.concat(vm.defaultDeliveryTemplate);
+            if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
+                return false;
+            }
             vm.showShippmentInfo = false;
             vm.showEditShareInfo = true;
             setShipDataIntro();
         }
 
-        function confirmZitiInfo(){
+        function confirmZitiInfo() {
             vm.showZitiInfo = false;
             vm.showEditShareInfo = true;
             setZitiDataIntro();
@@ -349,6 +353,9 @@
                 return false;
             }
             var deliveryTemplates = vm.deliveryTemplates.concat(vm.defaultDeliveryTemplate);
+            if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
+                return false;
+            }
             if (vm.validateShipFee(vm.kuai_di_data.ship_fee)) {
                 return false;
             }
@@ -361,9 +368,6 @@
                 return false;
             }
             if (vm.validatePinTuan()) {
-                return false;
-            }
-            if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
                 return false;
             }
             deliveryTemplates = _.map(deliveryTemplates, function (item) {
