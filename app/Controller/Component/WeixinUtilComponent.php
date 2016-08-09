@@ -63,7 +63,7 @@ class WeixinUtilComponent extends Component {
         $replay_type = 0;
         $url = '';
         $userM = ClassRegistry::init('User');
-        $sql = "SELECT nickname FROM cake_users WHERE deleted = 0 AND username = '{$from}' LIMIT 1";
+        $sql = "SELECT nickname FROM cake_users WHERE deleted = 0 AND username = '{$openId}' LIMIT 1";
         $user = $userM->query($sql);
         $userName = $user[0]['cake_users']['nickname'];
 
