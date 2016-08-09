@@ -1318,8 +1318,8 @@
     padding: 15px 0 0;
     position: fixed;
     top: 20%;
-    left: 0;
-    width: 100%;
+    left: 5%;
+    width: 90%;
     z-index: 5;
 }
 
