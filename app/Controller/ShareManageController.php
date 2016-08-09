@@ -134,6 +134,8 @@ class ShareManageController extends AppController
         $creator_id = $_REQUEST['creator_id'];
         $creator_name = $_REQUEST['creator_name'];
         $share_status = $_REQUEST['share_status'];
+        $start_date = $_REQUEST['start_date'];
+        $end_date = $_REQUEST['end_date'];
         $page = intval($_REQUEST['page']) ? : 1;
         $WeshareM = ClassRegistry::init('Weshare');
         $cartM = ClassRegistry::init('Cart');
@@ -165,6 +167,15 @@ class ShareManageController extends AppController
         if ($creator_name) {
             $cond['User.nickname'] = $creator_name;
         }
+
+        if($start_date) {
+            $cond['Weshare.created >'] = $start_date;
+        }
+
+        if($end_date) {
+            $cond['Weshare.created <'] = $end_date;
+        }
+
         $count = $WeshareM->find('count', [
             'conditions' => $cond,
             'joins' => $joins
@@ -180,7 +191,7 @@ class ShareManageController extends AppController
             'joins' => $joins,
             'order' => 'Weshare.id DESC'
         ));
-
+        //var_dump($results);die;
         $url = "/share_manage/search_shares?page=(:num)&creator_name={$_REQUEST['creator_name']}&id={$_REQUEST['id']}&share_status={$_REQUEST['share_status']}&title={$_REQUEST['title']}&creator_id={$_REQUEST['creator_id']}";
         $pager = new MyPaginator($count, 10, $page, $url);
 
@@ -1011,7 +1022,13 @@ GROUP BY product_id";
 
     public function pool_products()
     {
-        $index_products = $this->ShareManage->get_pool_products();
+        $status = $_GET['status'] === null ? 1 : $_GET['status'];
+        $cond = [
+            'status' => $status
+        ];
+        $index_products = $this->ShareManage->get_pool_products($cond);
+
+        $this->set('status',$status);
         $this->set('index_products', $index_products);
     }
 

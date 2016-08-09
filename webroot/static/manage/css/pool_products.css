@@ -5,11 +5,11 @@
   display: inline;
 }
 div.item-class {
-      width: 350px;
+      width: 440px;
 }
 div.item-class > span.title {
   display: inline-block;
-    width: 200px;
+    width: 290px;
       overflow: hidden;
         text-overflow: ellipsis;
           white-space: nowrap;
