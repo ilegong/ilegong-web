@@ -1777,6 +1777,7 @@ class WeshareBuyComponent extends Component
                 'fields' => $this->query_order_user_fields,
             ));
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+            $carts = [];
             if ($orders) {
                 if ($is_me) {
                     usort($orders, function ($a, $b) {
@@ -1791,14 +1792,14 @@ class WeshareBuyComponent extends Component
                         return ($a['id'] < $b['id']) ? -1 : 1;
                     });
                 }
+                $carts = $this->Cart->find('all', array(
+                    'conditions' => array(
+                        'order_id' => $orderIds,
+                        'type' => ORDER_TYPE_WESHARE_BUY
+                    ),
+                    'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
+                ));
             }
-            $carts = $this->Cart->find('all', array(
-                'conditions' => array(
-                    'order_id' => $orderIds,
-                    'type' => ORDER_TYPE_WESHARE_BUY
-                ),
-                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
-            ));
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
             $couponPrice = 0;
