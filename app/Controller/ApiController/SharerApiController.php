@@ -367,25 +367,7 @@ class SharerApiController extends Controller
     public function get_provide_share_list()
     {
         $uid = $this->currentUser['id'];
-        //$uid = 810684;
-        $this->loadModel('PoolProduct');
-        $poolProducts = $this->PoolProduct->find('all', [
-            'conditions' => [
-                'PoolProduct.user_id' => $uid,
-                'PoolProduct.status' => [POOL_PRODUCT_PUBLISH, POOL_PRODUCT_UN_PUBLISH],
-            ],
-            'order' => ['PoolProduct.status DESC', 'PoolProduct.created DESC']
-        ]);
-        $result = [];
-        $shareIds = [];
-        foreach ($poolProducts as $productItem) {
-            $shareIds[] = $productItem['PoolProduct']['weshare_id'];
-            $result[] = $productItem['PoolProduct'];
-        }
-        $paid_order_count = $this->ShareUtil->get_pool_share_wait_ship_order_count($shareIds);
-        foreach ($result as &$item) {
-            $item['wait_ship_order_count'] = empty($paid_order_count[$item['weshare_id']]) ? 0 : $paid_order_count[$item['weshare_id']];
-        }
+        $result = $this->WeshareBuy->get_user_provide_shares($uid);
         echo json_encode($result);
         exit;
     }
