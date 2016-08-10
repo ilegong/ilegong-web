@@ -87,7 +87,7 @@
     <a class="nextstepBtn channel_bottom" ng-click="vm.nextStep()">下一步，设置配送信息</a>
 </div>
 
-<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showShippmentInfo'>
+<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showShippmentInfo' ng-class="{'show-b': vm.showShippmentInfo}">
     <div class="refer-back-bg menu-top">
         设置配送信息
         <a ng-click="vm.backStep();">
@@ -272,7 +272,7 @@
 </div>
 <a class="nextstepBtn channel_bottom" ng-click="vm.saveWeshare()" ng-show='vm.showShippmentInfo'>Oh，搞定了！</a>
 
-<div class="areas-info" ng-if="vm.isShowChooseCity">
+<div class="areas-info" ng-if="vm.isShowChooseCity" ng-class="{'show-b': vm.isShowChooseCity}">
     <div class="refer-back-bg menu-top">
         选择地区
         <a ng-click="vm.hideChooseCityView();">

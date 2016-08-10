@@ -314,6 +314,7 @@
   }
 
   .shippment-info {
+    display: none;
     .input-type1 {
       margin-right: 3px;
     }
@@ -453,6 +454,7 @@
   .areas-info {
     background-color: #f9f9f9;
     margin-bottom: 50px;
+    display: none;
     // 公用
     .checkable-line {
       background-color: #fff;
