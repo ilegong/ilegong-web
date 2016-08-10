@@ -15,7 +15,7 @@
         .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
         .sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
         .sharedetail h1 { font-size: 1.2em; color: #333; margin-bottom: 10px !important;}
-        .sharedetail p { color: #999; padding-bottom: 15px;}
+        .sharedetail p {color: #999;}
         .sharedetail .images {margin-top: 10px;}
         .sharedetail .images dt {float: left;margin-right: 10px;position: relative;height: 65px;  }
         .sharedetail .images dt img {width: 60px;height: 60px;}
