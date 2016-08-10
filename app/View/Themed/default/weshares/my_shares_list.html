@@ -9,10 +9,10 @@
 
     <ul class="clearfix share-search has-menu-top extra-margin">
         {{if $type==0}}
-        <li class="share-search-input"><input type="text" ng-model="vm.searchText" placeholder="输入分享名称搜索"></li>
-        <li class="share-search-btn">
-            <button type="button" ng-click="vm.doSearch()">查询</button>
-        </li>
+            <li class="share-search-input"><input type="text" ng-model="vm.searchText" placeholder="输入分享名称搜索"></li>
+            <li class="share-search-btn">
+                <button type="button" ng-click="vm.doSearch()">查询</button>
+            </li>
         {{/if}}
     </ul>
 
@@ -27,7 +27,7 @@
             <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" infinite-scroll='vm.myShareNextPage();'
                  infinite-scroll-disabled='vm.mine.tmpSharesOver || vm.loading'
                  infinite-scroll-distance='0'>
-                {{template Elements/my_share_list_item}}
+                {{include 'Elements/my_share_list_item'}}
             </div>
             <div align="center"
                  style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
@@ -41,7 +41,7 @@
             <div class="mine_order" ng-repeat="share in vm.mine.searchShares" infinite-scroll='vm.mySearchShareNextPage();'
                  infinite-scroll-disabled='vm.mine.searchSharesOver || vm.loading'
                  infinite-scroll-distance='0'>
-                {{template Elements/my_share_list_item}}
+                {{include 'Elements/my_share_list_item'}}
             </div>
             <div align="center"
                  style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
