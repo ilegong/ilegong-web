@@ -583,10 +583,19 @@ class ShareController extends AppController
          *
          * select id, nickname, status, username from cake_users where status=9 limit 0,10
          */
-        $users = $this->User->find('all', [
+        $has_orders = $this->Order->find('all', [
+            'conditions' => [
+                'type' => 9,
+                'member_id' => $weshare_id,
+                'status >' => 0
+            ],
+            'fields' => ['creator']
+        ]);
+        $has_buy_uids = Hash::extract($has_orders, '{n}.Order.creator');
+        $q_cond = [
             'conditions' => [
                 'UserRelation.user_id' => $sharer,
-                'User.uc_id' => $sharer
+                'User.uc_id' => $sharer,
             ],
             'joins' => [
                 [
@@ -599,9 +608,13 @@ class ShareController extends AppController
             'fields' => ['User.*'],
             'order' => 'rand()',
             'limit' => $num
-        ]);
-        if(count($users) < $num){
-            $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id.'?error='.urlencode('想生成'.$num.'个订单，然而该团长只有'.count($users).'个粉丝，无法生成订单'));
+        ];
+        if(!empty($has_buy_uids)){
+            $q_cond['conditions']['not'] = ['User.id' => $has_buy_uids];
+        }
+        $users = $this->User->find('all', $q_cond);
+        if (count($users) < $num) {
+            $this->redirect('/admin/share/show_orders_of_share/' . $weshare_id . '?error=' . urlencode('想生成' . $num . '个订单，然而该团长只有' . count($users) . '个粉丝，无法生成订单'));
         }
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
@@ -624,8 +637,8 @@ class ShareController extends AppController
             $orders[] = $order;
         }
 
-        $this->log('admin make orders: '.json_encode($orders));
-        $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id);
+        $this->log('admin make orders: ' . json_encode($orders));
+        $this->redirect('/admin/share/show_orders_of_share/' . $weshare_id);
     }
 
     public function admin_make_unpaid_order($num = 1, $weshare_id, $sharer)
