@@ -1414,7 +1414,7 @@ class WesharesController extends AppController
         $this->set('weshareId', $weshareId);
         $this->set_history();
     }
-    
+
     /**
      * @param $weshareId
      * 客户端 重新load评论

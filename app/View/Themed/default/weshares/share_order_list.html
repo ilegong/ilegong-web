@@ -19,25 +19,6 @@
                 <a href="/weshares/add" class="btn btn-warning btn-xs" style="margin-top: 5px;">去分享</a>
             </div>
         </div>
-        {{if count($tags) > 0 && count($show_tag_ids) > 0}}
-        <br>
-        <br>
-        <div>
-            <ol class="breadcrumb" id="order-tag-toggle">
-                {{if $show_tag_all}}
-                <li class="active" data-id="all"><a>全部</a></li>
-                {{/if}}
-                {{loop $tags $tag}}
-                <?php
-                if(!in_array($tag['WeshareProductTag']['id'], $show_tag_ids)){
-                    continue;
-                }
-            ?>
-                <li data-id="{{$tag['WeshareProductTag']['id']}}"><a>{{$tag['WeshareProductTag']['name']}}</a></li>
-                {{/loop}}
-            </ol>
-        </div>
-        {{/if}}
         <table class="table">
             <thead>
             <tr>
@@ -48,11 +29,6 @@
             </thead>
             <tbody>
             {{loop $summery['details'] $cart_product_id $item_summery}}
-            <?php
-            if(!$show_tag_all&&!in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
-                continue;
-            }
-        ?>
             <tr class="summery-product-item" name="summery-product-{{$product_tag_map[$cart_product_id]}}">
                 <td>{{$item_summery['name']}}</td>
                 <td>{{$item_summery['num']}}</td>
@@ -60,77 +36,33 @@
             </tr>
             {{/loop}}
             </tbody>
-            {{if count($tags) > 0}}
-            {{if $show_tag_all}}
-            <tr class="order-data-summery" name="order-data-summery-all">
-                <td colspan="3">
-                    总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>
-                    {{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}
-                    {{if $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
-                    {{if $summery['all_use_rebate_fee'] > 0}}&nbsp;&nbsp;余额支付金额:&nbsp;<font color="red">{{$summery['all_use_rebate_fee']}}</font>{{/if}}
-                    {{if $repaid_order_money!=0}}
-                        {{if $repaid_order_money>0}}
-                        &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
-                        {{else}}
-                        &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
-                        {{/if}}
-                    {{/if}}
-                    &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
-                            color="red">{{$summery['all_buy_user_count']}}</font></td>
-            </tr>
-            {{/if}}
-            {{loop $tag_order_summery $tag_id $summery_item}}
-            <?php
-            if(in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
-                continue;
-            }
-        ?>
-            <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
-                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery_item['total_price']-$summery_item['repaid_money'],2)}}</font>
-                    {{if $summery_item['repaid_money']!=0}}
-                    {{if $summery_item['repaid_money']>0}}
-                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($summery_item['repaid_money'],2)}}</font>
-                    {{else}}
-                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($summery_item['repaid_money']),2)}}</font>
-                    {{/if}}
-                    {{/if}}
-                    &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
-                            color="red">{{$summery_item['buy_count']}}</font></td>
-            </tr>
-            {{/loop}}
-            {{else}}
+
             <tr class="order-data-summery" name="order-data-summery-all">
                 <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>
                     {{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}
                     {{if $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
                     {{if $summery['all_use_rebate_fee'] > 0}}&nbsp;&nbsp;余额支付金额:&nbsp;<font color="red">{{$summery['all_use_rebate_fee']}}</font>{{/if}}
                     {{if $repaid_order_money!=0}}
-                        {{if $repaid_order_money>0}}
-                        &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
-                        {{else}}
-                        &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
-                        {{/if}}
+                    {{if $repaid_order_money>0}}
+                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
+                    {{else}}
+                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
+                    {{/if}}
                     {{/if}}
                     &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                             color="red">{{$summery['all_buy_user_count']}}</font></td>
             </tr>
-            {{/if}}
+
             {{if $summery_item['ship_fee'] > 0}}
-            <tr>
-                <td colspan="3">{{if $weshare_info['Weshare']['type'] == SHARE_TYPE_GROUP}}拼团费用{{else}}快递费用{{/if}}:&nbsp;<font color="red">{{$summery_item['ship_fee']}}</font></td>
-            </tr>
+                <tr>
+                    <td colspan="3">{{if $weshare_info['Weshare']['type'] == SHARE_TYPE_GROUP}}拼团费用{{else}}快递费用{{/if}}:&nbsp;<font color="red">{{$summery_item['ship_fee']}}</font></td>
+                </tr>
             {{/if}}
             {{if count($rebate_logs) > 0}}
-            <tr>
-                <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE) > 0}}&nbsp;&nbsp;团长佣金:&nbsp;<font color="red">{{$share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE)}}</font>{{/if}}
-                </td>
-            </tr>
-            {{/if}}
-            {{if $child_share_order_count > 0}}
-            <tr>
-                <td colspan="3">拼团订单数:&nbsp;<font color="red">{{$child_share_order_count}}</font>&nbsp;&nbsp;自提点费用:&nbsp;<font color="red">{{$child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE}}</font>
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE) > 0}}&nbsp;&nbsp;团长佣金:&nbsp;<font color="red">{{$share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE)}}</font>{{/if}}
+                    </td>
+                </tr>
             {{/if}}
         </table>
     </div>
@@ -200,13 +132,6 @@
                     <div class="panel-group" style="margin-bottom: 5px;">
                         <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
                         {{template weshares/share_order_list_template}}
-                    </div>
-                </div>
-                {{/if}}
-                {{if count($child_share_data) > 0}}
-                <div class="tab-pane fade" id="group-share-orders">
-                    <div class="panel-group" style="margin-bottom: 5px;">
-                        {{template weshares/share_order_list_share_template}}
                     </div>
                 </div>
                 {{/if}}

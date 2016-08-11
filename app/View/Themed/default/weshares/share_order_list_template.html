@@ -1,11 +1,6 @@
 <?php $order_index=0 ?>
 {{loop $current_orders $item_order}}
-<?php $order_index = $order_index+1; $current_tag_id = get_share_order_tag_id($order_cart_map[$item_order['id']]);?>
-<?php
-    if(!$show_tag_all&&!in_array($current_tag_id, $show_tag_ids)){
-        continue;
-    }
-?>
+<?php $order_index = $order_index+1;?>
 <div class="col-xs-12 div-order-item" data-id="{{$item_order['id']}}" data-order-status="{{$item_order['status']}}" style="padding-right: 5px;padding-left: 5px;" name="order-item-tag-{{$current_tag_id}}" data-order-ship-type="{{$current_tag}}">
     <div class="offer {{if $item_order['status']==ORDER_STATUS_PAID}}
     offer-success
@@ -39,25 +34,6 @@
             </div>
         </div>
         <div class="offer-content">
-            {{if $item_order['process_prepaid_status']!=0}}
-            <div class="pull-right" id="process-prepaid-status">
-                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
-                <span class="label label-warning">金额待定</span>
-                {{/if}}
-                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID_TODO}}
-                <span class="label label-info">待补款</span>
-                {{/if}}
-                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID_DONE}}
-                <span class="label label-success">已补款</span>
-                {{/if}}
-                {{if $item_order['process_prepaid_status']==ORDER_STATUS_REFUND_TODO}}
-                <span class="label label-danger">待退差价</span>
-                {{/if}}
-                {{if $item_order['process_prepaid_status']==ORDER_STATUS_REFUND_DONE}}
-                <span class="label label-success">已退差价</span>
-                {{/if}}
-            </div>
-            {{/if}}
             <p id="order-info-panel-{{$item_order['id']}}">
                 <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
                 <strong>下单时间:</strong>&nbsp;&nbsp;{{$item_order['created']}}<br>
@@ -128,12 +104,6 @@
                     style="margin-bottom: 5px; margin-left: 5px;">退款
             </button>
             <textarea style="display: none;" id="order-cart-info-{{$item_order['id']}}">{{json_encode($order_cart_map[$item_order['id']]);}}</textarea>
-            {{/if}}
-            {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
-            <button class="btn btn-info btn-xs pull-right price-confirm" data-order-name="{{$item_order['consignee_name']}}"
-                    data-order-id="{{$item_order['id']}}" id="price-confirm-btn-{{$item_order['id']}}"
-                    style="margin-bottom: 5px; margin-left: 5px;">确定价格
-            </button>
             {{/if}}
             <!--remark order-->
             <button id="remark-order-{{$item_order['id']}}" class="btn btn-info btn-xs pull-right remark-order" data-order-name="{{$item_order['consignee_name']}}" data-order-remark="{{$item_order['business_remark']}}" data-order-id="{{$item_order['id']}}" style="margin-bottom: 5px; margin-left: 5px;">标记订单</button>
