@@ -1397,86 +1397,24 @@ class WesharesController extends AppController
         if ($weshare['Weshare']['creator'] != $user_id && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
-        //获取子分享数据
-        $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
-        //获取产品标签数据
-        $share_tags = $this->ShareUtil->get_share_tags($weshareId);
-        $all_tag_ids = Hash::extract($share_tags['tags'], '{n}.WeshareProductTag.id');
-        //should show all tag
-        if ($weshare['Weshare']['creator'] == $user_id || count($share_tags['tags']) <= 1) {
-            $this->set('show_tag_all', true);
-        }
-        //存在多个商品标签不是管理员进来管理
-        if (count($share_tags) > 0 && $weshare['Weshare']['creator'] != $user_id) {
-            $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
-        }
         //获取订单统计数据
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
-        if (count($share_tags['tags']) > 0) {
-            $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
-            $this->set('tag_order_summery', $tag_order_summery);
-        }
-//        $child_share_summery_datas = array();
-//        foreach ($child_share_data['child_share_ids'] as $child_share_id) {
-//            $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
-//        }
-
-        //$this->set('child_share_summery_datas', $child_share_summery_datas);
-        //$this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
-        $share_ids = $child_share_data['child_share_ids'];
-        $share_ids[] = $weshareId;
-
+        $share_ids = [$weshareId];
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($share_ids);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($share_ids);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($share_ids);
-
-        $this->set($child_share_data);
         $this->set($statics_data);
         $this->set('weshare_info', $weshare);
-        $this->set('tags', $share_tags['tags']);
-        $this->set('show_tag_ids', $all_tag_ids);
-        $this->set('product_tag_map', $share_tags['product_tag_map']);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);
         $this->set('repaid_order_money', $repaid_order_money);
-        $this->set('ship_type_list', ShipAddress::ship_type_list());
+        $this->set('ship_type_list', $statics_data['ship_types']);
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
         $this->set('weshareId', $weshareId);
         $this->set_history();
     }
-
-    /**
-     * @param $parent_summery_data
-     * @param $child_share_datas
-     * 自分享汇总数据合并
-     */
-    private function merge_child_share_summery_data(&$parent_summery_data, $child_share_datas)
-    {
-        $parent_summery_data['child_share_order_count'] = 0;
-        foreach ($child_share_datas as $child_share_data_item) {
-            $child_share_summery_details = $child_share_data_item['summery']['details'];
-            foreach ($child_share_summery_details as $pid => $summery_detail_item) {
-                if (empty($parent_summery_data['summery']['details'][$pid]['name'])) {
-                    $parent_summery_data['summery']['details'][$pid]['name'] = $summery_detail_item['name'];
-                }
-                $parent_summery_data['summery']['details'][$pid]['num'] = $parent_summery_data['summery']['details'][$pid]['num'] + $summery_detail_item['num'];
-                $parent_summery_data['summery']['details'][$pid]['total_price'] = $parent_summery_data['summery']['details'][$pid]['total_price'] + $summery_detail_item['total_price'];
-            }
-            $parent_summery_data['summery']['all_buy_user_count'] = $child_share_data_item['summery']['all_buy_user_count'] + $parent_summery_data['summery']['all_buy_user_count'];
-            $parent_summery_data['summery']['all_total_price'] = $child_share_data_item['summery']['all_total_price'] + $parent_summery_data['summery']['all_total_price'];
-            $parent_summery_data['summery']['real_total_price'] = $child_share_data_item['summery']['real_total_price'] + $parent_summery_data['summery']['real_total_price'];
-            $parent_summery_data['summery']['all_coupon_price'] = $child_share_data_item['summery']['all_coupon_price'] + $parent_summery_data['summery']['all_coupon_price'];
-            $parent_summery_data['child_share_order_count'] = $parent_summery_data['child_share_order_count'] + $child_share_data_item['summery']['all_buy_user_count'];
-            $rebate_logs = $child_share_data_item['rebate_logs'];
-            $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);
-            $share_rebate_money = $child_share_data_item['share_rebate_money'];
-            $parent_summery_data['share_rebate_money'] = $share_rebate_money;
-            $refund_money = $child_share_data_item['refund_money'];
-            $parent_summery_data['refund_money'] = $parent_summery_data['refund_money'] + $refund_money;
-        }
-    }
-
+    
     /**
      * @param $weshareId
      * 客户端 重新load评论
