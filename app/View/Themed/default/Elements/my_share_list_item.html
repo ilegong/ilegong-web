@@ -1,6 +1,6 @@
 {{literal}}
 <a class="clearfix share-goodlist" href="/weshares/view/{{share.id}}">
-    <div class="fl"><img lazy-src="{{share.default_image}}" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png" /></div>
+    <div class="fl"><img lazy-src="{{share.default_image}}" fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png" /></div>
     <h1>{{share.title}}</h1>
     <em ng-if="share.status == 0 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 0 && share.settlement == 0}">进行中</em>
     <em ng-if="share.status == 1 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 0}">已结束</em>
