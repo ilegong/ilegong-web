@@ -1,0 +1,114 @@
+<div class="users form">
+{{if $current_action=='admin_add'}}
+<?php 
+echo $this->MForm->create($current_model,array(
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+ <?php 
+echo $this->MForm->create($current_model,array(
+	'class'=>'form-horizontal',
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+{{/if}}
+<fieldset>
+    	 
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#article-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+                <li><a href="#article-publishing" data-toggle="tab"><span>{{__('Advanced Options')}}</span></a></li>
+                <li><a href="#article-seo" data-toggle="tab"><span>{{__('SEO')}}</span></a></li>
+                {{$this->Layout->getLanguageTabHead($current_model)}}
+            </ul>
+            <div class="tab-content">
+                <div id="article-main" class="tab-pane active">
+                	 <?php
+                	 	echo $this->MForm->input('id');
+						if($current_action=='admin_add'){
+				        	echo $this->MForm->input('name',array('size'=>'80','required'=>'required','onblur'=>"generateSlug(this,'#ArticleSlug')"));
+						}
+						else{
+							echo $this->MForm->input('name',array('size'=>'80','required'=>'required'));
+						}
+				         echo $this->MForm->input('cate_id',array('type'=> 'select','required'=>'required')); /*,'options'=>$categories */
+				         echo $this->MForm->input('slug',array('default'=>'','required'=>'required','size'=>'80','title'=>'不填时，值为数据的id。'));
+						 echo $this->MForm->input('published',array('default'=>1)); 
+						
+						
+						echo $this->MForm->input('summary',array('rows' => '2', 'cols' => '80')); 
+					        
+				     ?>
+				     <div class="clearfix"></div>
+				  <?php
+					echo $this->MForm->titleImage('Article.coverimg'); 
+					echo $this->MForm->swfupload('photo','Article');
+					echo $this->MForm->selectAssoc('Tag');
+					echo $this->MForm->ckeditor('content',array('div'=>'wygiswys','label' => false));
+				  ?>
+                </div>
+                
+                 <div id="article-seo"  class="tab-pane">
+	                 	<?php
+					        echo $this->MForm->input('seotitle',array('rows' => '2', 'cols' => '80')); 
+					        echo $this->MForm->input('seodescription',array('rows' => '5', 'cols' => '80'));
+					        echo $this->MForm->input('seokeywords',array('rows' => '5', 'cols' => '80'));
+					    	?>
+                 </div>
+                 <div id="article-publishing"  class="tab-pane">
+                 	<?php
+                 	echo $this->MForm->input('subtitle');
+                 	echo $this->MForm->input('authorname');
+				    echo $this->MForm->input('origin');	
+                   
+                    //echo $this->MForm->input('promote', array('label' => __('Promoted to front page', true)));                   
+                    echo $this->MForm->input('created');
+                	?>
+                	<?php echo $this->MForm->swfupload('video','Article'); ?>
+                 </div> 
+                 {{$this->Layout->getLanguageTabContent($current_model)}}          	
+       </div>
+ 
+    </fieldset>
+<?php echo $this->MForm->end(array('label'=>__('Submit'),'id'=>'btnsubmit')); ?>
+   
+</div>
+
+<script>
+	$(document).ready(function(){		 
+		$('#btnsubmit').click(function(){		
+			var oEditor = CKEDITOR.instances.ArticleContent;
+			var content = oEditor.getData();
+			$('#ArticleContent').val(content);
+			if(typeof(before_submit)=="function"){
+				if(before_submit()==false)
+					return false;
+			}
+			try {
+				var hasfile = false;
+				for(var i=0;i<swfu_array.length;i++){
+					var stats = swfu_array[i].getStats();
+					if(stats && stats.files_queued ==0){
+						continue;
+					}
+					else if(stats){
+						hasfile = true;
+						swfu_array[i].startUpload();
+					}
+				}
+				if(!hasfile){
+					// 无正在上传的文件 ,直接提交表单  
+					return true;			
+				}
+				else{
+					form_submit_flag_for_swfupload = true;
+					form_submit_obj_for_swfupload = this.form; //传递表单对象 
+					alert("有文件正在上传，请稍候...");
+				}
+			} catch (ex) {
+		
+			}
+			return false;	
+		});
+	});
+</script>
