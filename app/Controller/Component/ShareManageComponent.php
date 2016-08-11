@@ -173,8 +173,8 @@ FROM cake_weshares
 WHERE root_share_id = {$data['Weshares']['id']}";
 
         $clone_weshares = $wesharesM->query($sql);
-
-        $res = $poolProductM->save($data['PoolProduct']);
+        $data['PoolProduct']['user_id'] = $data['Weshares']['creator'];
+        $poolProductM->save($data['PoolProduct']);
         // 更新cake_weshare_products表
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         foreach ($data['WeshareProduct'] as $item) {

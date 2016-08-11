@@ -17,7 +17,7 @@
     {{literal}}
     <div style="padding-top: 10px;">
         <div class="mine_order" ng-repeat="share in vm.shares">
-            <a class="clearfix share-goodlist" href="/weshares/view/{{share.id}}">
+            <a class="clearfix share-goodlist">
                 <div class="fl"><img lazy-src="{{share.share_img}}" fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png" /></div>
                 <h1>{{share.share_name}}</h1>
                 <em ng-if="!share.deleted">上架</em>
