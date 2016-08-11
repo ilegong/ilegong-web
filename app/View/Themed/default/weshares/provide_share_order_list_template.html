@@ -37,7 +37,7 @@
                 <p id="order-info-panel-{{$item_order['id']}}">
                     <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font><br>
                     <strong>下单时间:</strong>&nbsp;&nbsp;{{$item_order['created']}}<br>
-                    <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}&nbsp;&nbsp;<font color="red">￥{{$item_order['total_all_price']}}</font><br>
+                    <strong>商品:</strong>&nbsp;&nbsp;{{implode(',', $item_order['carts'])}}&nbsp;&nbsp;<font color="red">￥{{$item_order['total_all_price']}}</font><br>
                     {{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
                     {{if !empty($item_order['business_remark'])}}
                         <strong>备注:</strong>&nbsp;&nbsp;<span name="order-remark">{{$item_order['business_remark']}}</span>
