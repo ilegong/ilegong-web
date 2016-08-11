@@ -2164,7 +2164,7 @@ class WeshareBuyComponent extends Component
                 'conditions' => array(
                     'data_id' => $related_share_ids,
                     'parent_id' => 0,
-                    'not' => array('status' => ORDER_STATUS_WAITING_PAY, 'order_id' => 0)
+                    'not' => array('status' => [ORDER_STATUS_WAITING_PAY, ORDER_STATUS_CANCEL], 'order_id' => 0)
                 )
             ));
             $order_count = $orderM->find('count', array(
