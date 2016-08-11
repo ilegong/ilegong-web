@@ -970,6 +970,16 @@ class WesharesController extends AppController
         exit();
     }
 
+    /**
+     * 获取用户分销的
+     */
+    public function my_provide_share_list_api(){
+        $uid = $this->currentUser['id'];
+        $list = $this->WeshareBuy->get_user_provide_shares($uid);
+        echo json_encode($list);
+        exit;
+    }
+
     private function combine_share_list_data($shares){
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
@@ -1026,6 +1036,15 @@ class WesharesController extends AppController
             $result[$share_id] = floatval($summery_data[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money;
         }
         return $result;
+    }
+
+    public function my_provide_shares_list(){
+        $uid = $this->currentUser['id'];
+        if (!$uid) {
+            $this->redirect('/users/login.html');
+        }
+        $title = '我的分销';
+        $this->set('title', $title);
     }
 
     public function my_shares_list($type = 0)

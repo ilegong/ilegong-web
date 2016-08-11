@@ -8,121 +8,127 @@ var del = require('del');
 var vinylPaths = require('vinyl-paths');
 
 var all_js = [
-  {
-    name: 'weshare.min.js',
-    sources: [
-      'webroot/src/scripts/module-filters.js',
-      'webroot/src/scripts/module-directives.js',
-      'webroot/src/scripts/module-services.js',
-      'webroot/src/scripts/app.js',
-      'webroot/src/scripts/subscription-controller.js'
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'index.min.js',
-    sources: [
-      'webroot/src/scripts/index-products-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'weshare-view.min.js',
-    sources: [
-      'webroot/src/scripts/consignee-view-controller.js',
-      'webroot/src/scripts/consignee-edit-controller.js',
-      'webroot/src/scripts/weshare-view-controller.js',
-      'webroot/src/scripts/pool-product-factory.js',
-      'webroot/src/scripts/share-product-view-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'weshare-edit.min.js',
-    sources: [
-      'webroot/src/scripts/weshare-edit-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'share-opt-index.min.js',
-    sources: [
-      'webroot/src/scripts/share-opt-index-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'avatar.min.js',
-    sources: [
-      'webroot/static/user/layer.m.js',
-      'webroot/static/user/jquery.crop.js',
-    ],
-    dist: 'webroot/static/user/'
-  }, {
-    name: 'share-order-list.min.js',
-    sources: [
-      'webroot/static/weshares/js/share-order-list.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'faq.min.js',
-    sources: [
-      'webroot/static/share_faq/custom/word-limit.js',
-      'webroot/static/share_faq/custom/faq.js'
-    ],
-    dist: 'webroot/static/share_faq/custom/'
-  }, {
-    name: 'user-info.min.js',
-    sources: [
-      'webroot/src/scripts/user-list-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  },{
-    name: 'sub-list.min.js',
-    sources: [
-      'webroot/src/scripts/sub-list-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'get-user-info.min.js',
-    sources: [
-      'webroot/src/scripts/get-user-info-controller.js'
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'tutorial.min.js',
-    sources: [
-      'webroot/src/scripts/tutorial-binding-card-controller.js',
-      'webroot/src/scripts/tutorial-binding-mobile-controller.js',
-    ],
-    dist: 'webroot/static/weshares/js/'
-  },{
+    {
+        name: 'weshare.min.js',
+        sources: [
+            'webroot/src/scripts/module-filters.js',
+            'webroot/src/scripts/module-directives.js',
+            'webroot/src/scripts/module-services.js',
+            'webroot/src/scripts/app.js',
+            'webroot/src/scripts/subscription-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'index.min.js',
+        sources: [
+            'webroot/src/scripts/index-products-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'weshare-view.min.js',
+        sources: [
+            'webroot/src/scripts/consignee-view-controller.js',
+            'webroot/src/scripts/consignee-edit-controller.js',
+            'webroot/src/scripts/weshare-view-controller.js',
+            'webroot/src/scripts/pool-product-factory.js',
+            'webroot/src/scripts/share-product-view-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'weshare-edit.min.js',
+        sources: [
+            'webroot/src/scripts/weshare-edit-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'share-opt-index.min.js',
+        sources: [
+            'webroot/src/scripts/share-opt-index-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'avatar.min.js',
+        sources: [
+            'webroot/static/user/layer.m.js',
+            'webroot/static/user/jquery.crop.js',
+        ],
+        dist: 'webroot/static/user/'
+    }, {
+        name: 'share-order-list.min.js',
+        sources: [
+            'webroot/static/weshares/js/share-order-list.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'faq.min.js',
+        sources: [
+            'webroot/static/share_faq/custom/word-limit.js',
+            'webroot/static/share_faq/custom/faq.js'
+        ],
+        dist: 'webroot/static/share_faq/custom/'
+    }, {
+        name: 'user-info.min.js',
+        sources: [
+            'webroot/src/scripts/user-list-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'sub-list.min.js',
+        sources: [
+            'webroot/src/scripts/sub-list-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'get-user-info.min.js',
+        sources: [
+            'webroot/src/scripts/get-user-info-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'tutorial.min.js',
+        sources: [
+            'webroot/src/scripts/tutorial-binding-card-controller.js',
+            'webroot/src/scripts/tutorial-binding-mobile-controller.js',
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
         name: 'pay-result.min.js',
         sources: [
             'webroot/src/scripts/pay-result-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    },{
+    }, {
         name: 'user-coupons-list-controller.min.js',
         sources: [
             'webroot/src/scripts/user-coupons-list-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    },{
+    }, {
         name: 'read-share-count.min.js',
         sources: [
             'webroot/src/scripts/read-share-count-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    },{
+    }, {
         name: 'user-rebate-list.min.js',
         sources: [
             'webroot/src/scripts/user-rebate-list-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
     }, {
-    name: 'vote.min.js',
-    sources: [
-      'webroot/src/scripts/vote-signup-controller.js',
-      'webroot/src/scripts/vote-event-controller.js'
-    ],
-    dist: 'webroot/static/weshares/js/'
-  },
+        name: 'vote.min.js',
+        sources: [
+            'webroot/src/scripts/vote-signup-controller.js',
+            'webroot/src/scripts/vote-event-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'user-provide-share-list.min.js',
+        sources: [
+            'webroot/src/scripts/get-user-provide-share-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }
 ];
 
 var all_css = [
