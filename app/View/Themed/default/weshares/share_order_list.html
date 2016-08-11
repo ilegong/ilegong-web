@@ -138,9 +138,6 @@
             </div>
         </div>
     </div>
-    <div class="row" style="margin-bottom: 30px;">
-
-    </div>
     <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
         <div class="modal fade bs-example-modal-sm update-order-remark-dialog" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-sm">
@@ -323,36 +320,6 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="confirm-money-dialog">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">确认价格</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <label for="refund-order-user" class="col-sm-2 control-label">用户名</label>
-
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" readonly id="confirm-order-user">
-                                </div>
-                            </div>
-                            <input type="hidden" class="form-control" readonly id="confirm-order-id">
-
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}" name="handle-confirm-money">
-                            确认价格
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="set_share_shipped_dialog">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
@@ -388,4 +355,4 @@
         </button>
     </div>
 </div>
-<script src="{{$STATIC_HOST}}/static/weshares/js/share-order-list.min.js?v0.2.6"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/share-order-list.min.js?v0.2.7"></script>

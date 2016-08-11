@@ -10,13 +10,6 @@ $(document).ready(function () {
   var filterOrderKeyword = '';
   var $filterOrderBtn = $('#filter-order');
   var $filterOrderText = $('#filterOrderText');
-  $('div.offer .div-share-item').on('click', function (e) {
-    e.preventDefault();
-    var $me = $(this);
-    var $parent = $me.parentsUntil('div.col-xs-12').parent('div.col-xs-12');
-    var child_share_id = $parent.data('id');
-    window.location.href = '/weshares/view/' + child_share_id;
-  });
   function init() {
     if ($tagLi.length > 0) {
       $('li:first', $shareOrderListTagToggle).trigger('click');

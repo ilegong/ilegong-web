@@ -1,0 +1,81 @@
+<link href="{{$STATIC_HOST}}/static/weshares/css/order-list.css?v0.1.4" rel="stylesheet">
+<div class="refer-back-bg menu-top">
+    订单统计
+    <a href="{{$back_url}}">
+        <img src="{{STATIC_HOST}}/static/img/back.png"/>
+        <label>返回</label>
+    </a>
+</div>
+<div style="margin-top: 50px;">
+    <div class="row">
+        <h4>订单列表</h4>
+        <div class="row" style="padding: 5px;">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="filterOrderText" placeholder="收货人或微信昵称">
+              <span class="input-group-btn">
+                <button id="filter-order" class="btn btn-primary" type="button">查询</button>
+              </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        <ul class="nav nav-pills">
+            <li role="presentation" class="disabled" data-toggle-val="all"><a href="#">全部</a></li>
+            <li role="presentation" data-toggle-val="1"><a href="#">待发货</a></li>
+            <li role="presentation" data-toggle-val="2"><a href="#">已发货</a></li>
+            <li role="presentation" data-toggle-val="3"><a href="#">已签收</a></li>
+            <li role="presentation" data-toggle-val="9"><a href="#">已评价</a></li>
+            <li role="presentation" data-toggle-val="14"><a href="#">退款中</a></li>
+            <li role="presentation" data-toggle-val="4"><a href="#">已退款</a></li>
+        </ul>
+        <hr>
+        <div class="col-md-12">
+            {{template weshares/provide_share_order_list_template}}
+        </div>
+    </div>
+    <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
+        <div class="modal fade bs-example-modal-sm update-ship-info-dialog" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">更新快递单号</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">订单ID</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="order_id" placeholder="订单ID" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">快递公司</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ship_type_name" placeholder="快递公司">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">快递单号</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}"
+                                name="handle-update-ship-code">修改
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{$STATIC_HOST}}/static/weshares/js/share-order-list.min.js?v0.2.7"></script>

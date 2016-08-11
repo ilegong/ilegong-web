@@ -3295,7 +3295,8 @@ class WeshareBuyComponent extends Component
     {
         $orderM = ClassRegistry::init('Order');
         $cond = [
-            'Order.type' => ORDER_TYPE_WESHARE_BUY
+            'Order.type' => ORDER_TYPE_WESHARE_BUY,
+            'not' => ['Order.status' => ORDER_STATUS_CANCEL]
         ];
         if (!empty($keyword)) {
             $cond['OR'] = [

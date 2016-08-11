@@ -1416,7 +1416,7 @@ class WesharesController extends AppController
     }
 
     public function provide_share_order_list($weshareId){
-        
+        $this->WeshareBuy->get_provide_share_order(false, $weshareId, 5000, 1);
     }
 
     /**
