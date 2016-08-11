@@ -234,9 +234,10 @@ class UserApiController extends Controller
         $datainfo['User']['image'] = get_user_avatar($datainfo);
 
         $payment = json_decode($datainfo['User']['payment'], true);
-        $payment['type'] = strval($payment["type"]);
+        if(is_array($payment)) {
+            $payment['type'] = strval($payment["type"]);
+        }
         $datainfo['User']['payment'] = json_encode($payment);
-
         return $datainfo;
     }
 

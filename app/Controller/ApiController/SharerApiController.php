@@ -315,51 +315,8 @@ class SharerApiController extends Controller
 
     public function get_provide_share_order_list($share_id, $only_paid, $page, $limit)
     {
-        $this->loadModel('Order');
-        $cond = [
-            'Order.type' => ORDER_TYPE_WESHARE_BUY
-        ];
         $keyword = $_REQUEST['keyword'];
-        if (!empty($keyword)) {
-            $cond['OR'] = [
-                ['Order.consignee_name like ' => '%' . $keyword . '%'],
-                ['Order.consignee_address like ' => '%' . $keyword . '%'],
-                ['Order.consignee_mobilephone' => '%' . $keyword . '%']
-            ];
-        }
-        if ($only_paid == 1) {
-            $cond['Order.status'] = ORDER_STATUS_PAID;
-        } else {
-            $cond['Order.status > '] = ORDER_STATUS_WAITING_PAY;
-        }
-        $cond['Weshare.refer_share_id'] = $share_id;
-        $cond['Weshare.type'] = SHARE_TYPE_POOL;
-        $orders = $this->Order->find('all', [
-            'conditions' => $cond,
-            'limit' => $limit,
-            'page' => $page,
-            'joins' => [
-                [
-                    'type' => 'left',
-                    'table' => 'cake_weshares',
-                    'alias' => 'Weshare',
-                    'conditions' => 'Weshare.id = Order.member_id'
-                ]
-            ],
-            'recursive' => 1,
-            'fields' => ['Order.id', 'Order.member_id' ,'Order.total_all_price', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_code', 'Order.status', 'Order.created', 'Order.pay_time', 'Order.creator', 'Order.business_remark']
-        ]);
-        $result = [];
-        foreach ($orders as $order_item) {
-            $carts = $order_item['Cart'];
-            $cart_info = [];
-            foreach ($carts as $cart_item) {
-                $cart_info[] = $cart_item['name'] . 'X' . $cart_item['num'];
-            }
-            $order = $order_item['Order'];
-            $order['carts'] = $cart_info;
-            $result[] = $order;
-        }
+        $result = $this->WeshareBuy->get_provide_share_order($only_paid, $share_id, $limit, $page, $keyword);
         echo json_encode($result);
         exit;
     }

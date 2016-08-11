@@ -1415,6 +1415,10 @@ class WesharesController extends AppController
         $this->set_history();
     }
 
+    public function provide_share_order_list($weshareId){
+        
+    }
+
     /**
      * @param $weshareId
      * 客户端 重新load评论
