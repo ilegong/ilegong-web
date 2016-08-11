@@ -473,6 +473,26 @@ class MessageApiController extends Controller
         $this->loadModel('ShareFaq');
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
+        if (empty($postData)) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        if (empty($postData['share_id'])) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        if (empty($postData['msg'])) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        if (empty($postData['sender'])) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        if (empty($postData['receiver'])) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
         $this->WeshareFaq->create_faq($postData);
         echo json_encode(['success' => true]);
         exit();
