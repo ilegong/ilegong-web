@@ -1713,32 +1713,6 @@ function user_subscribed_pys($uid) {
 }
 
 function send_weixin_message($post_data, $logObj = null) {
-
-    $tmp_type = [
-        '0MAsqVfLFyvlZ3LFdhavuq2PXuMxgi1i7rJcmTP31HU' => "send_pintuan_fail_msg",
-        '0m3XwqqqiUSp0ls830LdL24GHTOVHwHd6hAYDx3xthk' => "REFUNDING_ORDER",
-        '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54' => "send_share_product_arrival",
-        '4P1UuxeCmpU4xVZxBWlkUQDsIGbviUQG6zSakNzvUK4' => "send_comment_template_msg",
-        '87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4' => "ORDER_SHIPPED",
-        'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U' => "TUAN_TIP",
-        'DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0' => "ORDER_REBATE",
-        'L2nw1khejEMFilcSGKxfm_2zK4cnrHhf4Gv5le0c204' => "PACKET_BE_GOT",
-        'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U' => "JOIN_TUAN",
-        'UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q' => "ORDER_PAID",
-        'XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw' => "send_recommend_notify_template_msg",
-        'ee_aZdUrvl_G4F6qSUgZufwnt8oWs9LpG1K8hZ0l3Yg' => "send_new_member_tip ",
-        'j3mRemwa3yq5fjJCiNx5enCMC8C0YEXLehb2HGIiGkw' => "REFUND_ORDER",
-        'vffIekz48NrxDRNbiGP5_xTvCqBHusA_W5pidHhGaHs' => "PACKET_RECEIVED",
-        'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE' => "send_faq_notify_template_msg"
-    ];
-
-    $log = [
-        "index" => "wx_msg_" . strtolower($tmp_type[$post_data['template_id']]),
-        "type" => strtolower($tmp_type[$post_data['template_id']]),
-        "msg" => $post_data,
-    ];
-    
-    add_logs_to_es($log);
     
     $tries = 2;
     $wxOauthM = ClassRegistry::init('WxOauth');
