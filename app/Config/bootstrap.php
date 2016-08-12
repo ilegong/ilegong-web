@@ -1713,7 +1713,7 @@ function user_subscribed_pys($uid) {
 }
 
 function send_weixin_message($post_data, $logObj = null) {
-    
+
     $tries = 2;
     $wxOauthM = ClassRegistry::init('WxOauth');
 
