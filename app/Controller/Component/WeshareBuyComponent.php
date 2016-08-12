@@ -235,7 +235,7 @@ class WeshareBuyComponent extends Component
         $poolProducts = $poolProductM->find('all', [
             'conditions' => [
                 'PoolProduct.user_id' => $uid,
-                'PoolProduct.status' => [POOL_PRODUCT_PUBLISH, POOL_PRODUCT_UN_PUBLISH],
+                'PoolProduct.status' => [POOL_PRODUCT_PUBLISH, POOL_PRODUCT_UN_PUBLISH, POOL_PRODUCT_DRAFT],
             ],
             'order' => ['PoolProduct.status DESC', 'PoolProduct.created DESC']
         ]);
