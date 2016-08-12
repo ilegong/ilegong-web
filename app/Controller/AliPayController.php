@@ -27,6 +27,10 @@ class AliPayController extends AppController {
     }
 
     public function pay_short_url($uuid) {
+        if(empty($uuid)){
+            $this->redirect('/weshares/index.html');
+            return;
+        }
         $this->pageTitle = '支付宝支付';
         $this->set('hideNav', true);
         if (!$this->is_weixin()) {
