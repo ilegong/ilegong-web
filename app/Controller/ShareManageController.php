@@ -1697,7 +1697,8 @@ GROUP BY product_id";
             'conditions' => [
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $weshare_ids,
-                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY]
+                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY],
+                'not' => ['flag' => ORDER_FLAG_VIRTUAL_FLAG]
             ],
             'recursive' => 1,
         ]);
@@ -1743,7 +1744,8 @@ GROUP BY product_id";
             'conditions' => [
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $weshare_ids,
-                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY]
+                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY],
+                'not' => ['flag' => ORDER_FLAG_VIRTUAL_FLAG]
             ],
             'recursive' => 1,
         ]);
@@ -1914,7 +1916,7 @@ GROUP BY product_id";
         } else {
             $end_date = $_REQUEST['end_date'];
         }
-        $con1 = '';
+        $con1 = ' AND o.flag!=19';
         if ($_REQUEST['share_name']) {
             $con1 .= " AND s.title LIKE '%{$_REQUEST['share_name']}%'";
         }

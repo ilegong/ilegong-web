@@ -337,6 +337,7 @@ WHERE `51daifan`.`cake_weshare_products`.`origin_product_id` = '{$item['id']}'";
             'type' => ORDER_TYPE_WESHARE_BUY,
             'member_id' => $share_id,
             'status' => $q_order_status,
+            'not' => ['flag' => ORDER_FLAG_VIRTUAL_FLAG]
         ];
         if(!empty($start_date)){
             $q_cond['created > '] = $start_date;

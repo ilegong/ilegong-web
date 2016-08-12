@@ -3011,7 +3011,7 @@ if(!function_exists("add_logs_to_es"))
             $redis->rPush("logstash-list", json_encode($log));
         } catch (Exception $e) {
             $logObj = ClassRegistry::init('User');
-            $logObj->log('add es log error '.$e->getMessage());
+            $logObj->log('add es log error ' . $e->getMessage());
         }
     }
 }

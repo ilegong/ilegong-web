@@ -1043,7 +1043,7 @@ class ShareController extends AppController
             $end_date = $_REQUEST['end_date'];
         }
 
-        $con1 = '';
+        $con1 = ' AND o.flag!=19';
         if ($_REQUEST['share_name']) {
             $con1 .= " AND s.title LIKE '%{$_REQUEST['share_name']}%'";
         }
