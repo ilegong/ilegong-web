@@ -1744,8 +1744,9 @@ class WeshareBuyComponent extends Component
             else{
                 $conditions['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
             }
+
             if ($only_real_orders) {
-                $conditions['not'] = array('flag'=>19);
+                $conditions['not'] = array('flag' => ORDER_FLAG_VIRTUAL_FLAG);
             }
 
             $sort = array('created DESC');
@@ -3134,7 +3135,7 @@ class WeshareBuyComponent extends Component
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_ids,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY),
-                'not' => array('flag'=>19)
+                'not' => array('flag' => ORDER_FLAG_VIRTUAL_FLAG)
             )
         ));
         $refund_orders = array();
@@ -3296,7 +3297,7 @@ class WeshareBuyComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $cond = [
             'Order.type' => ORDER_TYPE_WESHARE_BUY,
-            'not' => ['Order.status' => ORDER_STATUS_CANCEL, 'Order.flag' => 19],
+            'not' => ['Order.status' => ORDER_STATUS_CANCEL, 'Order.flag' => ORDER_FLAG_VIRTUAL_FLAG],
         ];
         if (!empty($keyword)) {
             $cond['OR'] = [

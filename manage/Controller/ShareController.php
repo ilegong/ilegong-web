@@ -281,7 +281,8 @@ class ShareController extends AppController
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $weshare_ids,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY),
+                'not' => array('flag' => 19)
             )
         ));
         $refund_orders = array();
@@ -1308,6 +1309,8 @@ class ShareController extends AppController
         $order_flag = $_REQUEST['order_from_flag'];
         if ($order_flag != -1 && !empty($order_flag)) {
             $cond['flag'] = $order_flag;
+        } else {
+            $cond['not'] = ['flag' => 19];
         }
 //        $order_repaid_status = $_REQUEST['order_prepaid_status'];
 //        if ($order_repaid_status != 0) {

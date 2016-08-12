@@ -177,6 +177,8 @@ const ALIYUN_AVATAR_PREFIX = 'http://static.tongshijia.com';
 
 const ELK_REDIS_PORT = 33423;
 
+const ORDER_FLAG_VIRTUAL_FLAG = 19;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
