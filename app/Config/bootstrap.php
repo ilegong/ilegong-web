@@ -2992,7 +2992,8 @@ function createRedisCli() {
 //add logs
 if(!function_exists("add_logs_to_es"))
 {
-    function add_logs_to_es($log){
+    function add_logs_to_es($log)
+    {
         foreach ($log as $index => $item) {
             if (is_numeric($item)) {
                 $log[$index] = floatval($item);
@@ -3001,11 +3002,15 @@ if(!function_exists("add_logs_to_es"))
                 $log['index'] = preg_replace("/\s|　/", "", strtolower($item));
             }
         }
-        $redis = new Redis();
-        $redis->connect(REDIS_HOST, ELK_REDIS_PORT);
-        //$log["timestamp"] = date("Y-m-d H:i:s");
-        $log["session_id"] = $_COOKIE["PHPSESSID"];
-        $redis->rPush("logstash-list",json_encode($log));
+        try {
+            $redis = new Redis();
+            $redis->connect(REDIS_HOST, ELK_REDIS_PORT);
+            $log["session_id"] = $_COOKIE["PHPSESSID"];
+            $redis->rPush("logstash-list", json_encode($log));
+        } catch (Exception $e) {
+            $logObj = ClassRegistry::init('User');
+            $logObj->log('add es log error '.$e->getMessage());
+        }
     }
 }
 
