@@ -97,7 +97,7 @@ class SharerApiController extends Controller
     {
         $uid = $this->currentUser['id'];
         $subData = $this->ShareUtil->get_yesterday_fans_incremental($uid);
-        $viewData = $this->ShareUtil->get_yesterday_view_count($uid);
+        $viewData = abs($this->ShareUtil->get_yesterday_view_count($uid));
         $month_ini = new DateTime("first day of this month");
         $month_end = new DateTime("last day of this month");
         $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
