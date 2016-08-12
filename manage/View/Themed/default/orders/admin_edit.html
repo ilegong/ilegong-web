@@ -1,0 +1,237 @@
+<div class="users form">
+{{if $current_action=='admin_add'}}
+<?php 
+echo $this->MForm->create($current_model,array(
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+ <?php 
+echo $this->MForm->create($current_model,array(
+	'class'=>'form-horizontal',
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+{{/if}}
+<fieldset>    	 
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#article-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="article-main" class="tab-pane active">
+            	 <?php
+            	 	echo $this->MForm->input('id');	
+             	echo $this->MForm->input('consignee_name');
+				echo $this->MForm->input('consignee_area');
+             	echo $this->MForm->input('consignee_address');
+			    echo $this->MForm->input('consignee_mobilephone');	
+			    echo $this->MForm->input('total_price');
+                ?>
+                {{if $current_action == 'admin_edit'}}
+                {{if in_array($this->data['Order']['status'],array(1,2,3,9,16,4,14))}}
+                <div class="form-group">
+                   <label for="OrderStatus" class="col-sm-2 control-label">订单状态</label>
+                   <div class="col-sm-10 controls select">
+                    <select name="data[Order][status]" class="form-control" style="width:70%;display:inline" id="OrderStatus">
+                    <option value="">Please select</option>
+                    <option value="0" {{if $this->data['Order']['status']==0}}selected = "selected"{{/if}}>订单已生成</option>
+                    <option value="1" {{if $this->data['Order']['status']==1}}selected = "selected"{{/if}}>订单已支付</option>
+                    <option value="2" {{if $this->data['Order']['status']==2}}selected = "selected"{{/if}}>订单已发货</option>
+                    <option value="3" {{if $this->data['Order']['status']==3}}selected = "selected"{{/if}}>订单已收货</option>
+                    <option value="4" {{if $this->data['Order']['status']==4}}selected = "selected"{{/if}}>订单已退款</option>
+                    <option value="9" {{if $this->data['Order']['status']==9}}selected = "selected"{{/if}}>订单已完</option>
+                    <option value="10" {{if $this->data['Order']['status']==10}}selected = "selected"{{/if}}>订单已作废</option>
+                    <option value="11" {{if $this->data['Order']['status']==11}}selected = "selected"{{/if}}>订单已确认</option>
+                    <option value="12" {{if $this->data['Order']['status']==16}}selected = "selected"{{/if}}>订单已投诉</option>
+                    <option value="14" {{if $this->data['Order']['status']==14}}selected = "selected"{{/if}}>订单退款中</option>
+                    </select>
+                    <a type="button" class="btn btn-warning refund-button hidden" style="margin-right: 10px;" id="refundOrder" data-toggle="collapse" data-target="#refund_order" aria-expanded="false" aria-controls="refund_order" data-order_id="{{$this->data['Order']['id']}}" data-order_creator="{{$this->data['Order']['creator']}}"  data-total_price = "{{$this->data['Order']['total_price']}}">退款通知</a>
+                    {{if $this->data['Order']['status']==4}}<a href = "/manage/admin/orders/get_refund_log/{{$this->data['Order']['id']}}?total_price={{$this->data['Order']['total_price']}}">查看退款纪录</a>{{/if}}
+                   </div>
+                 </div>
+                <div class="form-group collapse" id="refund_order">
+                          <label for="refund_money" class="col-sm-2 control-label"></label>
+                          <div class="col-sm-10">
+                               <input id="refund_money" type="number"  name="refund_money" step="0.01" class="form-control" style="width:23%;display:inline"  placeholder="退款金额：单位为元">
+                                <textarea id="refund_remark" class="form-control" style="width:75%;display:inline;height:38px;" placeholder="退款声明：只用于微信模版消息;为空则显示默认消息"></textarea>
+                          </div>
+                 </div>
+                {{else}}
+                {{$this->MForm->input('status');}}
+                {{/if}}
+                {{elseif $current_action=='admin_add'}}
+                {{$this->MForm->input('status');}}
+                {{/if}}
+                <?php
+			    echo $this->MForm->input('remark',array('rows' => '2', 'cols' => '80'));
+                echo $this->MForm->input('ship_type');
+                echo $this->MForm->input('ship_mark');
+                echo $this->MForm->input('ship_code');
+            	?>
+             </div>
+       </div>
+</fieldset>
+    <div class="submit">
+        <input id="btnsubmit" type="submit" value="提交" class="btn btn-primary">
+    </div>
+</div>
+<script src="//cdn.bootcss.com/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+        var orderStatusBox = $('#OrderStatus');
+        var refundButton = $('.refund-button');
+        var refundOrder = $('#refundOrder');
+        var refund_money = $('#refund_money');
+        var refund_order = $('#refund_order');
+        var orderId = refundOrder.data('order_id');
+        var orderCreator = refundOrder.data('order_creator');
+        var totalPrice = refundOrder.data('total_price');
+        function initForm(){
+            refundButton.removeClass('hidden', orderStatusBox.val() == 4);
+            refundButton.toggleClass('hidden', orderStatusBox.val() != 4);
+        }
+        initForm();
+        orderStatusBox.on('change',function(){
+            refundButton.toggleClass('hidden', orderStatusBox.val() != 4);
+        });
+
+
+        function send_refund_message(){
+            var refundMoney = refund_money.val();
+            var refundRemark = $('#refund_remark').val();
+            $.post('/manage/admin/orders/send_refund_notify',{'orderId':orderId,'refundMoney':refundMoney,'creator':orderCreator,'refundMark':refundRemark},function(data){
+                var result = JSON.parse(data);
+                if(result.success){
+                    bootbox.alert(result.msg);
+                }else{
+                    bootbox.alert(result.msg);
+                }
+            });
+        }
+        $('#btnsubmit').click(function(){
+            if (orderStatusBox.val()==4){
+                $.getJSON('/manage/admin/orders/compute_refund_money',{'orderId':orderId},function(data){
+                 var res = data;
+                    if(refund_money.val()==''){
+                        alert('退款金额不能为空哦');
+                        refund_money.toggleClass('red').focus();
+                        return false;
+                    }else if(refund_money.val()>Math.round((totalPrice-res)*100)/100||parseInt(refund_money.val())<=0){
+                        refund_money.toggleClass('red').focus();
+                        alert('退款金额在0~'+ Math.round((totalPrice-res)*100)/100 +'之间');
+                        return false;
+                    }else{
+                        send_refund_message();
+                    }
+                });
+            }
+            var oEditor = CKEDITOR.instances.ArticleContent;
+            var content = oEditor.getData();
+            $('#ArticleContent').val(content);
+            if(typeof(before_submit)=="function"){
+                if(before_submit()==false)
+                    return false;
+            }
+            try {
+                var hasfile = false;
+                for(var i=0;i<swfu_array.length;i++){
+                    var stats = swfu_array[i].getStats();
+                    if(stats && stats.files_queued ==0){
+                        continue;
+                    }
+                    else if(stats){
+                        hasfile = true;
+                        swfu_array[i].startUpload();
+                    }
+                }
+                if(!hasfile){
+                    // 无正在上传的文件 ,直接提交表单
+                    return true;
+                }
+                else{
+                    form_submit_flag_for_swfupload = true;
+                    form_submit_obj_for_swfupload = this.form; //传递表单对象
+                    alert("有文件正在上传，请稍候...");
+                }
+            } catch (ex) {
+
+            }
+            return false;
+        });
+
+//        function send_refund_message(order_id,refund_money,creator,refund_mark,total_price){
+//            if(refund_money == ''){
+//                bootbox.alert('退款金额不能为空！');
+//                return;
+//            }
+//            if(parseFloat(refund_money) > total_price){
+//                bootbox.alert('退款金额不能超过订单金额！');
+//                return;
+//            }
+//            $.post('/manage/admin/orders/send_refund_notify',{'orderId':order_id,'refundMoney':refund_money,'creator':creator,'refundMark':refund_mark},function(data){
+//                var result = JSON.parse(data);
+//                if(result.success){
+//                    bootbox.alert(result.msg);
+//                }else{
+//                    bootbox.alert(result.msg);
+//                }
+//            });
+//        }
+//        $('#refund_order').on('click',function(){
+//            var consignee_mobilephone = $(this).data('consignee_mobilephone');
+//            var total_price = $(this).data('total_price');
+//            var order_id = $(this).data('order_id');
+//            var creator = $(this).data('order_creator');
+//            var dialogMessage = '<div class="form-horizontal">' +
+//                    '  <div class="form-group">' +
+//                    '      <label for="order_id" class="col-sm-2 control-label">订单ID</label>' +
+//                    '      <div class="col-sm-10">' +
+//                    '          <input id="order_id" class="form-control" value="' + order_id + '" readonly="readonly">' +
+//                    '      </div>' +
+//                    '  </div>' +
+//                    '  <div class="form-group">' +
+//                    '      <label for="refund_creator" class="col-sm-2 control-label">退款人ID</label>' +
+//                    '      <div class="col-sm-10">' +
+//                    '          <input id="refund_creator" class="form-control"  value="' + creator +  '"readonly="readonly">' +
+//                    '      </div>' +
+//                    '  </div>' +
+//                    '  <div class="form-group">' +
+//                    '      <label for="refund_money" class="col-sm-2 control-label">退款金额</label>' +
+//                    '      <div class="col-sm-10">' +
+//                    '          <input id="refund_money" type="number" step="0.01" class="form-control" placeholder="单位为元" ' + '>' +
+//                    '      </div>' +
+//                    '  </div>' +
+//                    ' <div class="form-group">' +
+//                    '      <label for="refund_remark" class="col-sm-2 control-label">退款说明</label>' +
+//                    '      <div class="col-sm-10">' +
+//                    '          <textarea id="refund_remark" class="form-control" placeholder="说明退款原因,只用于微信模版消息;为空则显示默认消息：亲，您有一笔＊＊元的退款已退至您的账户，请查收" ' + '></textarea>' +
+//                    '      </div>' +
+//                    '  </div>' +
+//                    '</div>';
+//            bootbox.dialog({
+//                title:'退款通知',
+//                message:dialogMessage,
+//                buttons:{
+//                    cancel:{
+//                        label:'取消',
+//                        className: "btn btn-default",
+//                        callback: function () {}
+//                    },
+//                    success:{
+//                        label:'发送',
+//                        className:"btn btn-primary",
+//                        callback:function(){
+//                            var refund_money = $('#refund_money').val();
+//                            var refund_remark = $('#refund_remark').val();
+//                            send_refund_message(order_id,refund_money,creator,refund_remark,total_price);
+//                        }
+//                    }
+//                }
+//
+//            })
+//        });
+
+	});
+</script>
