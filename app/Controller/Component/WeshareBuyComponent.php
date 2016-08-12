@@ -2742,8 +2742,8 @@ class WeshareBuyComponent extends Component
     public function unsubscribe_sharer($sharer_id, $follow_id)
     {
         $this->ShareUtil->delete_relation($sharer_id, $follow_id);
-        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
-        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $follow_id, '');
+        delete_redis_data_by_key('_' . $follow_id);
+        delete_redis_data_by_key('_' . $sharer_id);
     }
 
     /**

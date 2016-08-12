@@ -1358,7 +1358,6 @@ class WesharesController extends AppController
             "type" => "user_unsubscribe"
         ];
         add_logs_to_es($log);
-
         $this->autoRender = false;
         $this->WeshareBuy->unsubscribe_sharer($sharer_id, $user_id);
         echo json_encode(array('success' => true));
