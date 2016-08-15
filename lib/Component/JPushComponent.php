@@ -59,14 +59,25 @@ class JPushComponent extends Component
 
     public function filter_user($user_ids){
         $result = [];
-        $client = $this->get_push_client();
-        foreach ($user_ids as $uid) {
-            $u_device = $client->device()->getAliasDevices(strval($uid), ['ios']);
-            $this->log('jpush get user device result ' . $uid . ' result ' . json_encode($u_device->data->registration_ids));
-            if (!empty($u_device->data->registration_ids)) {
-                $result[] = $uid;
-            }
+//        $client = $this->get_push_client();
+//        foreach ($user_ids as $uid) {
+//            $u_device = $client->device()->getAliasDevices(strval($uid), ['ios']);
+//            $this->log('jpush get user device result ' . $uid . ' result ' . json_encode($u_device->data->registration_ids));
+//            if (!empty($u_device->data->registration_ids)) {
+//                $result[] = $uid;
+//            }
+//        }
+        if(empty($user_ids)){
+            return $result;
         }
+        $userM = ClassRegistry::init('User');
+        $users = $userM->find('all', [
+            'conditions' => [
+                'id' => $user_ids,
+                'is_install_app' => INSTALL_APP_MARK
+            ]
+        ]);
+        $result = Hash::extract($users, '{n}.User.id');
         return $result;
     }
 
