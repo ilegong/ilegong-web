@@ -44,22 +44,19 @@
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
-              <tr>
-                <th>分享ID</th>
-                  <th>用户ID</th>
-                <th>图片</th>
-                <th width="150px">分享名称</th>
-                <th>
-                  <div class='item-class'>
-                    <span class='title'>规格</span>
-                    <span class='price'>显示价格</span>
-                    <span class='channel_price'>渠道价格</span>
-                  </div>
+            <tr>
+                <th width="5%">分享ID</th>
+                <th width="5%">用户ID</th>
+                <th width="20%">分享名称</th>
+                <th width="40%">
+                    <div class='item-class'>
+                        <span class='title'>规格</span>
+                        <span class='price'>显示价格</span>
+                        <span class='channel_price'>渠道价格</span>
+                    </div>
                 </th>
-                <th>状态</th>
-                <th>排序</th>
-                <th width="350px">操作</th>
-              </tr>
+                <th width="30%">操作</th>
+            </tr>
             </thead>
             <tbody>
               {{loop $index_products $product}}
@@ -68,9 +65,6 @@
                   {{$product['PoolProduct']['weshare_id']}}
                 </td>
                   <td>{{$product['PoolProduct']['user_id']}}</td>
-                <td class='share-images'>
-                  <img src="{{$product['PoolProduct']['share_img']}}" style="width: 200px;height: 60px;" class="img-thumbnail" alt="{{$product['PoolProduct']['share_name']}}" />
-                </td>
                 <td>
                   {{$product['PoolProduct']['share_name']}}
                 </td>
@@ -82,18 +76,6 @@
                   <span class='channel_price'>{{number_format($WeshareProducts['channel_price'] / 100, 2, '.', '')}}</span>
                 </div>
                 {{/loop}}
-                </td>
-                <td>
-                  {{if $product['PoolProduct']['status'] == 0}}
-                  下架
-                  {{elseif $product['PoolProduct']['status'] == 1}}
-                  上架
-                  {{elseif $product['PoolProduct']['status'] == 2}}
-                  发布未上架
-                  {{/if}}
-                </td>
-                <td>
-                  {{$product['PoolProduct']['sort']}}
                 </td>
                 <td class='share-btns'>
                   <a class="btn btn-info" href="/shareManage/pool_product_edit/{{$product['PoolProduct']['id']}}.html" role="button">编辑</a>&nbsp;|&nbsp;
