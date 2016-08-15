@@ -547,6 +547,13 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
 		return $this->RefreshToken->delete($refresh_token);
 	}
 
+    private function markUserInstallApp($client_id, $uid){
+        if($client_id == PYS_OAUTH_CLIENT_ID){
+            $userM = ClassRegistry::init('User');
+            $userM->update(['is_install_app' => INSTALL_APP_MARK], ['id' => $uid]);
+        }
+    }
+
 /**
  * Grant type: user_credentials
  *
@@ -565,6 +572,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
 			'recursive' => -1
 		));
 		if ($user) {
+            $this->markUserInstallApp($client_id, $user['User'][$this->User->primaryKey]);
 			return array('user_id' => $user['User'][$this->User->primaryKey]);
 		}
         $user = $this->User->find('first', array(
@@ -575,6 +583,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
             'recursive' => -1
         ));
         if ($user) {
+            $this->markUserInstallApp($client_id, $user['User'][$this->User->primaryKey]);
             return array('user_id' => $user['User'][$this->User->primaryKey]);
         }
 		return false;
@@ -604,6 +613,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
         if (empty($userInfo)) {
             return false;
         }
+        $this->markUserInstallApp($client_id, $userInfo['User'][$this->User->primaryKey]);
         return array('user_id' => $userInfo['User'][$this->User->primaryKey]);
     }
 
