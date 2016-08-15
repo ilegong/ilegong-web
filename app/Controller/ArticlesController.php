@@ -102,7 +102,7 @@ class ArticlesController extends AppController{
         $this->set('hide');
     }
 
-    public function middle_autumn(){
+    public function special(){
         $this->layout = null;
     }
 
