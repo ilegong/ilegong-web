@@ -223,7 +223,7 @@
     background: white;
     top: 1px;
     left: 1px;
-    z-index: 999999;
+    z-index: 1;
     width: 31px;
     -webkit-transition: all 0.1s ease-in;
     transition: all 0.1s ease-in;
