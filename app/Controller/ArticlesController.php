@@ -102,6 +102,9 @@ class ArticlesController extends AppController{
         $this->set('hide');
     }
 
+    public function middle_autumn(){
+        $this->layout = null;
+    }
 
     public function log_js_error() {
         $msg = $_GET['msg'];
