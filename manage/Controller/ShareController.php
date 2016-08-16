@@ -439,50 +439,52 @@ class ShareController extends AppController
         $save_data = [];
         foreach ($weshares as $item) {
             $share_id = $item['id'];
-            $creator = $item['creator'];
-            $refund_fee = floatval($weshare_refund_map[$share_id]);
-            $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total'] / 100), 2);
-            $use_rebate_fee = round(floatval($weshare_summery[$share_id]['use_rebate_total'] / 100), 2);
-            $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
-            $rebate_fee = empty($weshare_rebate_map[$share_id]['rebate_money']) ? 0 : $weshare_rebate_map[$share_id]['rebate_money'];
-            $proxy_rebate_fee = empty($weshare_proxy_rebate_map[$share_id]['rebate_money']) ? 0 : $weshare_proxy_rebate_map[$share_id]['rebate_money'];
-            $total_fee = floatval($weshare_summery[$share_id]['total_price']);
-            $ship_fee = round($weshare_summery[$share_id]['ship_fee'] / 100, 2);
-            $current_share_repaid_money = $repaid_money_result[$share_id];
-            if ($current_share_repaid_money == 0) {
-                $current_share_repaid_money = 0;
+            if (!empty($share_id)) {
+                $creator = $item['creator'];
+                $refund_fee = floatval($weshare_refund_map[$share_id]);
+                $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total'] / 100), 2);
+                $use_rebate_fee = round(floatval($weshare_summery[$share_id]['use_rebate_total'] / 100), 2);
+                $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
+                $rebate_fee = empty($weshare_rebate_map[$share_id]['rebate_money']) ? 0 : $weshare_rebate_map[$share_id]['rebate_money'];
+                $proxy_rebate_fee = empty($weshare_proxy_rebate_map[$share_id]['rebate_money']) ? 0 : $weshare_proxy_rebate_map[$share_id]['rebate_money'];
+                $total_fee = floatval($weshare_summery[$share_id]['total_price']);
+                $ship_fee = round($weshare_summery[$share_id]['ship_fee'] / 100, 2);
+                $current_share_repaid_money = $repaid_money_result[$share_id];
+                if ($current_share_repaid_money == 0) {
+                    $current_share_repaid_money = 0;
+                }
+                $status = $item['settlement'] == 1 ? 1 : 0;
+                $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money + $use_rebate_fee;
+                $weshare_type = $item['type'];
+                $type = 1;
+                if ($weshare_type == 6) {
+                    $type = 2;
+                }
+                $begin_datetime = $item['created'];
+                $end_datetime = empty($item['close_date']) ? date('Y-m-d H:i:s') : $item['close_date'];
+                $save_data[] = [
+                    'share_id' => $share_id,
+                    'user_id' => $creator,
+                    'ship_fee' => $ship_fee,//快递费用
+                    'refund_fee' => $refund_fee,//退款费用
+                    'coupon_fee' => $coupon_fee,//优惠券费用
+                    'use_rebate_fee' => $use_rebate_fee, //使用余额
+                    'origin_total_fee' => $product_fee,//产品费用
+                    'rebate_fee' => $rebate_fee,//返利费用
+                    'total_fee' => $total_fee,//总费用
+                    'transaction_fee' => $transaction_fee,//交易费用
+                    'brokerage' => 0,//佣金
+                    'trade_fee' => $transaction_fee,//打款费
+                    'proxy_rebate' => $proxy_rebate_fee,//团长优惠
+                    'status' => $status,
+                    'type' => $type,
+                    'created' => date('Y-m-d H:i:s'),
+                    'updated' => date('Y-m-d H:i:s'),
+                    'begin_datetime' => $begin_datetime,
+                    'end_datetime' => $end_datetime,
+                    'remark' => '系统自动生成'
+                ];
             }
-            $status = $item['settlement'] == 1 ? 1 : 0;
-            $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money + $use_rebate_fee;
-            $weshare_type = $item['type'];
-            $type = 1;
-            if ($weshare_type == 6) {
-                $type = 2;
-            }
-            $begin_datetime = $item['created'];
-            $end_datetime = empty($item['close_date']) ? date('Y-m-d H:i:s') : $item['close_date'];
-            $save_data[] = [
-                'share_id' => $share_id,
-                'user_id' => $creator,
-                'ship_fee' => $ship_fee,//快递费用
-                'refund_fee' => $refund_fee,//退款费用
-                'coupon_fee' => $coupon_fee,//优惠券费用
-                'use_rebate_fee' => $use_rebate_fee, //使用余额
-                'origin_total_fee' => $product_fee,//产品费用
-                'rebate_fee' => $rebate_fee,//返利费用
-                'total_fee' => $total_fee,//总费用
-                'transaction_fee' => $transaction_fee,//交易费用
-                'brokerage' => 0,//佣金
-                'trade_fee' => $transaction_fee,//打款费
-                'proxy_rebate' => $proxy_rebate_fee,//团长优惠
-                'status' => $status,
-                'type' => $type,
-                'created' => date('Y-m-d H:i:s'),
-                'updated' => date('Y-m-d H:i:s'),
-                'begin_datetime' => $begin_datetime,
-                'end_datetime' => $end_datetime,
-                'remark' => '系统自动生成'
-            ];
         }
         $this->loadModel('BalanceLog');
         $this->BalanceLog->saveAll($save_data);
