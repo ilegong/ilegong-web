@@ -3198,17 +3198,18 @@ class WeshareBuyComponent extends Component
             'limit' => 500
         ));
         $share_rebate_map = array();
+        $result = [];
         foreach ($rebateLogs as $log) {
             $share_id = $log['RebateTrackLog']['share_id'];
             if (!isset($share_rebate_map[$share_id])) {
-                $share_rebate_map[$share_id] = array('rebate_money' => 0);
+                $share_rebate_map[$share_id] = 0;
             }
-            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+            $share_rebate_map[$share_id] = $share_rebate_map[$share_id] + $log['RebateTrackLog']['rebate_money'];
         }
-        foreach ($share_rebate_map as &$rebate_item) {
-            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
+        foreach ($share_rebate_map as $key => $rebate_item) {
+            $result[$key] = number_format(round($rebate_item / 100, 2), 2);
         }
-        return $share_rebate_map;
+        return $result;
     }
 
     /**

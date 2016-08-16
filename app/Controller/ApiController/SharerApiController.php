@@ -585,7 +585,7 @@ class SharerApiController extends Controller
      * @return array
      * 获取结算结果
      */
-    private function  get_share_balance_result($share_ids)
+    private function get_share_balance_result($share_ids)
     {
         $balance_result = $this->WeshareBuy->get_shares_balance_money($share_ids);
         $summery_data = $balance_result['weshare_summery'];

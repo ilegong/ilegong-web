@@ -695,7 +695,7 @@ class ShareUtilComponent extends Component
             $shareInfo['id'] = null;
             $shareInfo['created'] = date('Y-m-d H:i:s');
             $shareInfo['status'] = $share_status; //分享状态
-            $shareInfo['settlement'] = 0; //打款状态为未打款
+            $shareInfo['settlement'] = WESHARE_SETTLEMENT_NO; //打款状态为未打款
             $shareInfo['type'] = $new_share_type;
 
             $shareInfo['refer_share_id'] = $shareId;
