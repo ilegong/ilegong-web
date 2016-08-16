@@ -191,7 +191,6 @@ class ShareManageController extends AppController
             'joins' => $joins,
             'order' => 'Weshare.id DESC'
         ));
-        //var_dump($results);die;
         $url = "/share_manage/search_shares?page=(:num)&creator_name={$_REQUEST['creator_name']}&id={$_REQUEST['id']}&share_status={$_REQUEST['share_status']}&title={$_REQUEST['title']}&creator_id={$_REQUEST['creator_id']}";
         $pager = new MyPaginator($count, 10, $page, $url);
 
@@ -205,8 +204,7 @@ FROM cake_carts
 WHERE order_id IN (
   SELECT id
   FROM cake_orders
-  WHERE member_id = {$result['Weshare']['id']} AND `type` = 9 AND `status` IN (9, 1, 2, 3, 14, 4) AND `deleted` = '0'
-)
+  WHERE member_id = {$result['Weshare']['id']} AND `type` = 9 AND `status` IN (9, 1, 2, 3, 14, 4) AND `deleted` = '0' AND `flag`!=19)
 GROUP BY product_id";
             $results[$index]['products'] = $cartM->query($sql);
         }
