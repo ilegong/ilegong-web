@@ -1,4 +1,4 @@
-<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';">
     <div class="refer-back-bg menu-top">
         {{$title}}
         <a href="/weshares/entrance">
@@ -24,10 +24,12 @@
             <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
         </ul>
         <div style="padding-top: 10px;">
-            <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" infinite-scroll='vm.myShareNextPage();'
+            <div class="mine_order" infinite-scroll='vm.myShareNextPage();'
                  infinite-scroll-disabled='vm.mine.tmpSharesOver || vm.loading'
-                 infinite-scroll-distance='0'>
-                {{include 'Elements/my_share_list_item'}}
+                 infinite-scroll-distance='1'>
+                <div ng-repeat="share in vm.mine.tmpShares">
+                    {{include 'Elements/my_share_list_item'}}
+                </div>
             </div>
             <div align="center"
                  style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
@@ -38,10 +40,12 @@
 
     <div ng-if="vm.inSearchShare">
         <div style="padding-top: 10px;">
-            <div class="mine_order" ng-repeat="share in vm.mine.searchShares" infinite-scroll='vm.mySearchShareNextPage();'
+            <div class="mine_order" infinite-scroll='vm.mySearchShareNextPage();'
                  infinite-scroll-disabled='vm.mine.searchSharesOver || vm.loading'
                  infinite-scroll-distance='0'>
-                {{include 'Elements/my_share_list_item'}}
+                <div ng-repeat="share in vm.mine.searchShares">
+                    {{include 'Elements/my_share_list_item'}}
+                </div>
             </div>
             <div align="center"
                  style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">

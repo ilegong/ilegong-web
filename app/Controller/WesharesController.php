@@ -980,6 +980,12 @@ class WesharesController extends AppController
         exit;
     }
 
+
+    /**
+     * @param $shares
+     * @return array
+     * 显示结算金额
+     */
     private function combine_share_list_data($shares){
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
