@@ -486,8 +486,10 @@ class ShareController extends AppController
                 ];
             }
         }
-        $this->loadModel('BalanceLog');
-        $this->BalanceLog->saveAll($save_data);
+        if (!empty($save_data)) {
+            $this->loadModel('BalanceLog');
+            $this->BalanceLog->saveAll($save_data);
+        }
         echo 'success';
         exit;
     }
