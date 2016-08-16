@@ -1017,6 +1017,11 @@ class WesharesController extends AppController
         return ['status' => $status, 'settlement' => $settlement];
     }
 
+    /**
+     * @param $share_ids
+     * @return array
+     * 分享的待发货订单
+     */
     private function get_order_count_share_map($share_ids)
     {
         $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status='.ORDER_STATUS_PAID.' and type='.ORDER_TYPE_WESHARE_BUY.' group by member_id';
@@ -1083,6 +1088,10 @@ class WesharesController extends AppController
         }
     }
 
+    /**
+     * @param int $page
+     * 获取我的订单
+     */
     public function my_order_list_api($page = 1)
     {
         $limit = 5;
@@ -1827,6 +1836,9 @@ class WesharesController extends AppController
         return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
+    /**
+     * 下单使用优惠码
+     */
     public function get_useful_coupons()
     {
         $postStr = file_get_contents('php://input');

@@ -2395,6 +2395,7 @@ class ShareUtilComponent extends Component
     }
 
     // api: summary(order count, view count, recent orders and creators)
+    //分享的一些汇总数据
     public function get_index_product_summary($share_id)
     {
         $key = INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $share_id;
@@ -2880,7 +2881,8 @@ class ShareUtilComponent extends Component
             'conditions' => [
                 'Order.member_id' => $share_ids,
                 'Order.type' => ORDER_TYPE_WESHARE_BUY,
-                'Order.status' => ORDER_STATUS_PAID
+                'Order.status' => ORDER_STATUS_PAID,
+                'not' => ['Order.flag' => ORDER_FLAG_VIRTUAL_FLAG]
             ],
             'group' => 'Order.member_id',
             'fields' => ['Order.member_id', 'COUNT(Order.id) as order_count']

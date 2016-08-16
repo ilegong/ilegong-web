@@ -87,7 +87,8 @@ class OrdersComponent extends Component
             'conditions' => [
                 'Order.creator' => $params['user_id'],
                 'Order.status' => $params['status'],
-                'Order.type' => ORDER_TYPE_WESHARE_BUY
+                'Order.type' => ORDER_TYPE_WESHARE_BUY,
+                'not' => ['Order.flag' => ORDER_FLAG_VIRTUAL_FLAG]
             ],
             'joins' => [
                 [

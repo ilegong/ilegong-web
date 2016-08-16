@@ -3293,6 +3293,15 @@ class WeshareBuyComponent extends Component
         return $sharer_info;
     }
 
+    /**
+     * @param $only_paid
+     * @param $share_id
+     * @param $limit
+     * @param $page
+     * @param string $keyword
+     * @return array
+     * 我上了产品街的订单
+     */
     public function get_provide_share_order($only_paid, $share_id, $limit, $page, $keyword = '')
     {
         $orderM = ClassRegistry::init('Order');
