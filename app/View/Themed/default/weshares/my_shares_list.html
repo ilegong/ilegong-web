@@ -24,10 +24,10 @@
             <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
         </ul>
         <div style="padding-top: 10px;">
-            <div class="mine_order" infinite-scroll='vm.myShareNextPage();'
+            <div infinite-scroll='vm.myShareNextPage();'
                  infinite-scroll-disabled='vm.mine.tmpSharesOver || vm.loading'
                  infinite-scroll-distance='1'>
-                <div ng-repeat="share in vm.mine.tmpShares">
+                <div class="mine_order" ng-repeat="share in vm.mine.tmpShares">
                     {{include 'Elements/my_share_list_item'}}
                 </div>
             </div>
@@ -40,10 +40,10 @@
 
     <div ng-if="vm.inSearchShare">
         <div style="padding-top: 10px;">
-            <div class="mine_order" infinite-scroll='vm.mySearchShareNextPage();'
+            <div infinite-scroll='vm.mySearchShareNextPage();'
                  infinite-scroll-disabled='vm.mine.searchSharesOver || vm.loading'
                  infinite-scroll-distance='0'>
-                <div ng-repeat="share in vm.mine.searchShares">
+                <div class="mine_order" ng-repeat="share in vm.mine.searchShares">
                     {{include 'Elements/my_share_list_item'}}
                 </div>
             </div>

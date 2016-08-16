@@ -328,21 +328,43 @@ class UtilController extends AppController {
 //    }
 
     public function weshare_buyers(){
-        $this->loadModel('Weshare');
+        require_once(APPLIBS . 'MyPaginator.php');
         $this->loadModel('Order');
-        $orders = $this->Order->find('all', [
-            'conditions' => [
-
-            ],
-            'joins' => [
-                [
-                    'table' => 'cake_weshares',
-                    'alias' => 'Weshare',
-                    'conditions' => '',
-                    'type' => 'inner'
-                ]
+        $cond = [
+            'Order.type' => ORDER_TYPE_WESHARE_BUY,
+            'Order.status' => [ORDER_STATUS_COMMENT, ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED]
+        ];
+        $joins = [
+            [
+                'table' => 'cake_weshares',
+                'alias' => 'Weshare',
+                'conditions' => 'Weshare.id = Order.member_id',
+                'type' => 'inner'
             ]
+        ];
+        if ($_REQUEST['weshareId']) {
+            $cond['Order.member_id'] = $_REQUEST['weshareId'];
+        }
+        if ($_REQUEST['keyword']) {
+            $cond['Weshare.title like '] = '%' . $_REQUEST['keyword'] . '%';
+        }
+        $count = $this->Order->find('count', [
+            'conditions' => $cond,
+            'joins' => $joins,
         ]);
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $url = "/util/weshare_buyers.html?page=(:num)&weshareId={$_REQUEST['weshareId']}&keyword={$_REQUEST['keyword']}";
+        $limit = 100;
+        $pager = new MyPaginator($count, $limit, $page, $url);
+        $orders = $this->Order->find('all', [
+            'conditions' => $cond,
+            'joins' => $joins,
+            'fields' => ['Order.consignee_name', 'Order.consignee_mobilephone', 'Weshare.title'],
+            'limit' => $limit,
+            'page' => $page
+        ]);
+        $this->set('orders', $orders);
+        $this->set('pager', $pager);
     }
 
 
