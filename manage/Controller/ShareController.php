@@ -1300,8 +1300,8 @@ class ShareController extends AppController
             if ($start_date == $end_date) {
                 $cond['DATE(created)'] = $query_date;
             } else {
-                $cond['DATE(created) >'] = $start_date;
-                $cond['DATE(created) <'] = $end_date;
+                $cond['DATE(created) >='] = $start_date;
+                $cond['DATE(created) <='] = $end_date;
             }
         }
         $order_status = $_REQUEST['order_status'];
