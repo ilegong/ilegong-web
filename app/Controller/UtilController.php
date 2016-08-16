@@ -327,6 +327,23 @@ class UtilController extends AppController {
 //        return;
 //    }
 
+    public function weshare_buyers(){
+        $this->loadModel('Weshare');
+        $this->loadModel('Order');
+        $orders = $this->Order->find('all', [
+            'conditions' => [
+
+            ],
+            'joins' => [
+                [
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => '',
+                    'type' => 'inner'
+                ]
+            ]
+        ]);
+    }
 
 
     //二维码快捷支付

@@ -382,6 +382,11 @@ GROUP BY product_id";
         return $data['Weshare'];
     }
 
+    /**
+     * @param $id
+     * @param $sid
+     * 上架产品街
+     */
     public function pool_product_item_pick($id , $sid)
     {
         // 在cake_pool_products表里面恢复数据
@@ -422,6 +427,11 @@ GROUP BY product_id";
         $this->redirect("/shareManage/pool_product_edit/$sid.html");
     }
 
+    /**
+     * @param $id
+     * @param $sid
+     * 下架产品街产品
+     */
     public function pool_product_item_ban($id, $sid)
     {
         // 在cake_pool_products表里面删除数据
@@ -580,6 +590,10 @@ GROUP BY product_id";
         $this->data = $weshareData;
     }
 
+    /**
+     * @param $user_id
+     * 给特定用户创建分享
+     */
     public function share_add($user_id)
     {
         $uid = $this->currentUser['id'];
@@ -632,6 +646,9 @@ GROUP BY product_id";
         $this->redirect("/share_manage/share_edit/".$shareId);
     }
 
+    /**
+     * 保存用户信息
+     */
     public function save_user_edit()
     {
         $payment = [
@@ -650,6 +667,11 @@ GROUP BY product_id";
         echo json_encode(['ok' => 1]);
         die;
     }
+
+    /**
+     * @param $user_id
+     * 编辑用户信息
+     */
     public function user_edit($user_id)
     {
         $uid = $this->currentUser['id'];
