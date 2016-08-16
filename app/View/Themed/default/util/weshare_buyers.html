@@ -37,11 +37,9 @@
                         <tbody>
                         {{loop $orders $data_item}}
                         <tr>
-                            <td width="5%">{{$data_item['Comment']['id']}}</td>
-                            <td width="10%">{{$data_item['User']['nickname']}}</td>
-                            <td width="35%">{{$data_item['Weshare']['title']}}</td>
-                            <td width="45%">{{$data_item['Comment']['body']}}</td>
-                            <td width="5%"><a class="btn btn-warning" href="/share_manage/delete_comment/{{$data_item['Comment']['id']}}.html">删除</a></td>
+                            <td>{{$data_item['Order']['consignee_name']}}</td>
+                            <td>{{$data_item['Order']['consignee_mobilephone']}}</td>
+                            <td>{{$data_item['Weshare']['title']}}</td>
                         </tr>
                         {{/loop}}
                         </tbody>
