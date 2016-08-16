@@ -454,7 +454,7 @@ class ShareController extends AppController
                     $current_share_repaid_money = 0;
                 }
                 $status = $item['settlement'] == 1 ? 1 : 0;
-                $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money + $use_rebate_fee;
+                $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]['rebate_money']) + $current_share_repaid_money + $use_rebate_fee;
                 $weshare_type = $item['type'];
                 $type = 1;
                 if ($weshare_type == 6) {
