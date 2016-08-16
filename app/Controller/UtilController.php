@@ -328,6 +328,7 @@ class UtilController extends AppController {
 //    }
 
     public function weshare_buyers(){
+        $this->layout = 'sharer';
         require_once(APPLIBS . 'MyPaginator.php');
         $this->loadModel('Order');
         $cond = [
@@ -365,6 +366,8 @@ class UtilController extends AppController {
         ]);
         $this->set('orders', $orders);
         $this->set('pager', $pager);
+        $this->set('weshareId', $_REQUEST['weshareId']);
+        $this->set('keyword', $_REQUEST['keyword']);
     }
 
 

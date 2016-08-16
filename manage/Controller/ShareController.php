@@ -1298,7 +1298,7 @@ class ShareController extends AppController
             $cond['consignee_mobilephone'] = $query_mobile_num;
         } else {
             if ($start_date == $end_date) {
-                $cond['DATE(created)'] = $query_date;
+                $cond['DATE(created)'] = $start_date;
             } else {
                 $cond['DATE(created) >='] = $start_date;
                 $cond['DATE(created) <='] = $end_date;
