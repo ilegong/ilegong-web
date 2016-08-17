@@ -10,10 +10,19 @@ class ShareManageComponent extends Component
         $indexProductM = ClassRegistry::init('IndexProduct');
         $indexProducts = $indexProductM->find('all', array(
             'conditions' => array(
-                'deleted' => DELETED_NO,
-                'tag_id' => $tag_id
+                'IndexProduct.deleted' => DELETED_NO,
+                'IndexProduct.tag_id' => $tag_id
             ),
-            'order' => array('sort_val ASC')
+            'joins' => [
+                [
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'type' => 'inner',
+                    'conditions' => 'Weshare.id=IndexProduct.share_id'
+                ]
+            ],
+            'order' => array('IndexProduct.sort_val ASC'),
+            'fields' => ['IndexProduct.*', 'Weshare.status']
         ));
         return $indexProducts;
     }

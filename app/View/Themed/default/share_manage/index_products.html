@@ -28,7 +28,6 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>#</th>
                             <th>图片</th>
                             <th>分享编号</th>
                             <th width="10%">分享名称</th>
@@ -43,12 +42,11 @@
                         </thead>
                         <tbody>
                         {{loop $index_products $product}}
-                        <tr>
-                            <td>{{$product['IndexProduct']['id']}}</td>
+                        <tr {{if $product['Weshare']['status'] == WESHARE_STATUS_STOP || $product['Weshare']['status'] == WESHARE_STATUS_DELETED}}class='danger'{{/if}}>
                             <td><img src="{{$product['IndexProduct']['share_img']}}" style="width: 200px;height: 60px;"
                                      class="img-thumbnail">
                             </td>
-                            <td>{{$product['IndexProduct']['share_id']}}</td>
+                            <td>{{$product['IndexProduct']['share_id']}}{{if $product['Weshare']['status'] == WESHARE_STATUS_STOP || $product['Weshare']['status'] == WESHARE_STATUS_DELETED}}<font style="color: #ff0000">下架</font>{{/if}}</td>
                             <td>{{$product['IndexProduct']['share_name']}}</td>
                             <td>{{$product['IndexProduct']['share_price']}}</td>
                             <td>{{$product['IndexProduct']['share_vote']}}</td>
