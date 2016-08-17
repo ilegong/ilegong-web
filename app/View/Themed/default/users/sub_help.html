@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1.1, user-scalable=no, width=device-width">
+    <title>{{$title}}</title>
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.27" media="all" rel="stylesheet" type="text/css">
+    <style>
+        .app-button-download{width:90%; height:44px; background-color:#fff; border:1px solid #fc5959; border-radius:4px; color:#fc5959; font-size:1.3em; line-height:44px; text-align:center; position: fixed; bottom: 5px;
+            left: 5%;}
+    </style>
+</head>
+<body>
+<div class="refer-back-bg menu-top">
+    帮助中心
+    <a href="/users/help.html">
+        <img style="padding-left:12px;" ng-src="http://static.tongshijia.com/static/img/back.png"
+             src="http://static.tongshijia.com/static/img/back.png">
+        <label>返回</label>
+    </a>
+</div>
+<div style="margin-top: 50px;"></div>
+<img src="{{$STATIC_HOST}}/static/img/help/{{$img}}" width="100%">
+<!--App-->
+<a class="app-button-download">下载App</a>
+</body>
+</html>

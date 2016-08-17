@@ -1525,6 +1525,16 @@ class UsersController extends AppController
         exit();
     }
 
+    public function help(){
+        $this->layout = null;
+    }
+
+    public function sub_help(){
+        $this->layout = null;
+        $this->set('img', $_REQUEST['img']);
+        $this->set('title', $_REQUEST['title']);
+    }
+
 
 }
 
