@@ -62,10 +62,18 @@ class WesharesComponent extends Component
     {
         $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshare_id);
         $couponItemM = ClassRegistry::init('CouponItem');
+        $userM = ClassRegistry::init('User');
         $share_creator = $weshareInfo['creator']['id'];
         $my_coupon_items = $couponItemM->find_my_valid_share_coupons($uid, $share_creator);
+        $rebate_money = $userM->get_rebate_money($uid, true);
+        $coupon = [];
+        if (!empty($my_coupon_items)) {
+            $coupon['reduced_price'] = $my_coupon_items[0]['Coupon']['reduced_price'];
+            $coupon['coupon_id'] = $my_coupon_items[0]['CouponItem']['id'];
+        }
         return [
-            'coupons' => $my_coupon_items[0],
+            'balance_money' => $rebate_money,
+            'coupons' => $coupon,
             'ship_settings' => $weshareInfo['ship_type'],
             'delivery_template' => $weshareInfo['deliveryTemplate'],
             'proxy_rebate_percent' => $weshareInfo['proxy_rebate_percent'],
