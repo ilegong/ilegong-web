@@ -187,6 +187,10 @@ class WesharesController extends AppController
      */
     public function view($weshare_id, $from = 0)
     {
+        if (!is_numeric($weshare_id)) {
+            $this->redirect('/weshares/index.html');
+            return;
+        }
         //add logs
         $log = [
             "index" => "event_share_view",

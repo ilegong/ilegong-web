@@ -14,6 +14,14 @@ class ShareManageController extends AppController
 
     var $operateDataTypeNameMap = array(SHARE_ORDER_OPERATE_TYPE => '查看订单权限', SHARE_TAG_ORDER_OPERATE_TYPE => '查看分组订单权限');
 
+    public function beforeFilter()
+    {
+        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
+        $this->Auth->allowedActions = array('login', 'forgot', 'reset', 'do_login');
+        $this->layout = 'sharer';
+        parent::beforeFilter();
+    }
+
     var $sortSharePaginate = array(
         'Weshare' => array(
             'order' => 'Weshare.id DESC',
@@ -737,14 +745,6 @@ GROUP BY product_id";
             }
             $this->set('share_operate_settings', $share_operate_settings_result);
         }
-    }
-
-    public function beforeFilter()
-    {
-        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
-        $this->Auth->allowedActions = array('login', 'forgot', 'reset', 'do_login');
-        $this->layout = 'sharer';
-        parent::beforeFilter();
     }
 
 
