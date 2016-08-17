@@ -2410,7 +2410,7 @@ class ShareUtilComponent extends Component
         $related_share_ids = $WeshareM->get_relate_share($share_id);
 
         $order_count = $OrderM->find('count', array(
-            'conditions' => array('status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY], 'member_id' => $related_share_ids),
+            'conditions' => array('status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY], 'member_id' => $related_share_ids, 'type' => ORDER_TYPE_WESHARE_BUY),
         ));
         $view_count = $WeshareM->find('first', array(
             'fields' => array('Weshare.view_count'),

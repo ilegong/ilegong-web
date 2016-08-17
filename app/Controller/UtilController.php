@@ -355,7 +355,7 @@ class UtilController extends AppController {
         ]);
         $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
         $url = "/util/weshare_buyers.html?page=(:num)&weshareId={$_REQUEST['weshareId']}&keyword={$_REQUEST['keyword']}";
-        $limit = 100;
+        $limit = 500;
         $pager = new MyPaginator($count, $limit, $page, $url);
         $orders = $this->Order->find('all', [
             'conditions' => $cond,
