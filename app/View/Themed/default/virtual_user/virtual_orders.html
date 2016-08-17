@@ -23,6 +23,11 @@
                             <label>分享名字</label>
                             <input type="text" class="form-control" name="keyword" value="{{$keyword}}">
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="trueOrder" value="1" {{if $trueOrder}}checked{{/if}}> 真实订单
+                            </label>
+                        </div>
                         <button type="submit" class="btn btn-default">查询</button>
                     </form>
                 </div>

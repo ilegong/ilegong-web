@@ -1,0 +1,115 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">{{$user['User']['nickname']}}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                私信
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>分享ID</th>
+                        <th>发送者</th>
+                        <th width="40%">消息</th>
+                        <th>时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{loop $faqs $faq}}
+                    <tr>
+                        <td><a>{{$faq['ShareFaq']['share_id']}}</a></td>
+                        <td>{{$faq['User']['nickname']}}</td>
+                        <td>{{$faq['ShareFaq']['msg']}}</td>
+                        <td>{{$faq['ShareFaq']['created']}}</td>
+                    </tr>
+                    {{/loop}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer">
+                Panel Footer
+            </div>
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+    <div class="col-lg-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                评论
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>分享ID</th>
+                        <th>订单ID</th>
+                        <th>发送者</th>
+                        <th width="40%">内容</th>
+                        <th>时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{loop $comments $comment}}
+                    <tr>
+                        <td><a>{{$comment['Comment']['data_id']}}</a></td>
+                        <td><a>{{$comment['Comment']['order_id']}}</a></td>
+                        <td>{{$comment['Comment']['username']}}</td>
+                        <td>{{$comment['Comment']['body']}}</td>
+                        <td>{{$comment['Comment']['created']}}</td>
+                    </tr>
+                    {{/loop}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer">
+                Panel Footer
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+<div class="row">
+    <!-- /.col-lg-4 -->
+    <div class="col-lg-8">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                待发货订单
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>订单ID</th>
+                        <th>收货人</th>
+                        <th>收货地址</th>
+                        <th>下单时间</th>
+                        <th width="40%">分享名称</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{loop $orders $order}}
+                    <tr>
+                        <td><a>{{$order['Order']['id']}}</a></td>
+                        <td>{{$order['Order']['consignee_name']}}</td>
+                        <td>{{$order['Order']['consignee_address']}}</td>
+                        <td>{{$order['Order']['created']}}</td>
+                        <td>{{$weshare_map[$order['Order']['member_id']]['title']}}</td>
+                    </tr>
+                    {{/loop}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer">
+                Panel Footer
+            </div>
+        </div>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>

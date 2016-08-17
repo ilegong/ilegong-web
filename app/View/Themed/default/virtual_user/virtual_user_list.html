@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">用户列表</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> 我们的用户
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="list-group">
+                    {{loop $users $user}}
+                    <a href="/virtual_user/virtual_dashboard/{{$user['User']['id']}}.html" target="_blank" class="list-group-item">
+                        <i class="fa fa-user fa-fw"></i> {{$user['User']['nickname']}}
+                        <span class="pull-right text-muted small"><em>{{$user['User']['id']}}</em>
+                        </span>
+                    </a>
+                    {{/loop}}
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+</div>
