@@ -1,0 +1,143 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">购买用户</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-10">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                购买用户
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <form class="form-inline" action="/util/weshare_buyers.html" method="get">
+                    <div class="form-group">
+                        <label>分享ID</label>
+                        <input type="text" class="form-control" name="weshareId" value="{{$weshareId}}">
+                    </div>
+                    <div class="form-group">
+                        <label>分享名称</label>
+                        <input type="text" class="form-control" name="keyword" value="{{$keyword}}">
+                    </div>
+                    <button type="submit" class="btn btn-default">查询</button>
+                </form>
+                <br>
+                <?php
+                    $mobile_nums = [];
+                ?>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>手机号码</th>
+                            <th>分享名称</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{loop $orders $data_item}}
+                        <tr>
+                            <?php
+                                $mobile_nums[] = $data_item['Order']['consignee_mobilephone'];
+                            ?>
+                            <td>{{$data_item['Order']['consignee_name']}}</td>
+                            <td>{{$data_item['Order']['consignee_mobilephone']}}</td>
+                            <td>{{$data_item['Weshare']['title']}}</td>
+                        </tr>
+                        {{/loop}}
+                        </tbody>
+                    </table>
+                    <div class="inline pull-right page">
+                        <?php echo $pager;?>
+                    </div>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-8 -->
+    <div class="col-lg-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                电话号码
+                <div class="pull-right" style="margin-top: -5px;">
+                    <button class="btn btn-default btn-sm" id="copyMobileBtn">复制</button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?php $mobile_nums = array_unique($mobile_nums); ?>
+                <p id="mobiles">
+                    {{loop $mobile_nums $data_item}}
+                    {{$data_item}}<br/>
+                    {{/loop}}
+                </p>
+            </div>
+            <div class="panel-footer">
+                Panel Footer
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+<script>
+    document.getElementById("copyMobileBtn").addEventListener("click", function() {
+        copyToClipboard(document.getElementById("mobiles"));
+        alert('复制成功');
+    });
+
+    function copyToClipboard(elem) {
+        // create hidden text element, if it doesn't already exist
+        var targetId = "_hiddenCopyText_";
+        var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+        var origSelectionStart, origSelectionEnd;
+        if (isInput) {
+            // can just use the original source element for the selection and copy
+            target = elem;
+            origSelectionStart = elem.selectionStart;
+            origSelectionEnd = elem.selectionEnd;
+        } else {
+            // must use a temporary form element for the selection and copy
+            target = document.getElementById(targetId);
+            if (!target) {
+                var target = document.createElement("textarea");
+                target.style.position = "absolute";
+                target.style.left = "-9999px";
+                target.style.top = "0";
+                target.id = targetId;
+                document.body.appendChild(target);
+            }
+            target.textContent = elem.innerHTML;
+            target.textContent = target.textContent.replace(/\s/g,"").replace(/[<]br[^>]*[>]/gi, "\r\n");
+        }
+        // select the content
+        var currentFocus = document.activeElement;
+        target.focus();
+        target.setSelectionRange(0, target.value.length);
+
+        // copy the selection
+        var succeed;
+        try {
+            succeed = document.execCommand("copy");
+        } catch(e) {
+            succeed = false;
+        }
+        // restore original focus
+        if (currentFocus && typeof currentFocus.focus === "function") {
+            currentFocus.focus();
+        }
+
+        if (isInput) {
+            // restore prior selection
+            elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+        } else {
+            // clear temporary content
+            target.textContent = "";
+        }
+        return succeed;
+    }
+</script>
