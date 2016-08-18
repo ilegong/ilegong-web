@@ -10,6 +10,59 @@ class RedPacketComponent extends Component
 {
     public $components = array('Weixin');
 
+
+    private function injectModel(){
+        $this->SharedOffer = ClassRegistry::init('SharedOffer');
+        $this->SharedSlice = ClassRegistry::init('SharedSlice');
+        $this->User = ClassRegistry::init('User');
+        $this->Brand = ClassRegistry::init('Brand');
+        $this->CouponItem = ClassRegistry::init('CouponItem');
+    }
+
+    private function validSharedOffer($sharedOffer, $uid, $shared_offer_id)
+    {
+        $success = false;
+        $expired = false;
+        if (empty($sharedOffer)) {
+            return ['success' => $success, 'reason' => 'not_exist', 'msg' => '红包不存在', 'redirect_url' => '/'];
+        }
+        $owner = $sharedOffer['SharedOffer']['uid'];
+        $isOwner = $owner == $uid;
+        if ($isOwner) {
+            if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW) {
+                $this->SharedOffer->updateAll(['status' => SHARED_OFFER_STATUS_GOING]
+                    , ['id' => $shared_offer_id, 'status' => SHARED_OFFER_STATUS_NEW]);
+            }
+        } else {
+            if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW) {
+                return ['success' => $success, 'reason' => 'not_open', 'msg' => '红包尚未开封，请等待红包所有人开封后发出邀请', 'redirect_url' => '/'];
+            }
+        }
+        $addDays = $sharedOffer['ShareOffer']['valid_days'];
+        if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_EXPIRED
+            || is_past($sharedOffer['SharedOffer']['start'], $addDays)
+        ) {
+            //Only ongoing status can go to expired
+            if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_GOING) {
+                $this->SharedOffer->updateAll(['status' => SHARED_OFFER_STATUS_EXPIRED]
+                    , ['id' => $shared_offer_id, 'status' => SHARED_OFFER_STATUS_GOING]);
+            }
+            $expired = true;
+        }
+        return ['success' => true, 'expired' => $expired];
+    }
+
+    /**
+     * @param $shared_offer_id
+     * @param $uid
+     * @param bool $send_msg
+     * 添加记录并获取优惠券
+     */
+    public function gen_sliced_and_receive($shared_offer_id, $uid, $send_msg = true)
+    {
+
+    }
+
     /**
      * @param $shared_offer_id
      * @param $uid
@@ -23,40 +76,19 @@ class RedPacketComponent extends Component
         //update sharing slices
         //add to coupon
         //display success (ajax)
-        $this->SharedOffer = ClassRegistry::init('SharedOffer');
-        $this->SharedSlice = ClassRegistry::init('SharedSlice');
-        $this->User = ClassRegistry::init('User');
-        $this->Brand = ClassRegistry::init('Brand');
-        $this->CouponItem = ClassRegistry::init('CouponItem');
-        $success = false;
+        $this->injectModel();
+        
         $sharedOffer = $this->SharedOffer->findById($shared_offer_id);
-        if (empty($sharedOffer)) {
-            return array('success' => $success, 'reason' => 'not_exist', 'msg' => '红包不存在', 'redirect_url' => '/');
+        $validResult = $this->validSharedOffer($sharedOffer, $uid, $shared_offer_id);
+        if (!$validResult['success']) {
+            return $validResult;
         }
+
+        $expired = $validResult['expired'];
         $owner = $sharedOffer['SharedOffer']['uid'];
-        $isOwner = $owner == $uid;
-        if ($isOwner) {
-            if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW) {
-                $this->SharedOffer->updateAll(array('status' => SHARED_OFFER_STATUS_GOING)
-                    , array('id' => $shared_offer_id, 'status' => SHARED_OFFER_STATUS_NEW));
-            }
-        } else {
-            if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW) {
-                return array('success' => $success, 'reason' => 'not_open', 'msg' => '红包尚未开封，请等待红包所有人开封后发出邀请', 'redirect_url' => '/');
-            }
-            if ($is_weixin && notWeixinAuthUserInfo($uid, $this->currentUser['nickname'])) {
-                return array('success' => $success, 'reason' => 'not_auth', 'msg' => '为让朋友知道是谁领了她/他发的红包，请授权我们获取您的微信昵称', 'redirect_url' => '/users/login.html?force_login=true&referer=' . urlencode($_SERVER['REQUEST_URI']));
-            }
-        }
-        $expired = false;
         $addDays = $sharedOffer['ShareOffer']['valid_days'];
-        if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_EXPIRED
-            || is_past($sharedOffer['SharedOffer']['start'], $addDays)
-        ) {
-            $expired = true;
-        }
         $slices = $this->SharedSlice->find('all',
-            array('conditions' => array('shared_offer_id' => $shared_offer_id), 'order' => 'SharedSlice.accept_time desc')
+            ['conditions' => ['shared_offer_id' => $shared_offer_id], 'order' => 'SharedSlice.accept_time desc']
         );
         $accepted_users = Hash::extract($slices, '{n}.SharedSlice.accept_user');
         $packet_provider = $sharedOffer['ShareOffer']['sharer_id'];
