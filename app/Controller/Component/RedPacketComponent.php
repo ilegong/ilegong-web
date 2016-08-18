@@ -77,7 +77,6 @@ class RedPacketComponent extends Component
         //add to coupon
         //display success (ajax)
         $this->injectModel();
-        
         $sharedOffer = $this->SharedOffer->findById($shared_offer_id);
         $validResult = $this->validSharedOffer($sharedOffer, $uid, $shared_offer_id);
         if (!$validResult['success']) {
