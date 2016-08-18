@@ -44,7 +44,7 @@ class UsersController extends AppController
 
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
 
-        $this->Auth->allowedActions = array('register', 'login', 'forgot', 'captcha', 'reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon', 'get_proxies', 'get_id_and_proxies');
+        $this->Auth->allowedActions = ['register', 'login', 'forgot', 'captcha', 'reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon', 'get_proxies', 'get_id_and_proxies', 'help', 'sub_help'];
         $this->set('op_cate', 'me');
     }
 
