@@ -24,7 +24,12 @@
           "type": "view",
           "name": "下载APP",
           "url": "http://www.tongshijia.com/pys/download_app.html?from=weixin"
-        }
+        },
+          {
+              "type": "view",
+              "name": "新手指南",
+              "url": "http://www.tongshijia.com/users/help.html?from=weixin"
+          }
       ]
     },
     {
