@@ -86,9 +86,10 @@ class RedPacketComponent extends Component
         $insertSlice = $this->SharedSlice->save(['shared_offer_id' => $shared_offer_id,
             'number' => $avgNumber,
             'accept_time' => addslashes($now), 'accept_user' => $uid, 'modified' => addslashes($now), 'created' => addslashes($now)]);
-        
 
+        if($insertSlice){
 
+        }
     }
 
     /**
