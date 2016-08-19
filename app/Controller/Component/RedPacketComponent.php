@@ -56,10 +56,38 @@ class RedPacketComponent extends Component
      * @param $shared_offer_id
      * @param $uid
      * @param bool $send_msg
+     * @return array
      * 添加记录并获取优惠券
      */
     public function gen_sliced_and_receive($shared_offer_id, $uid, $send_msg = true)
     {
+        $this->injectModel();
+        $sharedOffer = $this->SharedOffer->findById($shared_offer_id);
+        $validResult = $this->validSharedOffer($sharedOffer, $uid, $shared_offer_id);
+        if (!$validResult['success']) {
+            return $validResult;
+        }
+        $hasAccepet = $this->SharedSlice->hasAny(['shared_offer_id' => $shared_offer_id, 'accept_user' => $uid]);
+        if($hasAccepet){
+            return ['success' => false, 'reason' => 'has_accept', 'msg' => '已经领取过该红包'];
+        }
+        $expired = $validResult['expired'];
+        $owner = $sharedOffer['SharedOffer']['uid'];
+        $addDays = $sharedOffer['ShareOffer']['valid_days'];
+        $packet_provider = $sharedOffer['ShareOffer']['sharer_id'];
+        $avgNumber = 0;
+        $nickNames = $this->User->findNicknamesMap(array_merge([], array($uid, $owner, $packet_provider)));
+        $ownerName = $nickNames[$owner];
+        $dt = new DateTime();
+        $now = $dt->format(FORMAT_DATETIME);
+        $dt->add(new DateInterval('P' . $addDays . 'D'));
+        $valid_end = $dt->format(FORMAT_DATETIME);
+
+        $insertSlice = $this->SharedSlice->save(['shared_offer_id' => $shared_offer_id,
+            'number' => $avgNumber,
+            'accept_time' => addslashes($now), 'accept_user' => $uid, 'modified' => addslashes($now), 'created' => addslashes($now)]);
+        
+
 
     }
 
@@ -121,26 +149,16 @@ class RedPacketComponent extends Component
                         $updated = $this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\'' . addslashes($now) . '\''),
                             array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0));
                         if ($updated) {
-                            if ($sharedOffer['SharedOffer']['share_offer_id'] == 44) { //朋友说指定商品优惠券
-                                $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], 0, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
-                                    COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, 883);//指定商品id
-                            } elseif ($sharedOffer['SharedOffer']['share_offer_id'] == 45) {//朋友说指定商品优惠券
-                                $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], 0, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
-                                    COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, 1020);//指定商品id
-                            } else {
-                                //todo set name
-                                $brandName = $brandNames[$brandId];
-                                if ($brandId == 0) {
-                                    $brandName = '朋友说';
-                                }
-                                if ($brandId == -1) {
-                                    //set share name
-                                    $brandName = '微分享红包';
-                                }
-                                $couponId = $this->CouponItem->add_coupon_type($brandName, $brandId, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
-                                    COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
-
+                            $brandName = $brandNames[$brandId];
+                            if ($brandId == 0) {
+                                $brandName = '朋友说';
                             }
+                            if ($brandId == -1) {
+                                //set share name
+                                $brandName = '微分享红包';
+                            }
+                            $couponId = $this->CouponItem->add_coupon_type($brandName, $brandId, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
+                                COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
                             if ($couponId) {
                                 $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer' . $shared_offer_id);
                                 $couponItemId = $this->CouponItem->getLastInsertID();
@@ -192,4 +210,5 @@ class RedPacketComponent extends Component
         $success = true;
         return compact('slices', 'expired', 'accepted', 'just_accepted', 'noMore', 'nickNames', 'sharedOffer', 'uid', 'isOwner', 'total_slice', 'left_slice', 'ownerName', 'success', 'couponNum');
     }
+
 }

@@ -2325,4 +2325,15 @@ class WesharesController extends AppController
         $this->set('image', $image);
         $this->set('desc', $desc);
     }
+
+    public function get_dzx_coupon(){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->redirect('/users/login.html');
+            return;
+        }
+        $shared_offer_id = 56;
+        $this->RedPacket->gen_sliced_and_receive($shared_offer_id, $uid, $send_msg = true);
+
+    }
 }
