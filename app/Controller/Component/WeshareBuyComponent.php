@@ -1597,17 +1597,18 @@ class WeshareBuyComponent extends Component
         //'FIELD(status, ' . join(',', $order_status) . ')'
         $sort = ['id DESC'];
         $current_user_order = $this->get_current_user_share_order_data($weshareId, $uid);
-        $query_order_cond = array(
-            'conditions' => array(
+        $query_order_cond = [
+            'conditions' => [
                 'member_id' => $related_share_ids,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => $order_status,
                 'deleted' => DELETED_NO,
-            ),
+            ],
             'fields' => $this->query_share_info_order_fields,
             'limit' => $this->share_order_count,
             'offset' => ($page - 1) * $this->share_order_count,
-            'order' => $sort);
+            'order' => $sort
+        ];
         if (!empty($current_user_order['order_ids'])) {
             $query_order_cond['conditions']['not'] = ['id' => $current_user_order['order_ids']];
         }
