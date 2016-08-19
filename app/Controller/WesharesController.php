@@ -487,6 +487,7 @@ class WesharesController extends AppController
         if (!empty($detail)) {
             $detail['prepare_comment_data'] = $this->prepare_comment_data();
         }
+        $detail['weshare']['creator']['level']['data_value'] = $detail['weshare']['creator']['level']['data_value'] + 1;
         echo json_encode($detail);
         exit();
     }
