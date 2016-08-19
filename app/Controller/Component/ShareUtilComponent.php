@@ -1031,6 +1031,7 @@ class ShareUtilComponent extends Component
                 return null;
             }
             $user_level = $user_level['UserLevel'];
+            $user_level['data_value'] = $user_level['data_value'] + 1;
             $level_name = get_user_level_text($user_level['data_value']);
             $user_level['level_name'] = $level_name;
             Cache::write($key, json_encode($user_level));

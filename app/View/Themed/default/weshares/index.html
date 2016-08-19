@@ -60,7 +60,7 @@
                              onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'">
                     </a>
                 </li>
-                <li class="proxy-level">{{"L".$user_level['data_value']}}</li>
+                <li class="proxy-level">{{"L".($user_level['data_value']+1)}}</li>
                 <li class="fl">
                     <a class="nickname" href="/weshares/user_share_info/{{$product['share_user_id']}}">{{$user['nickname']}}</a>
                     <dl class="label-container clearfix">
