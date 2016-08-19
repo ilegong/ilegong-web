@@ -40,6 +40,8 @@
                         <tr>
                             <th><input type="checkbox" id="select_all">&nbsp;&nbsp;全选</th>
                             <th>姓名</th>
+                            <th>时间</th>
+                            <th>团长</th>
                             <th>分享</th>
                             <th>操作</th>
                         </tr>
@@ -49,6 +51,8 @@
                         <tr>
                             <td><input type="checkbox" value="{{$order_item['Order']['id']}}" class="check-order"></td>
                             <td>{{$order_item['Order']['consignee_name']}}</td>
+                            <td>{{$order_item['Order']['created']}}</td>
+                            <td>{{$order_item['User']['nickname']}}</td>
                             <td>{{$order_item['Weshare']['title']}}</td>
                             <td><button type="button" class="btn btn-success set-shipped" data-val="{{$order_item['Order']['id']}}">发货</button></td>
                         </tr>

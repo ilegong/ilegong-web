@@ -108,9 +108,15 @@ class VirtualUserController extends AppController
                 'alias' => 'Weshare',
                 'type' => 'inner',
                 'conditions' => 'Weshare.id=Order.member_id'
+            ],
+            [
+                'table' => 'cake_users',
+                'alias' => 'User',
+                'type' => 'inner',
+                'conditions' => 'User.id = Order.brand_id'
             ]
         ];
-        $fields = ['Order.id', 'Order.consignee_name', 'Weshare.title'];
+        $fields = ['Order.id', 'Order.consignee_name', 'Weshare.title', 'Order.created', 'Order.brand_id', 'User.nickname'];
         $orders = $this->Order->find('all', [
             'conditions' => $cond,
             'joins' => $joins,
