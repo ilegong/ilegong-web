@@ -85,6 +85,16 @@ class WesharesController extends AppController
     public function read_share_count()
     {
         $uid = $this->currentUser['id'];
+
+        //add logs
+        $log = [
+            "index" => "event_read_share_count",
+            "type" => "read_share_count",
+            "user_id" => intval($this->currentUser['id']),
+            "referer" => $_SERVER["HTTP_REFERER"],
+        ];
+        add_logs_to_es($log);
+
         $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
         list($share_count, $read_count) = $this->WxShareStatistics->getWeshareSummary($uid);
         $this->set('share_count', $share_count);
@@ -364,6 +374,16 @@ class WesharesController extends AppController
     {
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
+
+        //add logs
+        $log = [
+            "index" => "event_share_add",
+            "type" => "share_add",
+            "user_id" => intval($uid),
+            "referer" => $_SERVER["HTTP_REFERER"],
+        ];
+        add_logs_to_es($log);
+
         //check user has bind mobile and payment
         $current_user = $this->User->find('first', array(
             'conditions' => array(
@@ -1059,6 +1079,16 @@ class WesharesController extends AppController
         if (!$uid) {
             $this->redirect('/users/login.html');
         }
+
+        //add logs
+        $log = [
+            "index" => "event_my_provide_shares_list",
+            "type" => "my_provide_shares_list",
+            "user_id" => intval($uid),
+            "referer" => $_SERVER["HTTP_REFERER"]
+        ];
+        add_logs_to_es($log);
+
         $title = '我的分销';
         $this->set('title', $title);
     }
@@ -1069,6 +1099,14 @@ class WesharesController extends AppController
         if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
+
+        //add log
+        $log = [
+            "user_id" => intval($uid),
+            "index" => "event_save_sharer",
+            "type" => "save_sharer"
+        ];
+        add_logs_to_es($log);
 
         $this->set('type', $type);
         $title = $type == 0 ? '我的分享' : '授权我的';
@@ -1091,6 +1129,15 @@ class WesharesController extends AppController
         if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
+
+        //add log
+        $log = [
+            "user_id" => intval($uid),
+            "index" => "event_my_order_list",
+            "type" => "my_order_list"
+        ];
+        add_logs_to_es($log);
+
     }
 
     /**
