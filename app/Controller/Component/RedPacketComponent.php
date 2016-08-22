@@ -53,13 +53,14 @@ class RedPacketComponent extends Component
     }
 
     /**
+     * @param $share_id
      * @param $shared_offer_id
      * @param $uid
      * @param bool $send_msg
      * @return array
      * 添加记录并获取优惠券
      */
-    public function gen_sliced_and_receive($shared_offer_id, $uid, $send_msg = true)
+    public function gen_sliced_and_receive($share_id, $shared_offer_id, $uid, $send_msg = true)
     {
         $this->injectModel();
         $sharedOffer = $this->SharedOffer->findById($shared_offer_id);
@@ -68,28 +69,52 @@ class RedPacketComponent extends Component
             return $validResult;
         }
         $hasAccepet = $this->SharedSlice->hasAny(['shared_offer_id' => $shared_offer_id, 'accept_user' => $uid]);
-        if($hasAccepet){
+        if ($hasAccepet) {
             return ['success' => false, 'reason' => 'has_accept', 'msg' => '已经领取过该红包'];
         }
+
         $expired = $validResult['expired'];
+        if ($expired) {
+            return ['success' => false, 'reason' => 'share_offer_expired', 'msg' => '活动已经过期'];
+        }
         $owner = $sharedOffer['SharedOffer']['uid'];
         $addDays = $sharedOffer['ShareOffer']['valid_days'];
         $packet_provider = $sharedOffer['ShareOffer']['sharer_id'];
         $avgNumber = 0;
         $nickNames = $this->User->findNicknamesMap(array_merge([], array($uid, $owner, $packet_provider)));
-        $ownerName = $nickNames[$owner];
         $dt = new DateTime();
         $now = $dt->format(FORMAT_DATETIME);
         $dt->add(new DateInterval('P' . $addDays . 'D'));
         $valid_end = $dt->format(FORMAT_DATETIME);
-
         $insertSlice = $this->SharedSlice->save(['shared_offer_id' => $shared_offer_id,
             'number' => $avgNumber,
             'accept_time' => addslashes($now), 'accept_user' => $uid, 'modified' => addslashes($now), 'created' => addslashes($now)]);
-
-        if($insertSlice){
-
+        $brandId = $sharedOffer['ShareOffer']['brand_id'];
+        $brandName = "微分享";
+        if ($insertSlice) {
+            $couponId = $this->CouponItem->add_coupon_type($brandName, $brandId, $now, $valid_end, $insertSlice['SharedSlice']['number'], PUBLISH_YES,
+                COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, $share_id);
+            if ($couponId) {
+                $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer' . $shared_offer_id);
+                $couponItemId = $this->CouponItem->getLastInsertID();
+                $this->SharedSlice->updateAll(array('coupon_item_id' => $couponItemId),
+                    array('id' => $insertSlice['SharedSlice']['id'], 'coupon_item_id' => 0));
+                App::uses('CakeNumber', 'Utility');
+                $couponNum = CakeNumber::precision($insertSlice['SharedSlice']['number'] / 100, 2);
+                if ($send_msg) {
+                    $packet_provider_nickname = $nickNames[$packet_provider];
+                    $title = '您已成功领取' . $nickNames[$sharedOffer['SharedOffer']['uid']] . '分享的' . $packet_provider_nickname . '红包';
+                    $keyword1 = $packet_provider_nickname . '心意一份';
+                    $desc = '谢谢你对' . $packet_provider_nickname . '支持';
+                    $detail_url = WX_HOST . '/weshares/user_share_info/' . $packet_provider;
+                    $this->Weixin->send_packet_received_message($uid, $couponNum, $sharedOffer['ShareOffer']['name'], $title, $detail_url, $keyword1, $desc);
+                    //send for sharer
+                    $this->Weixin->send_packet_be_got_message($sharedOffer['SharedOffer']['uid'], $nickNames[$uid], $couponNum, $packet_provider_nickname . "红包", $detail_url);
+                }
+                return ['success' => true];
+            }
         }
+        return ['success' => false];
     }
 
     /**

@@ -2334,7 +2334,8 @@ class WesharesController extends AppController
             return;
         }
         $shared_offer_id = 56;
-        $this->RedPacket->gen_sliced_and_receive($shared_offer_id, $uid, $send_msg = true);
-
+        $share_id = 6781;
+        $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
+        $this->redirect('/weshare/view/' . $share_id . '.html');
     }
 }
