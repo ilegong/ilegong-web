@@ -308,6 +308,29 @@ class UtilController extends AppController {
     }
 
     /**
+     * @param $offerId
+     * @param $uid
+     * 手工生成红包分享ID
+     */
+    public function gen_shared_offer_by_offer($offerId, $uid)
+    {
+        $this->autoRender = false;
+        $this->loadModel('SharedOffer');
+        $this->SharedOffer->create();
+        $saveData = [
+            'share_offer_id' => $offerId,
+            'total_number' => 0,
+            'start' => date(FORMAT_DATETIME, mktime()),
+            'uid' => $uid,
+            'order_id' => -1,
+            'status' => SHARED_OFFER_STATUS_OUT
+        ];
+        $result = $this->SharedOffer->save($saveData);
+        echo json_encode($result);
+        exit;
+    }
+
+    /**
      *
      * 迁移写死的一些 用户权限配置数据
      */
