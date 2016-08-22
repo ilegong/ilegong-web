@@ -124,6 +124,7 @@ class WesharesComponent extends Component
         $user_share_summery = $this->WeshareBuy->get_user_share_summary($creatorId);
         $couponItemM = ClassRegistry::init('CouponItem');
         $my_coupon_items = $couponItemM->find_my_valid_share_coupons($uid, $creatorId);
+        $use_coupon = $this->get_can_use_coupon($my_coupon_items, $weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
@@ -139,7 +140,7 @@ class WesharesComponent extends Component
             'weshare_ship_settings' => $weshare_ship_settings,
             'consignee' => $consignee,
             'user_share_summery' => $user_share_summery,
-            'my_coupons' => $my_coupon_items[0],
+            'my_coupons' => $use_coupon,
             'sub_status' => $sub_status,
             'is_manage' => $is_manage_user,
             'can_manage_share' => $can_manage_share,
@@ -147,6 +148,36 @@ class WesharesComponent extends Component
             'share_summery' => $share_summery,
             'user_rebate_total' => $user_rebate_total
         ];
+    }
+
+    /**
+     * @param $my_coupon_items
+     * @param $share_id
+     * @return null
+     * 获取可用的优惠券
+     */
+    private function get_can_use_coupon($my_coupon_items, $share_id)
+    {
+        if (empty($my_coupon_items)) {
+            return null;
+        }
+        $can_use_coupons = [];
+        $use_coupon = null;
+        foreach ($my_coupon_items as $item) {
+            $coupon_pids = $item['Coupon']['product_list'];
+            if ($coupon_pids == 0) {
+                $can_use_coupons[] = $item;
+            } else {
+                if (array_search($share_id, $coupon_pids) !== false) {
+                    $can_use_coupons[] = $item;
+                    $use_coupon = $item;
+                }
+            }
+        }
+        if (empty($use_coupon) && !empty($can_use_coupons)) {
+            $use_coupon = $can_use_coupons[0];
+        }
+        return $use_coupon;
     }
 
     /**
