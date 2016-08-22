@@ -14,11 +14,11 @@
             <div class="panel-body">
                 <div class="list-group">
                     {{loop $users $user}}
-                    <a href="/virtual_user/virtual_dashboard/{{$user['User']['id']}}.html" target="_blank" class="list-group-item">
-                        <i class="fa fa-user fa-fw"></i> {{$user['User']['nickname']}}
-                        <span class="pull-right text-muted small"><em>{{$user['User']['id']}}</em>
-                        </span>
-                    </a>
+                        <a href="/virtual_user/virtual_dashboard/{{$user['User']['id']}}.html" target="_blank" class="list-group-item">
+                            <i class="fa fa-user fa-fw"></i> {{$user['User']['nickname']}}
+                            <span class="pull-right text-muted small"><em>{{$user['User']['id']}}</em>
+                            </span>
+                        </a>
                     {{/loop}}
                 </div>
             </div>

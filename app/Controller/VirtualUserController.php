@@ -19,7 +19,41 @@ class VirtualUserController extends AppController
             ],
             'fields' => ['id', 'nickname']
         ]);
+        $today = date(FORMAT_DATE) . ' 00:00:00';
+        $this->loadModel('ShareFaq');
+        $this->loadModel('Order');
+        $this->loadModel('OptLog');
+        $faqs = $this->ShareFaq->find('all', [
+            'conditions' => [
+                'created > ' => $today,
+                'receiver' => self::$virtual_user
+            ],
+            'group' => ['receiver'],
+            'fields' => ['receiver', 'count(id) as c']
+        ]);
+        $faqs = Hash::combine($faqs, '{n}.ShareFaq.receiver', '{n}.0.c');
+        $orders = $this->Order->find('all', [
+            'conditions' => [
+                'created > ' => $today,
+                'status' => ORDER_STATUS_PAID,
+                'brand_id' => self::$virtual_user
+            ],
+            'group' => ['brand_id'],
+            'fields' => ['brand_id', 'count(id) as c']
+        ]);
+        $orders = Hash::combine($orders, '{n}.Order.brand_id', '{n}.0.c');
+        $comments = $this->OptLog->find('all', [
+            'conditions' => [
+                'obj_type' => OPT_LOG_SHARE_COMMENT,
+                'obj_creator' => self::$virtual_user,
+                'created >' => $today
+            ],
+            'group' => ['obj_creator'],
+            'fields' => ['obj_creator', 'count(id) as c']
+        ]);
+        $comments = Hash::combine($comments, '{n}.OptLog.obj_creator', '{n}.0.c');
         $this->set('users', $users);
+        $this->set(compact($faqs, $orders, $comments));
     }
 
     public function virtual_dashboard($uid)
