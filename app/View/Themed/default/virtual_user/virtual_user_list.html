@@ -5,21 +5,36 @@
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-bell fa-fw"></i> 我们的用户
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <div class="list-group">
-                    {{loop $users $user}}
-                        <a href="/virtual_user/virtual_dashboard/{{$user['User']['id']}}.html" target="_blank" class="list-group-item">
-                            <i class="fa fa-user fa-fw"></i> {{$user['User']['nickname']}}
-                            <span class="pull-right text-muted small"><em>{{$user['User']['id']}}</em>
-                            </span>
-                        </a>
-                    {{/loop}}
+                <div class="dataTable_wrapper">
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                        <tr>
+                            <th>用户ID</th>
+                            <th>用户昵称</th>
+                            <th>私信数</th>
+                            <th>评论数</th>
+                            <th>订单数</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{loop $users $user}}
+                        <tr class="odd gradeX">
+                            <td><a href="/virtual_user/virtual_dashboard/{{$user['User']['id']}}.html" target="_blank">{{$user['User']['id']}}</a></td>
+                            <td>{{$user['User']['nickname']}}</td>
+                            <td>{{$faqs[$user['User']['id']] ? $faqs[$user['User']['id']] : 0}}</td>
+                            <td>{{$orders[$user['User']['id']] ? $orders[$user['User']['id']] : 0}}</td>
+                            <td>{{$comments[$user['User']['id']] ? $comments[$user['User']['id']] : 0}}</td>
+                        </tr>
+                        {{/loop}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- /.panel-body -->

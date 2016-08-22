@@ -36,7 +36,8 @@ class VirtualUserController extends AppController
             'conditions' => [
                 'created > ' => $today,
                 'status' => ORDER_STATUS_PAID,
-                'brand_id' => self::$virtual_user
+                'brand_id' => self::$virtual_user,
+                'flag !=' => ORDER_FLAG_VIRTUAL_FLAG
             ],
             'group' => ['brand_id'],
             'fields' => ['brand_id', 'count(id) as c']
