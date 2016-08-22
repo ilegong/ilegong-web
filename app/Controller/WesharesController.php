@@ -2327,10 +2327,11 @@ class WesharesController extends AppController
         $this->set('desc', $desc);
     }
 
-    public function get_dzx_coupon(){
+    public function get_dzx_coupon()
+    {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
-            $this->redirect('/users/login.html');
+            $this->redirect('/users/login.html?referer=/weshares/get_dzx_coupon.html');
             return;
         }
         $shared_offer_id = 56;

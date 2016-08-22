@@ -1595,7 +1595,7 @@ class WeshareBuyComponent extends Component
         $related_share_ids = $weshareM->get_relate_share($weshareId);
         $order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         //'FIELD(status, ' . join(',', $order_status) . ')'
-        $sort = ['id DESC'];
+        $sort = ['created DESC'];
         $current_user_order = $this->get_current_user_share_order_data($weshareId, $uid);
         $query_order_cond = [
             'conditions' => [
@@ -1679,7 +1679,7 @@ class WeshareBuyComponent extends Component
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
             usort($orders, function ($a, $b) {
-                return ($a['id'] < $b['id']) ? -1 : 1;
+                return ($a['id'] < $b['id']) ? 1 : -1;
             });
         }
         $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs, 'order_ids' => $orderIds);
