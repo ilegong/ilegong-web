@@ -7,16 +7,16 @@ $this->PhpExcel->createWorksheet()
     ->setDefaultFont('宋体', 14);
 // define table cells
 $table = array(
-    array('label' => __('订单号')),
-    array('label' => __('客户姓名')),
-    array('label' => __('付款时间')),
-    array('label' => __('商品信息')),
-    array('label' => __('总价(含运费)')),
-    array('label' => __('运费')),
-    array('label' => __('使用红包')),
-    array('label' => __('状态')),
-    array('label' => __('联系电话')),
-    array('label' => __('收货地址')),
+    array('label' => __('订单号'), 'width' => 20),
+    array('label' => __('客户姓名'), 'width' => 20),
+    array('label' => __('付款时间'), 'width' => 20),
+    array('label' => __('商品信息'), 'width' => 100),
+    array('label' => __('总价(含运费)'), 'width' => 10),
+    array('label' => __('运费'), 'width' => 10),
+    array('label' => __('使用红包'), 'width' => 10),
+    array('label' => __('状态'), 'width' => 10),
+    array('label' => __('联系电话'), 'width' => 30),
+    array('label' => __('收货地址'), 'width' => 100),
 );
 
 // add heading with different font and bold text
