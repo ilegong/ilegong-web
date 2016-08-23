@@ -2400,7 +2400,7 @@ function multi_array_sum($total, $next) {
 }
 
 function map_share_type_text($type) {
-    $type_text_map = array(0 => '正常分享', 1 => '自提点拼团', 3 => '产品池', 4 => '渠道价购买', 5 => '多人拼团分享');
+    $type_text_map = array(0 => '正常分享', 1 => '自提点拼团', 3 => '产品池', 4 => '渠道价购买', 5 => '多人拼团分享', 6 => '指定开团');
     return $type_text_map[$type];
 }
 

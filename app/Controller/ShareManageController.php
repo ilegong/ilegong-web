@@ -147,7 +147,7 @@ class ShareManageController extends AppController
         $page = intval($_REQUEST['page']) ? : 1;
         $WeshareM = ClassRegistry::init('Weshare');
         $cartM = ClassRegistry::init('Cart');
-        $cond = ['Weshare.type' => SHARE_TYPE_DEFAULT];
+        $cond = ['Weshare.type' => [SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL]];
         $joins[] = [
             'table' => 'users',
             'alias' => 'User',
