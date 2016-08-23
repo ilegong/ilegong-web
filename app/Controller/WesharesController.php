@@ -1486,7 +1486,14 @@ class WesharesController extends AppController
         $orders = $this->WeshareBuy->get_provide_share_order(false, $weshareId, 5000, 1);
         $this->set('ship_type_list', ShipAddress::ship_type_list());
         $this->set('all_orders', $orders);
+        $this->set('weshareId', $weshareId);
         $this->set_history();
+    }
+
+    public function provide_share_order_export($weshareId){
+        $this->layout = null;
+        $orders = $this->WeshareBuy->get_provide_share_order(true, $weshareId, 5000, 1);
+        $this->set('orders', $orders);
     }
 
     /**
