@@ -208,94 +208,94 @@ class TestController extends AppController
         exit;
     }
 
-    public function set_root_id($offset,$limit)
-    {
-        $this->autoRender = false;
-        $weshareM = ClassRegistry::init('Weshare');
-        $weshares = $weshareM->find('all', [
-            'conditions' => [
-                'type' => 0,
-                'not' => ['refer_share_id' => 0]
-            ],
-            'offset' => $offset,
-            'limit' => $limit,
-            'order' => ['id DESC']
-        ]);
-        $save_data = [];
-        foreach ($weshares as $share_item) {
-            $share_item_id = $share_item['Weshare']['id'];
-            $root_share_id = $weshareM->get_root_share_id($share_item_id);
-            if (empty($root_share_id)) {
-                $root_share_id = 0;
-            }
-            $save_data[] = ['id' => $share_item_id, 'root_share_id' => $root_share_id];
-        }
-        $weshareM->saveAll($save_data);
-        echo 'page' . $limit;
-        exit();
-    }
+//    public function set_root_id($offset,$limit)
+//    {
+//        $this->autoRender = false;
+//        $weshareM = ClassRegistry::init('Weshare');
+//        $weshares = $weshareM->find('all', [
+//            'conditions' => [
+//                'type' => 0,
+//                'not' => ['refer_share_id' => 0]
+//            ],
+//            'offset' => $offset,
+//            'limit' => $limit,
+//            'order' => ['id DESC']
+//        ]);
+//        $save_data = [];
+//        foreach ($weshares as $share_item) {
+//            $share_item_id = $share_item['Weshare']['id'];
+//            $root_share_id = $weshareM->get_root_share_id($share_item_id);
+//            if (empty($root_share_id)) {
+//                $root_share_id = 0;
+//            }
+//            $save_data[] = ['id' => $share_item_id, 'root_share_id' => $root_share_id];
+//        }
+//        $weshareM->saveAll($save_data);
+//        echo 'page' . $limit;
+//        exit();
+//    }
 
 
 
-    public function test_push(){
-        $this->autoRender=false;
-        $result = $this->JPush->push('893376');
-        echo json_encode($result);
-        return;
-    }
+//    public function test_push(){
+//        $this->autoRender=false;
+//        $result = $this->JPush->push('893376');
+//        echo json_encode($result);
+//        return;
+//    }
+//
+//
+//    public function add_queue(){
+//        $this->autoRender = false;
+//        $this->RedisQueue->add_curl_task();
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
 
+//    public function update_old_avatar()
+//    {
+//        $this->autoRender = false;
+//        $userM = ClassRegistry::init('User');
+//        $users = $userM->find('all', array(
+//            'conditions' => array(
+//                'avatar LIKE' => 'avatar/http://51daifan%'
+//            ),
+//            'limit' => 100
+//        ));
+//        $save_data = array();
+//        foreach ($users as $user) {
+//            $uid = $user['User']['id'];
+//            $image = $user['User']['image'];
+//            $avatar = create_avatar_in_aliyun($image);
+//            $save_data[] = array('id' => $uid, 'avatar' => $avatar);
+//        }
+//        $userM->saveAll($save_data);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
 
-    public function add_queue(){
-        $this->autoRender = false;
-        $this->RedisQueue->add_curl_task();
-        echo json_encode(array('success' => true));
-        return;
-    }
+//    public function test_query_share_ids($share_id, $uid){
+//        $this->autoRender = false;
+//        $weshareM = ClassRegistry::init('Weshare');
+//        $result = $weshareM->get_relate_share($share_id, $uid);
+//        $share_buy_result = $this->WeshareBuy->get_share_and_all_refer_share_count($share_id, $uid);
+//        echo json_encode(array('success' => true, 'result' => $result, 'share_buy_result' => $share_buy_result));
+//        return;
+//    }
 
-    public function update_old_avatar()
-    {
-        $this->autoRender = false;
-        $userM = ClassRegistry::init('User');
-        $users = $userM->find('all', array(
-            'conditions' => array(
-                'avatar LIKE' => 'avatar/http://51daifan%'
-            ),
-            'limit' => 100
-        ));
-        $save_data = array();
-        foreach ($users as $user) {
-            $uid = $user['User']['id'];
-            $image = $user['User']['image'];
-            $avatar = create_avatar_in_aliyun($image);
-            $save_data[] = array('id' => $uid, 'avatar' => $avatar);
-        }
-        $userM->saveAll($save_data);
-        echo json_encode(array('success' => true));
-        return;
-    }
-
-    public function test_query_share_ids($share_id, $uid){
-        $this->autoRender = false;
-        $weshareM = ClassRegistry::init('Weshare');
-        $result = $weshareM->get_relate_share($share_id, $uid);
-        $share_buy_result = $this->WeshareBuy->get_share_and_all_refer_share_count($share_id, $uid);
-        echo json_encode(array('success' => true, 'result' => $result, 'share_buy_result' => $share_buy_result));
-        return;
-    }
-
-    public function send_tmp_msg()
-    {
-        $this->autoRender = false;
-        $userId = 697674;
-        $openId = $this->Oauthbind->findWxServiceBindByUid($userId);
-        $title = 'hi,你在我们平台订了猕猴桃和无花果，现在您留的电话不正确，请迅速和我们联系：13651031953，';
-        $order_id = 37377;
-        $order_date = '2015-09-10 21:14:32';
-        $desc = '生鲜不能存放，谢谢理解！';
-        $detail_url = '';
-        $this->Weixin->send_comment_template_msg($openId, $detail_url, $title, $order_id, $order_date, $desc);
-        echo json_encode(array('success' => true));
-    }
+//    public function send_tmp_msg()
+//    {
+//        $this->autoRender = false;
+//        $userId = 697674;
+//        $openId = $this->Oauthbind->findWxServiceBindByUid($userId);
+//        $title = 'hi,你在我们平台订了猕猴桃和无花果，现在您留的电话不正确，请迅速和我们联系：13651031953，';
+//        $order_id = 37377;
+//        $order_date = '2015-09-10 21:14:32';
+//        $desc = '生鲜不能存放，谢谢理解！';
+//        $detail_url = '';
+//        $this->Weixin->send_comment_template_msg($openId, $detail_url, $title, $order_id, $order_date, $desc);
+//        echo json_encode(array('success' => true));
+//    }
 
     public function test_send_tuan_buy_msg($orderId)
     {
