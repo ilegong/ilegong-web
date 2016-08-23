@@ -147,7 +147,7 @@ class ShareManageController extends AppController
         $page = intval($_REQUEST['page']) ? : 1;
         $WeshareM = ClassRegistry::init('Weshare');
         $cartM = ClassRegistry::init('Cart');
-        $cond = [];
+        $cond = ['Weshare.type' => SHARE_TYPE_DEFAULT];
         $joins[] = [
             'table' => 'users',
             'alias' => 'User',
@@ -157,15 +157,15 @@ class ShareManageController extends AppController
         ];
 
         if ($s_id) {
-            $cond = ['Weshare.id' => $s_id];
+            $cond['Weshare.id'] = $s_id;
         }
 
         if ($creator_id) {
-            $cond = ['Weshare.creator' => $creator_id];
+            $cond['Weshare.creator'] = $creator_id;
         }
 
         if ($s_title) {
-            $cond = ['Weshare.title LIKE' => '%' . $s_title . '%'];
+            $cond['Weshare.title LIKE'] = '%' . $s_title . '%';
         }
 
         if ($share_status != "all") {
