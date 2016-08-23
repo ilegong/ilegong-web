@@ -1727,7 +1727,10 @@ function send_weixin_message($post_data, $logObj = null) {
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 30
     );
-
+    if($post_data['touser'] == 'orKydjpLB3ORedyURVnh8NOP52b0'){
+        add_template_msg_task($post_data);
+        return true;
+    }
     while ($tries-- > 0) {
         $access_token = $wxOauthM->get_base_access_token();
         if (!empty($access_token)) {
@@ -2992,6 +2995,15 @@ if(!function_exists("add_logs_to_es"))
             $logObj = ClassRegistry::init('User');
             $logObj->log('add es log error ' . $e->getMessage());
         }
+    }
+}
+
+function add_template_msg_task($data){
+    try {
+        $r = createRedisCli();
+        $r->rPush("wx_template_first_msg", json_encode($data));
+    } catch (Exception $e) {
+
     }
 }
 
