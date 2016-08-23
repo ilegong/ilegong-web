@@ -49,10 +49,14 @@ class AppController extends Controller {
         if (!empty($access_token)) {
             $this->OAuth = $this->Components->load('OAuth.OAuth');
             $this->Cookie = $this->Components->load('Cookie', array('name' => 'SAECMS', 'time' => '+2 weeks'));
-            $this->OAuth->allow([]);
             $this->currentUser = $this->OAuth->user();
-            $this->Session->write('Auth.User', $this->currentUser);
-            $this->Cookie->write('Auth.User', $this->currentUser, true, 3600 * 24 * 7);
+            $this->OAuth->allow([]);
+            if ($this->currentUser) {
+                $this->Session->write('Auth.User', $this->currentUser);
+                $this->Cookie->write('Auth.User', $this->currentUser, true, 3600 * 24 * 7);
+            } else {
+                $this->redirect('/');
+            }
         } else {
             if (!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']) {
                 $this->Cookie = $this->Components->load('Cookie', array('name' => 'SAECMS', 'time' => '+2 weeks'));
