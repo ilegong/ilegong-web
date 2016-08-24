@@ -11,6 +11,7 @@
      data-recommend-id="{{$recommend_id}}" data-comment-order-id="{{$comment_order_id}}"
      data-replay-comment-id="{{$reply_comment_id}}"
      data-from="{{$click_from}}"
+     data-should-bind-mobile="{{$should_bind_mobile}}"
      ng-click="clickPage();">
     <div id="sharedOfferResult" style="display: none;" data-shared-offer="{{$follow_shared_offer_id}}"
          data-shared-type="{{$get_coupon_type}}" data-shared-coupon-num="{{$couponNum}}"></div>
@@ -501,8 +502,31 @@
                     <a ng-click='vm.sendNotifyShareMsg();' style="background-color: #ffa200; width: 100%;">群发通知</a>
                 </div>
             </div>
+
+            <!--绑定手机号码提示层-->
+            <div class="login-dialog" ng-if="vm.showBindMobileDialog">
+                <a ng-click="vm.hideBindMobileDialog()" class="close-icon"><img ng-src="{{::vm.staticFilePath}}/static/img/closeicon.png"/></a>
+                <h1>绑定手机号</h1>
+                <p>将红包放入手机账户中</p>
+                <cite>
+                    <label>
+                        <input ng-model="vm.mobilePhone.value" type="text" placeholder="请输入手机号"/>
+                    </label>
+                    <s ng-show="!vm.mobilePhone.valid">手机号输入错误</s>
+                </cite>
+                <cite>
+                    <label>
+                        <a ng-click="vm.sendCode()" class="security-code" ng-show="!vm.code.sent">发送验证码</a>
+                        <a class="security-code send-again" ng-show="vm.code.sent"><span ng-bind="vm.code.timeSpent"></span>s重新发送</a>
+                        <input type="text" type="number" string-to-number ng-model="vm.code.value" placeholder="请输入验证码"/>
+                    </label>
+                    <s ng-show="!vm.code.valid">验证码输入错误</s>
+                </cite>
+                <a ng-click="vm.bindMobile()" class="login-btn">确定</a>
+            </div>
+
             <div class="background-layer" ng-show="vm.showLayer"
-                 ng-click="vm.showShareControl=false;vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+                 ng-click="vm.hideAllLayer();"></div>
         </div>
     </div>
 
@@ -529,10 +553,10 @@
 <?php
     $this->assign('title',$page_title);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.17'
+$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.18'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.25'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.26'
 ), array('block' => 'scripts'))
 ?>

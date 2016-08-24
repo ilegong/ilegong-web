@@ -80,7 +80,7 @@ class RedPacketComponent extends Component
         $owner = $sharedOffer['SharedOffer']['uid'];
         $addDays = $sharedOffer['ShareOffer']['valid_days'];
         $packet_provider = $sharedOffer['ShareOffer']['sharer_id'];
-        $avgNumber = 0;
+        $avgNumber = $sharedOffer['ShareOffer']['avg_number'];
         $nickNames = $this->User->findNicknamesMap(array_merge([], array($uid, $owner, $packet_provider)));
         $dt = new DateTime();
         $now = $dt->format(FORMAT_DATETIME);

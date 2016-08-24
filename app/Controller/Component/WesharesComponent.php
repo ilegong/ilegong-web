@@ -66,10 +66,11 @@ class WesharesComponent extends Component
         $share_creator = $weshareInfo['creator']['id'];
         $my_coupon_items = $couponItemM->find_my_valid_share_coupons($uid, $share_creator);
         $rebate_money = $userM->get_rebate_money($uid, true);
+        $use_coupon = $this->get_can_use_coupon($my_coupon_items, $weshare_id);
         $coupon = [];
-        if (!empty($my_coupon_items)) {
-            $coupon['reduced_price'] = $my_coupon_items[0]['Coupon']['reduced_price'];
-            $coupon['coupon_id'] = $my_coupon_items[0]['CouponItem']['id'];
+        if (!empty($use_coupon)) {
+            $coupon['reduced_price'] = $use_coupon['Coupon']['reduced_price'];
+            $coupon['coupon_id'] = $use_coupon['CouponItem']['id'];
         }
         return [
             'balance_money' => $rebate_money,
@@ -125,6 +126,11 @@ class WesharesComponent extends Component
         $couponItemM = ClassRegistry::init('CouponItem');
         $my_coupon_items = $couponItemM->find_my_valid_share_coupons($uid, $creatorId);
         $use_coupon = $this->get_can_use_coupon($my_coupon_items, $weshareId);
+        $coupon = [];
+        if (!empty($use_coupon)) {
+            $coupon['Coupon']['reduced_price'] = $use_coupon['Coupon']['reduced_price'];
+            $coupon['CouponItem']['id'] = $use_coupon['CouponItem']['id'];
+        }
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
@@ -140,7 +146,7 @@ class WesharesComponent extends Component
             'weshare_ship_settings' => $weshare_ship_settings,
             'consignee' => $consignee,
             'user_share_summery' => $user_share_summery,
-            'my_coupons' => $use_coupon,
+            'my_coupons' => $coupon,
             'sub_status' => $sub_status,
             'is_manage' => $is_manage_user,
             'can_manage_share' => $can_manage_share,
@@ -168,9 +174,16 @@ class WesharesComponent extends Component
             if ($coupon_pids == 0) {
                 $can_use_coupons[] = $item;
             } else {
-                if (array_search($share_id, $coupon_pids) !== false) {
-                    $can_use_coupons[] = $item;
-                    $use_coupon = $item;
+                if (is_array($coupon_pids)) {
+                    if (array_search($share_id, $coupon_pids) !== false) {
+                        $can_use_coupons[] = $item;
+                        $use_coupon = $item;
+                    }
+                } else {
+                    if ($coupon_pids == $share_id) {
+                        $can_use_coupons[] = $item;
+                        $use_coupon = $item;
+                    }
                 }
             }
         }

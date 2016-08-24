@@ -3,7 +3,7 @@
     angular.module('weshares')
         .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, Utils, ShareOrder, OfflineStore) {
+    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $interval, $timeout, $filter, Utils, ShareOrder, OfflineStore) {
         var vm = this;
         vm.staticFilePath = Utils.staticFilePath();
         vm.showShareDetailView = true;
@@ -84,6 +84,12 @@
         vm.getBannerLink = getBannerLink;
         vm.getRecommendWeshares = getRecommendWeshares;
         vm.isIOSDevice = isIOSDevice;
+        vm.hideAllLayer = hideAllLayer;
+        vm.canSendCode = canSendCode;
+        vm.canBindMobile = canBindMobile;
+        vm.sendCode = sendCode;
+        vm.bindMobile = bindMobile;
+        vm.hideBindMobileDialog = hideBindMobileDialog;
         activate();
 
         OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
@@ -179,21 +185,25 @@
             //auto poup comment dialog
             var commentOrderId = element.attr('data-comment-order-id');
             var replayCommentId = element.attr('data-replay-comment-id');
+            var shouldBindMobile = element.attr('data-should-bind-mobile');
+            if (shouldBindMobile == 1) {
+                initBindMobileDialog();
+            }
             vm.rebateLogId = rebateLogId || 0;
             vm.recommendUserId = recommendUserId || 0;
             var weshareId = element.attr('data-weshare-id');
             $rootScope.uid = element.attr('data-uid');
             vm.weshare = {};
-            $scope.$watch('vm.selectShipType', function (val) {
-                if (val != -1) {
-                    vm.chooseShipType = false;
-                }
-            });
-            $scope.$watchCollection('vm.checkedOfflineStore', function (val) {
-                if (val) {
-                    vm.chooseOfflineStoreError = false;
-                }
-            });
+            //$scope.$watch('vm.selectShipType', function (val) {
+            //    if (val != -1) {
+            //        vm.chooseShipType = false;
+            //    }
+            //});
+            //$scope.$watchCollection('vm.checkedOfflineStore', function (val) {
+            //    if (val) {
+            //        vm.chooseOfflineStoreError = false;
+            //    }
+            //});
             var shareDetailUrl = '/weshares/detail/' + weshareId + '.json?comment_order_id=' + commentOrderId + '&reply_comment_id=' + replayCommentId;
             $http({
                 method: 'GET', url: shareDetailUrl, params: {
@@ -1226,6 +1236,117 @@
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
             vm.getRecommendWeshares(vm.weshare.id, vm.weshare.creator.id);
+        }
+
+        function initBindMobileDialog() {
+            vm.mobilePhone = {value: '', valid: true};
+            vm.code = {value: '', sent: false, timer: null, timeSpent: 60, valid: true};
+            vm.showBindMobileDialog = true;
+            vm.showLayer = true;
+        }
+
+        function hideBindMobileDialog() {
+            vm.showBindMobileDialog = false;
+            vm.showLayer = false;
+        }
+
+        function canSendCode() {
+            if (_.isEmpty(vm.mobilePhone.value) || !Utils.isMobileValid(vm.mobilePhone.value)) {
+                vm.mobilePhone.valid = false;
+            } else {
+                vm.mobilePhone.valid = true;
+            }
+            return Utils.isMobileValid(vm.mobilePhone.value) && !_.isEmpty(vm.mobilePhone.value) && !vm.code.sent;
+        }
+
+        function canBindMobile() {
+            if (_.isEmpty(vm.mobilePhone.value) || !Utils.isMobileValid(vm.mobilePhone.value)) {
+                vm.mobilePhone.valid = false;
+            } else {
+                vm.mobilePhone.valid = true;
+            }
+            if (_.isEmpty(vm.code.value)) {
+                vm.code.valid = false;
+            } else {
+                vm.code.valid = true;
+            }
+            return Utils.isMobileValid(vm.mobilePhone.value) && !_.isEmpty(vm.mobilePhone.value) && !_.isEmpty(vm.code.value);
+        }
+
+        function sendCode() {
+            if (!vm.canSendCode()) {
+                return;
+            }
+            vm.code.sending = true;
+            $http.post('/check/get_mobile_code?mobile=' + vm.mobilePhone.value).success(function (data) {
+                if (data.error) {
+                    if (data.msg == 'not login') {
+                        window.location.href = '/users/login';
+                        return;
+                    }
+                }
+                vm.code.sent = true;
+                vm.code.timer = $interval(function () {
+                    vm.code.timeSpent = Math.max(0, vm.code.timeSpent - 1);
+                    if (vm.code.timeSpent <= 0) {
+                        vm.code.sent = false;
+                        vm.code.timeSpent = 60;
+                        if (!_.isEmpty(vm.code.timer)) {
+                            $interval.cancel(vm.code.timer);
+                            vm.code.timer = null;
+                        }
+                    }
+                }, 1000);
+                vm.code.sending = false;
+            }).error(function (data) {
+                vm.code.sending = false;
+            });
+        }
+
+        function bindMobile() {
+            if (!vm.canBindMobile()) {
+                return;
+            }
+            if (vm.binding) {
+                return;
+            }
+            vm.binding = true;
+            $http.post('/users/wx_user_bind_mobile', {
+                'mobile': vm.mobilePhone.value,
+                'code': vm.code.value
+            }).success(function (data) {
+                vm.binding = false;
+                if (data.success) {
+                    vm.hideBindMobileDialog();
+                    return;
+                }
+                if (data.reason == 'code_error') {
+                    vm.code.valid = false;
+                    return;
+                }
+                if (data.reason == 'mobile_error') {
+                    vm.code.valid = true;
+                    return;
+                }
+            }).error(function (data) {
+                vm.binding = false;
+            });
+        }
+
+        function hideAllLayer(){
+            vm.showBindMobileDialog = false;
+            vm.showShareControl = false;
+            vm.showTipSubSharerDialog = false;
+            vm.showRecommendDialog = false;
+            vm.showLayer = false;
+            vm.showNotifyView = false;
+            vm.showBuyingDialog = false;
+            vm.showShareDialog = false;
+            vm.showNotifyShareDialog = false;
+            vm.showNotifyShareOfferDialog = false;
+            vm.showNotifyGetPacketDialog = false;
+            vm.showCommentListDialog = false;
+            vm.closeCommentDialog();
         }
 
         function getBannerImage(){

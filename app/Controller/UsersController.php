@@ -975,6 +975,7 @@ class UsersController extends AppController
         $cartsUpdated = $this->Cart->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
 
         $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid . ": orderUpdated=" . $orderUpdated . ", consigneeUpdated=" . $consigneeUpdated . ", cartsUpdated=" . $cartsUpdated);
+
 //        $this->loadModel('Brand');
 //        $this->Brand->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
 //        $this->loadModel('TrackLog');
@@ -1018,11 +1019,11 @@ class UsersController extends AppController
         $this->RecommendLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('RebateTrackLog');
-        //$this->RebateTrackLog->updateAll(array('sharer' => $new_serviceAccount_bind_uid), array('sharer' => $old_serviceAccount_bind_uid));
+        $this->RebateTrackLog->updateAll(array('sharer' => $new_serviceAccount_bind_uid), array('sharer' => $old_serviceAccount_bind_uid));
         $this->RebateTrackLog->updateAll(array('clicker' => $new_serviceAccount_bind_uid), array('clicker' => $old_serviceAccount_bind_uid));
 
-        //$this->loadModel('BalanceLog');
-        //$this->BalanceLog->updateAll(array(''), array());
+        $this->loadModel('BalanceLog');
+        $this->BalanceLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
     }
 
@@ -1290,8 +1291,10 @@ class UsersController extends AppController
             echo json_encode(['success' => false, 'reason' => 'not_login']);
             exit;
         }
-        $mobile = $_REQUEST['mobile'];
-        $mobileCode = $_REQUEST['mobileCode'];
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        $mobileCode = $postDataArray['code'];
+        $mobile = $postDataArray['mobile'];
         $msgCode = $this->Session->read('messageCode');
         $currentPostNum = $this->Session->read('current_register_phone');
         $codeLog = json_decode($msgCode, true);
@@ -1304,30 +1307,34 @@ class UsersController extends AppController
             exit;
         }
         $mobileUser = $this->getUserByMobile($mobile);
-        $dateNow = date(FORMAT_DATETIME);
         if (empty($mobileUser)) {
-            $this->User->update(['mobilephone' => $mobile, 'updated' => $dateNow], ['id' => $currentUserId]);
-            echo json_encode(['success' => true]);
-            exit;
+            $this->User->update(['mobilephone' => $mobile], ['id' => $currentUserId]);
+            $this->Session->write('Auth.User.mobilephone', $mobile);
         }
-        //merge data to wx_user
-        $dataSource = $this->User->getDataSource();
-        try {
-            $dataSource->begin();
-            $mobileUserId = $mobileUser['User']['id'];
-            $this->loadModel('UserMigrate');
-            $this->UserMigrate->save(['new_user_id' => $currentUserId, 'old_user_id' => $mobileUserId, 'created' => $dateNow, 'remark' => 'bind_mobile_merge']);
-            $this->User->update(['mobilephone' => $mobile, 'password' => $mobileUser['User']['password'], 'updated' => $dateNow], ['id' => $currentUserId]);
-            $this->User->update(['mobilephone' => null], ['id' => $mobileUserId]);
-            $this->transferUserInfo($mobileUserId, $currentUserId);
-            $dataSource->commit();
-            echo json_encode(['success' => true]);
-            exit;
-        } catch (Exception $e) {
-            $dataSource->rollback();
-            echo json_encode(['success' => false, 'reason' => 'system_error']);
-            exit;
-        }
+        echo json_encode(['success' => true]);
+        exit;
+
+//        $dateNow = date(FORMAT_DATETIME);
+//          merge data to wx_user
+//        $dataSource = $this->User->getDataSource();
+//        try {
+//            $dataSource->begin();
+//            $mobileUserId = $mobileUser['User']['id'];
+//            $this->loadModel('UserMigrate');
+//            $this->UserMigrate->save(['new_user_id' => $currentUserId, 'old_user_id' => $mobileUserId, 'created' => $dateNow, 'remark' => 'bind_mobile_merge']);
+//            $this->User->update(['mobilephone' => "'" . $mobile . "'", 'password' => "'" . $mobileUser['User']['password'] . "'"], ['id' => $currentUserId]);
+//            $this->User->update(['mobilephone' => "'" . "'"], ['id' => $mobileUserId]);
+//            $this->transferUserInfo($mobileUserId, $currentUserId);
+//            $dataSource->commit();
+//            $this->Session->write('Auth.User.mobilephone', $mobile);
+//            echo json_encode(['success' => true]);
+//            exit;
+//        } catch (Exception $e) {
+//            $dataSource->rollback();
+//            $this->log('merge user error msg ' . $e->getMessage());
+//            echo json_encode(['success' => false, 'reason' => 'system_error']);
+//            exit;
+//        }
     }
 
 

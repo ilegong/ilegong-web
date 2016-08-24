@@ -260,8 +260,17 @@ class WesharesController extends AppController
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, null, $shared_offer_id, $summary, $ordersDetail);
         $this->set('page_title', $weshare['title']);
         $this->set('click_from', $view_from);
+        $this->set('should_bind_mobile', $this->should_bind_mobile());
         $this->set_history();
         $this->WeshareBuy->update_share_view_count($weshare_id);
+    }
+
+    private function should_bind_mobile()
+    {
+        if ($this->currentUser['id'] && empty($this->currentUser['mobilephone'])) {
+            return true;
+        }
+        return false;
     }
 
     private function handle_weshare_view_paid($from, $uid, $weshare_id)
@@ -2388,9 +2397,9 @@ class WesharesController extends AppController
             $this->redirect('/users/login.html?referer=/weshares/get_dzx_coupon.html');
             return;
         }
-        $shared_offer_id = 56;
+        $shared_offer_id = 22628;
         $share_id = 6781;
         $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
-        $this->redirect('/weshare/view/' . $share_id . '.html');
+        $this->redirect('/weshares/view/' . $share_id . '.html');
     }
 }
