@@ -265,11 +265,14 @@ class WeixinController extends Controller {
                     echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
                     echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
-                case '社区福利':
-                    echo $this->newArticleMsg($user, $me, [['title' => '社区活动（每人限购一份）', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd548a-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4377?from=pineapple']]);
-                    break;
-                case '兑换活动':
-                    echo $this->newArticleMsg($user, $me, [['title' => '兑换活动', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd39dc-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4507?from=pineapple']]);
+//                case '社区福利':
+//                    echo $this->newArticleMsg($user, $me, [['title' => '社区活动（每人限购一份）', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd548a-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4377?from=pineapple']]);
+//                    break;
+//                case '兑换活动':
+//                    echo $this->newArticleMsg($user, $me, [['title' => '兑换活动', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd39dc-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4507?from=pineapple']]);
+//                    break;
+                case 'dzx':
+                    echo $this->newArticleMsg($user, $me, [['title' => '一样的价格，一样的味道，去年意犹未尽的你还要来一份么？', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/08/24/93684ab0-69e4-11e6-ad1c-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/6951.html?from=wx_article']]);
                     break;
 				default:
                     $hour = date('G');

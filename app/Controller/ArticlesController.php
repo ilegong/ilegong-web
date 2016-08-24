@@ -106,6 +106,10 @@ class ArticlesController extends AppController{
         $this->layout = null;
     }
 
+    public function dzx(){
+        $this->layout = null;
+    }
+
     public function log_js_error() {
         $msg = $_GET['msg'];
         $url = $_GET['url'];
