@@ -1024,13 +1024,6 @@ class UsersController extends AppController
         //$this->loadModel('BalanceLog');
         //$this->BalanceLog->updateAll(array(''), array());
 
-        //团购的
-        //积分的
-        //在后台给1000个
-        //优惠券兑换的功能
-        //返利
-        //分享
-        //粉丝数据
     }
 
     /**
@@ -1262,17 +1255,8 @@ class UsersController extends AppController
 
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
-        $orderId = $_REQUEST['order_id'];
-        $from = $_REQUEST['from'];
         $this->set('userId', $userId);
         $this->set('nickname', $userNickName);
-        $this->set('orderId', $orderId);
-        $this->set('from', $from);
-        $short_intro = $_REQUEST['reason'];
-        $ref_url = $_REQUEST['ref'];
-
-        $this->set('short_intro', $short_intro);
-        $this->set('ref_url', $ref_url);
         $this->set('hideNav', true);
 
         $this->pageTitle = "绑定手机号";
@@ -1416,8 +1400,6 @@ class UsersController extends AppController
         $this->set('img', $_REQUEST['img']);
         $this->set('title', $_REQUEST['title']);
     }
-
-
 }
 
 ?>

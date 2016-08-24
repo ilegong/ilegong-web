@@ -259,10 +259,11 @@ class OAuthController extends OAuthAppController {
         $result = $this->User->save([
             'nickname' => $nickname,
             'sex' => 0,
-            'username' => $mobile,
+            'username' => NULL,
             'password' => $password,
             'uc_id' => 0,
-            'mobilephone' => $mobile
+            'mobilephone' => $mobile,
+            'is_install_app' => INSTALL_APP_MARK
         ]);
         if (!$result) {
             return false;
@@ -360,7 +361,7 @@ class OAuthController extends OAuthAppController {
             exit();
         } else {
             $data['User']['password'] = Security::hash($inputData['password'], null, true);
-            $data['User']['uc_id'] = APP_REGISTER_MARK;
+            $data['User']['is_install_app'] = INSTALL_APP_MARK;
             if ($userM->save($data)) {
                 $_GET = array('username' => $mobile, 'password' => $inputData['password'], 'client_id' => $inputData['client_id'], 'grant_type' => 'password');
                 header("HTTP/1.1 " . '200 OK');
