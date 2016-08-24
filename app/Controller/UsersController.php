@@ -1304,8 +1304,9 @@ class UsersController extends AppController
             exit;
         }
         $mobileUser = $this->getUserByMobile($mobile);
+        $dateNow = date(FORMAT_DATETIME);
         if (empty($mobileUser)) {
-            $this->User->update(['mobilephone' => $mobile], ['id' => $currentUserId]);
+            $this->User->update(['mobilephone' => $mobile, 'updated' => $dateNow], ['id' => $currentUserId]);
             echo json_encode(['success' => true]);
             exit;
         }
@@ -1313,9 +1314,12 @@ class UsersController extends AppController
         $dataSource = $this->User->getDataSource();
         try {
             $dataSource->begin();
-            $oldUserId = $mobileUser['User']['id'];
-            $this->User->update(['mobilephone' => $mobile, 'password' => $mobileUser['User']['password']], ['id' => $currentUserId]);
-            $this->transferUserInfo($oldUserId, $currentUserId);
+            $mobileUserId = $mobileUser['User']['id'];
+            $this->loadModel('UserMigrate');
+            $this->UserMigrate->save(['new_user_id' => $currentUserId, 'old_user_id' => $mobileUserId, 'created' => $dateNow, 'remark' => 'bind_mobile_merge']);
+            $this->User->update(['mobilephone' => $mobile, 'password' => $mobileUser['User']['password'], 'updated' => $dateNow], ['id' => $currentUserId]);
+            $this->User->update(['mobilephone' => null], ['id' => $mobileUserId]);
+            $this->transferUserInfo($mobileUserId, $currentUserId);
             $dataSource->commit();
             echo json_encode(['success' => true]);
             exit;
