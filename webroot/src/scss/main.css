@@ -1800,3 +1800,18 @@
     color: #999999;
     font-size: 0.9em;
 }
+
+.login-dialog{ background-color: #FFFFFF; width: 90%; position:fixed; left: 50%; margin-left: -45%; z-index: 999; border-radius: 5px;}
+.login-dialog h1{ font-size: 1.6em; padding: 20px 10px 10px; color: #333333; text-align: center;}
+.login-dialog p{ text-align: center; padding: 0 10px 15px; font-size: 1.1em; color: #666666;}
+.login-dialog cite s{ display: block; text-decoration: none; color: #ff0000; padding-top: 5px;}
+.login-dialog cite{ display: block; margin: 0 20px 20px; font-style: normal;}
+.login-dialog cite label{ display: block; border: 1px #CCCCCC solid; padding: 11px 10px; position: relative;}
+.login-dialog cite label .security-code{ display: block; text-decoration: none; width: 95px; text-align: center; line-height: 44px; position: absolute; top: -1px; right: -1px; font-size: 1.1em; background-color: #ff6485; color: #FFFFFF;}
+.login-dialog cite label .send-again{ background-color: #CCCCCC;}
+.login-dialog cite label input{ color: #333333; width: 100%; border: 0; line-height: 20px; font-size: 1.1em;}
+.login-dialog .login-btn{ display: block; text-decoration: none; margin: 0 20px 20px; background-color: #ff6485; line-height: 44px; text-align: center; border-radius: 2px; color: #FFFFFF; font-size: 1.2em;}
+.login-dialog ul{ margin: 0 20px 20px;}
+.login-dialog .login-link{ display: block; color: #ff6485;}
+.login-dialog .close-icon{ display: block; position: absolute; top: 10px; right: 10px;}
+.login-dialog .close-icon img{ width: 16px; height: 16px;}
