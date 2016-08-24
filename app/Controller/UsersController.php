@@ -295,67 +295,7 @@ class UsersController extends AppController
         }
     }
 
-    function wxBindToAccount($defUsername = '')
-    {
-        $this->pageTitle = __('绑定帐号');
-        $userinfo = $this->Auth->user();
-        $uid = $userinfo['id'];
-        if (!$uid) {
-            $this->Session->setFlash(__('You are not authorized to access that location.', true));
-            $this->redirect(array('action' => 'login'));
-        }
 
-        $this->loadModel('Oauthbind');
-        $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
-        if (empty($wxBind)) {
-            $this->set('error', 'not_wx_user');
-            return;
-        }
-
-        $this->data['User']['username'] = trim($this->data['User']['username']);
-
-        $oauth_openid = $wxBind['oauth_openid'];
-        if (!empty($wxBind) && $userinfo['username'] != $oauth_openid) {
-            $this->__message(__('您的微信已经与帐号' . $userinfo['username'] . '绑定，不能再绑定其他帐号'), '/', 60);
-            return;
-        }
-
-        if (!empty($this->data) && !empty($this->data['User']['username'])) {
-
-            if (!empty($wxBind) && $this->data['User']['username'] == $userinfo['username']) {
-                $this->Session->setFlash(__('绑定成功！'));
-                return;
-            }
-
-            if (!empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
-
-                //TODO: 防止一个用户名绑定了多个微信
-                $newUser = $this->User->find('first', array('conditions' => array(
-
-                    'OR' => array(
-                        'username' => $this->data['User']['username'],
-                        'mobilephone' => $this->data['User']['username'],
-                    ),
-                    'password' => Security::hash(trim($this->data['User']['password']), null, true),
-                )));
-
-                if (!empty($newUser)) {
-                    $newUserId = $newUser['User']['id'];
-                    if ($uid != $newUserId) {
-                        $this->transferUserInfo($uid, $newUserId);
-                        $this->Oauthbind->update_wx_bind_uid($oauth_openid, $uid, $newUserId);
-                        $this->logoutCurrUser();
-                        $this->Auth->login();
-                    }
-                    $this->__message('绑定成功! 自动跳转到您的个人中心', '/users/me.html', 5);
-                } else {
-                    $this->Session->setFlash(__('用户名或者密码不正确', true));
-                }
-            } else {
-                $this->Session->setFlash(__('请输入用户名、密码', true));
-            }
-        }
-    }
 
     function edit_nick_name()
     {
@@ -751,24 +691,6 @@ class UsersController extends AppController
     {
         $uid = $this->currentUser['id'];
         $this->redirect('/weshares/user_share_info/' . $uid);
-//        $this->pageTitle = __('个人中心');
-//
-//        $this->loadModel('Order');
-//        $uid = $this->currentUser['id'];
-//        $count = $this->Order->count_by_status($uid);
-//        if (!is_array($count)) {
-//            $count = array();
-//        }
-//        $left_to_comment = $this->Order->count_to_comments($uid);
-//        $count[ORDER_STATUS_COMMENT] = $left_to_comment;
-//
-//        $this->set('order_count', $count);
-//
-//        $this->set('total_score', $this->User->get_score($uid));
-//
-//        $mOrder = ClassRegistry::init('Order');
-//        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
-//        $this->set('received_cnt', $received_cnt);
     }
 
 
@@ -1047,21 +969,19 @@ class UsersController extends AppController
         $this->loadModel('Order');
         $this->loadModel('OrderConsignee');
         $this->loadModel('Cart');
+
         $orderUpdated = $this->Order->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $consigneeUpdated = $this->OrderConsignee->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $cartsUpdated = $this->Cart->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
 
         $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid . ": orderUpdated=" . $orderUpdated . ", consigneeUpdated=" . $consigneeUpdated . ", cartsUpdated=" . $cartsUpdated);
-
-        $this->loadModel('Brand');
-        $this->Brand->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
-
-        $this->loadModel('TrackLog');
-        $this->TrackLog->updateAll(array('from' => $new_serviceAccount_bind_uid), array('from' => $old_serviceAccount_bind_uid));
-        $this->TrackLog->updateAll(array('to' => $new_serviceAccount_bind_uid), array('to' => $old_serviceAccount_bind_uid));
-
-        $this->loadModel('AwardResult');
-        $this->AwardResult->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
+//        $this->loadModel('Brand');
+//        $this->Brand->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+//        $this->loadModel('TrackLog');
+//        $this->TrackLog->updateAll(array('from' => $new_serviceAccount_bind_uid), array('from' => $old_serviceAccount_bind_uid));
+//        $this->TrackLog->updateAll(array('to' => $new_serviceAccount_bind_uid), array('to' => $old_serviceAccount_bind_uid));
+//        $this->loadModel('AwardResult');
+//        $this->AwardResult->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('SharedOffer');
         $this->SharedOffer->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
@@ -1069,24 +989,40 @@ class UsersController extends AppController
         $this->loadModel('SharedSlice');
         $this->SharedSlice->updateAll(array('accept_user' => $new_serviceAccount_bind_uid), array('accept_user' => $old_serviceAccount_bind_uid));
 
-        $this->loadModel('ExchangeLog');
-        $this->ExchangeLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+//        $this->loadModel('ExchangeLog');
+//        $this->ExchangeLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('CouponItem');
         $this->CouponItem->updateAll(array('bind_user' => $new_serviceAccount_bind_uid), array('bind_user' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('Comment');
         $this->Comment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
-
-        $this->loadModel('OrderComment');
-        $this->OrderComment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+//
+//        $this->loadModel('OrderComment');
+//        $this->OrderComment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('Weshare');
         $this->Weshare->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('UserRelation');
         $this->UserRelation->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+        $this->UserRelation->updateAll(array('follow_id' => $new_serviceAccount_bind_uid), array('follow_id' => $old_serviceAccount_bind_uid));
 
+        $this->loadModel('UserSubLog');
+        $this->UserSubLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('RebateLog');
+        $this->RebateLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('RecommendLog');
+        $this->RecommendLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('RebateTrackLog');
+        //$this->RebateTrackLog->updateAll(array('sharer' => $new_serviceAccount_bind_uid), array('sharer' => $old_serviceAccount_bind_uid));
+        $this->RebateTrackLog->updateAll(array('clicker' => $new_serviceAccount_bind_uid), array('clicker' => $old_serviceAccount_bind_uid));
+
+        //$this->loadModel('BalanceLog');
+        //$this->BalanceLog->updateAll(array(''), array());
 
         //团购的
         //积分的
@@ -1274,58 +1210,6 @@ class UsersController extends AppController
     }
 
     /**
-     * public function mobile_bind()
-     * {
-     * $this->autoRender = false;
-     * $readCode = $_POST['code'];
-     * $mobile_num = $_POST['mobile'];
-     * $msgCode = $this->Session->read('messageCode');
-     * $current_post_num = $this->Session->read('current_register_phone');
-     * $bind_from = $_POST['from'];
-     * $codeLog = json_decode($msgCode, true);
-     * $user_info = array();
-     * $res = array();
-     * if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
-     * $user_info['User']['mobilephone'] = $mobile_num;
-     * $user_info['User']['id'] = $this->currentUser['id'];
-     * $user_info['User']['uc_id'] = 5;
-     * if (empty($this->currentUser['id'])) {
-     * $res = array('success' => false, 'msg' => 'please login');
-     * } else if ($mobile_num != $current_post_num) {
-     * $res = array('success' => false, 'msg' => '请重新验证您的手机号码');
-     * } else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
-     * $tempUser = $this->getUserNamebyMobile($mobile_num);
-     * $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
-     * } else if ($this->User->hasAny(array('User.username' => $mobile_num))) {
-     * if ($this->currentUser['username'] == $mobile_num) {
-     * if ($this->User->save($user_info)) {
-     * $res = array('success' => true, 'msg' => '你的账号和手机号绑定成功');
-     * };
-     * } else {
-     * $tempUser = $this->getUserNamebyMobile($mobile_num);
-     * $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
-     * }
-     * } else {
-     * if ($this->User->save($user_info)) {
-     * $this->Session->write('Auth.User.mobilephone', $mobile_num);
-     * $result_msg = '你的账号和手机号绑定成功';
-     * if ($bind_from == 'refer') {
-     * $result_msg = $result_msg . ',并获得1000积分';
-     * }
-     * $res = array('success' => true, 'msg' => $result_msg);
-     * } else {
-     * $res = array('success' => false, 'msg' => '绑定失败，数据库忙');
-     * }
-     * }
-     * } else {
-     * $res = array('success' => false, 'msg' => '短信验证码错误');
-     * }
-     * echo json_encode($res);
-     * }
-     *
-     * */
-
-    /**
      * @param $text
      * @return mixed|string
      */
@@ -1414,52 +1298,50 @@ class UsersController extends AppController
     }
 
 
-    function merge_data()
+    function wx_user_bind_mobile()
     {
         $this->autoRender = false;
-        $userId = $this->Session->read('Auth.User.id');
-        //no login user must to login
-        if (!$userId) {
-            $this->Session->setFlash(__('You are not authorized to access that location.', true));
-            $this->redirect(array('action' => 'login'));
+        $currentUserId = $this->currentUser['id'];
+        if (!$currentUserId) {
+            echo json_encode(['success' => false, 'reason' => 'not_login']);
+            exit;
         }
-        $this->loadModel('Oauthbind');
-        $wxBind = $this->Oauthbind->findWxServiceBindByUid($userId);
-        $oauth_openid = $wxBind['oauth_openid'];
         $mobile = $_REQUEST['mobile'];
         $mobileCode = $_REQUEST['mobileCode'];
         $msgCode = $this->Session->read('messageCode');
+        $currentPostNum = $this->Session->read('current_register_phone');
         $codeLog = json_decode($msgCode, true);
-        if (is_array($codeLog) && $codeLog['code'] == $mobileCode) {
-            $newUser = $this->getUserByMobile($mobile);
-            $newUserId = $newUser['User']['id'];
-            if (!empty($wxBind)) {
-                try {
-                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
-                } catch (Exception $e) {
-                    $this->log("merge user data has exception user id " . $userId . " new user id " . $newUserId) . ($e->getMessage());
-                    $result = array('success' => 'fale', 'msg' => '信息合并失败');
-                }
-                //do wx bind
-//                $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
-//                if(empty($wxNewBind)){
-//                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId,$newUserId);
-//                }else{
-//                    //$new_oauth_openid = $wxNewBind['oauth_openid'];
-//
-//                }
-            }
-            $this->transferUserInfo($userId, $newUserId);
-            $this->logoutCurrUser();
-            $this->data['checkMobileCode'] = true;
-            $this->data['User'] = $newUser['User'];
-            $this->Auth->login();
-            $result = array('success' => 'true', 'msg' => '信息合并成功');
-        } else {
-            $result = array('success' => 'false', 'msg' => '手机验证码不正确');
+        if ($codeLog['code'] != $mobileCode) {
+            echo json_encode(['success' => false, 'reason' => 'code_error']);
+            exit;
         }
-        echo json_encode($result);
+        if ($mobile != $currentPostNum) {
+            echo json_encode(['success' => false, 'reason' => 'mobile_error']);
+            exit;
+        }
+        $mobileUser = $this->getUserByMobile($mobile);
+        if (empty($mobileUser)) {
+            $this->User->update(['mobilephone' => $mobile], ['id' => $currentUserId]);
+            echo json_encode(['success' => true]);
+            exit;
+        }
+        //merge data to wx_user
+        $dataSource = $this->User->getDataSource();
+        try {
+            $dataSource->begin();
+            $oldUserId = $mobileUser['User']['id'];
+            $this->User->update(['mobilephone' => $mobile, 'password' => $mobileUser['User']['password']], ['id' => $currentUserId]);
+            $this->transferUserInfo($oldUserId, $currentUserId);
+            $dataSource->commit();
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            $dataSource->rollback();
+            echo json_encode(['success' => false, 'reason' => 'system_error']);
+            exit;
+        }
     }
+
 
     function getUserByMobile($mobile)
     {
