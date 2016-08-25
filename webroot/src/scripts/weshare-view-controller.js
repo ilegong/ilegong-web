@@ -1328,7 +1328,7 @@
                 vm.binding = false;
                 if (data.success) {
                     vm.hideBindMobileDialog();
-                    vm.showTipMsg('绑定成功');
+                    vm.showTipMsg('红包已放入手机账户');
                     return;
                 }
                 if (data.reason == 'code_error') {
