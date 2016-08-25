@@ -7,31 +7,31 @@
 </div>
 <div class="has-menu-top extra-margin coupon-list-page" ng-controller="UserCouponListCtrl as vm">
     {{loop $coupons $coupon_item}}
-    <div class="coupon-item">
-        <ul class="coupon clearfix">
-            <li class="fl label">￥</li>
-            <li class="much">{{number_format($coupon_item['Coupon']['reduced_price']/100, 2);}}</li>
-            <li class="fr available">
-                {{if empty($coupon_item['Coupon']['product_list'])}}
-                <a href="/weshares/user_share_info/{{$coupon_item['ShareOffer']['sharer_id']}}.html" class="clearfix use-btn">
-                    <span>去使用</span>
-                </a>
-                {{else}}
-                    {{if is_array($coupon_item['Coupon']['product_list'])}}
-                        <a href="/weshares/view/{{$coupon_item['Coupon']['product_list'][0]}}.html" class="clearfix use-btn">
-                            <span>去使用</span>
-                        </a>
+        <div class="coupon-item">
+            <ul class="coupon clearfix">
+                <li class="fl label">￥</li>
+                <li class="much">{{number_format($coupon_item['Coupon']['reduced_price']/100, 2);}}</li>
+                <li class="fr available">
+                    {{if empty($coupon_item['Coupon']['product_list'])}}
+                    <a href="/weshares/user_share_info/{{$coupon_item['ShareOffer']['sharer_id']}}.html" class="clearfix use-btn">
+                        <span>去使用</span>
+                    </a>
                     {{else}}
-                        <a href="/weshares/view/{{$coupon_item['Coupon']['product_list']}}.html" class="clearfix use-btn">
-                            <span>去使用</span>
-                        </a>
+                        {{if is_array($coupon_item['Coupon']['product_list'])}}
+                            <a href="/weshares/view/{{$coupon_item['Coupon']['product_list'][0]}}.html" class="clearfix use-btn">
+                                <span>去使用</span>
+                            </a>
+                        {{else}}
+                            <a href="/weshares/view/{{$coupon_item['Coupon']['product_list']}}.html" class="clearfix use-btn">
+                                <span>去使用</span>
+                            </a>
+                        {{/if}}
                     {{/if}}
-                {{/if}}
-            </li>
-            <li class="label">{{$coupon_item['ShareOffer']['name']}}</li>
-            <li class="label">有效期至{{$coupon_item['Coupon']['valid_end']}}</li>
-        </ul>
-    </div>
+                </li>
+                <li class="label">{{$coupon_item['ShareOffer']['name']}}</li>
+                <li class="label">有效期至{{friendlyDateFromStr($coupon_item['Coupon']['valid_end'], 'ymd')}}</li>
+            </ul>
+        </div>
     {{/loop}}
 </div>
 <?php
