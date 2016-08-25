@@ -14,7 +14,7 @@
             <li class="{{if $share_faq['ShareFaq']['sender'] == $current_user_id}}even{{else}}odd{{/if}}">
                 <a class="user" href="/weshares/user_share_info/{{$share_faq['ShareFaq']['sender']}}"><img
                         class="img-responsive avatar_"
-                        src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}"><span
+                        src="{{get_user_avatar($user_info[$share_faq['ShareFaq']['sender']])}}"><span
                         class="user-name">{{$user_info[$share_faq['ShareFaq']['sender']]['nickname']}}</span></a>
 
                 <div class="reply-content-box">
@@ -30,7 +30,7 @@
         </ul>
     </div>
     <div class="panel-footer" style="position: fixed;bottom: 0px;left: 0;width: 100%;">
-        <input type="hidden" id="sender-img" value="{{$user_info[$current_user_id]['image']}}">
+        <input type="hidden" id="sender-img" value="{{get_user_avatar($user_info[$current_user_id])}}">
         <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
 
         <div class="widget-area no-padding blank" id="chat-input-form">
