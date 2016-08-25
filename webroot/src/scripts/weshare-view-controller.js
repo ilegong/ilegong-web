@@ -191,7 +191,9 @@
             var commentOrderId = element.attr('data-comment-order-id');
             var replayCommentId = element.attr('data-replay-comment-id');
             var shouldBindMobile = element.attr('data-should-bind-mobile');
+            vm.shouldBindMobile = false;
             if (shouldBindMobile == 1) {
+                vm.shouldBindMobile = true;
                 initBindMobileDialog();
             }
             vm.rebateLogId = rebateLogId || 0;
@@ -1241,7 +1243,7 @@
             }
             //vm.checkShareInfoHeight();
             //load all comments
-            if (!vm.showBindMobileDialog) {
+            if (!vm.shouldBindMobile) {
                 showPromotionCouponDialog();
             }
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
