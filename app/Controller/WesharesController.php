@@ -157,6 +157,10 @@ class WesharesController extends AppController
         $this->set('user_level', $user_level);
     }
 
+    /**
+     * @param $uid
+     * @param $weshareId
+     */
     private function add_paid_faild_msg_to_es($uid, $weshareId)
     {
         $order = $this->Order->find('first', [
