@@ -140,12 +140,8 @@
             //first share
             var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
             var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
-            var getPromotionCouponNum = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-num');
-            var promotionCouponInfo = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-info');
             var followSharedNum = parseFloat(angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num'));
             vm.sharedOfferId = initSharedOfferId;
-            vm.getPromotionCouponNum = getPromotionCouponNum;
-            vm.promotionCouponInfo = promotionCouponInfo;
             //show get packet num
             if (followSharedType) {
                 if (followSharedType == 'got' && followSharedNum > 0) {
@@ -184,7 +180,11 @@
         }
 
         function initWeshareData() {
-          var element = angular.element(document.getElementById('weshareView'));
+            var element = angular.element(document.getElementById('weshareView'));
+            var getPromotionCouponNum = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-num');
+            var promotionCouponInfo = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-info');
+            vm.getPromotionCouponNum = getPromotionCouponNum;
+            vm.promotionCouponInfo = promotionCouponInfo;
             var rebateLogId = element.attr('data-rebate-log-id');
             var recommendUserId = element.attr('data-recommend-id');
             //auto poup comment dialog
