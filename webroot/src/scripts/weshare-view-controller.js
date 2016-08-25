@@ -1211,9 +1211,11 @@
                 vm.useRebate = 1;
             }
             vm.weshareSettings = data['weshare_ship_settings'];
+
             if(data['sub_status']){
                 $rootScope.proxies.push(parseInt(vm.weshare.creator.id));
             };
+
             vm.autoPopCommentData = data['prepare_comment_data'];
             vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
             vm.productSummery = data['share_summery'];
@@ -1222,10 +1224,11 @@
             vm.submitRecommendData.recommend_user = vm.currentUser.id;
             vm.submitRecommendData.recommend_share = vm.weshare.id;
 
-            if (vm.myCoupons) {
-                vm.useCouponId = vm.myCoupons.CouponItem.id;
-                vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
+            if(vm.myCoupons&&vm.myCoupons['Coupon']&&vm.myCoupons['CouponItem']){
+                vm.useCouponId = vm.myCoupons['CouponItem']['id'];
+                vm.userCouponReduce = vm.myCoupons['Coupon']['reduced_price'];
             }
+
             vm.userShareSummery = data['user_share_summery'];
             //|| vm.canManageShare
             if (vm.isCreator() || vm.canManageShare) {

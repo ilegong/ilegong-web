@@ -260,14 +260,18 @@ class WesharesController extends AppController
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, null, $shared_offer_id, $summary, $ordersDetail);
         $this->set('page_title', $weshare['title']);
         $this->set('click_from', $view_from);
-        $this->set('should_bind_mobile', $this->should_bind_mobile());
+        $this->set('should_bind_mobile', $this->should_bind_mobile($weshare_id));
         $this->set_history();
         $this->WeshareBuy->update_share_view_count($weshare_id);
+
+        if ($weshare_id == WESHARE_DZX_ID) {
+            $this->get_dzx_coupon();
+        }
     }
 
-    private function should_bind_mobile()
+    private function should_bind_mobile($weshare_id)
     {
-        if ($this->currentUser['id'] && empty($this->currentUser['mobilephone'])) {
+        if ($this->currentUser['id'] && empty($this->currentUser['mobilephone']) && $weshare_id == WESHARE_DZX_ID && $this->is_weixin()) {
             return true;
         }
         return false;
@@ -2390,16 +2394,17 @@ class WesharesController extends AppController
         $this->set('desc', $desc);
     }
 
+    /**
+     * 获取大闸蟹的优惠券
+     */
     public function get_dzx_coupon()
     {
         $uid = $this->currentUser['id'];
-        if (empty($uid)) {
-            $this->redirect('/users/login.html?referer=/weshares/get_dzx_coupon.html');
-            return;
+        if (!empty($uid)) {
+            $shared_offer_id = WESHARE_DZX_SHARED_OFFER_ID;
+            $share_id = WESHARE_DZX_ID;
+            $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
+            $this->redirect('/weshares/view/' . $share_id . '.html');
         }
-        $shared_offer_id = 22628;
-        $share_id = 6781;
-        $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
-        $this->redirect('/weshares/view/' . $share_id . '.html');
     }
 }
