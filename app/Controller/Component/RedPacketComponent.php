@@ -126,7 +126,7 @@ class RedPacketComponent extends Component
                     }
                     $this->Weixin->send_packet_received_message($uid, $couponNum, $sharedOffer['ShareOffer']['name'], $title, $detail_url, $keyword1, $desc);
                 }
-                return ['success' => true];
+                return ['success' => true, 'couponNum' => $couponNum];
             }
         }
         return ['success' => false];

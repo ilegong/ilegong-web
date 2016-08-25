@@ -89,6 +89,7 @@
         vm.canBindMobile = canBindMobile;
         vm.sendCode = sendCode;
         vm.bindMobile = bindMobile;
+        vm.showTipMsg = showTipMsg;
         vm.hideBindMobileDialog = hideBindMobileDialog;
         activate();
 
@@ -139,8 +140,10 @@
             //first share
             var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
             var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
+            var getPromotionCouponNum = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-num');
             var followSharedNum = parseFloat(angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num'));
             vm.sharedOfferId = initSharedOfferId;
+            vm.getPromotionCouponNum = getPromotionCouponNum;
             //show get packet num
             if (followSharedType) {
                 if (followSharedType == 'got' && followSharedNum > 0) {
@@ -1236,6 +1239,10 @@
             }
             //vm.checkShareInfoHeight();
             //load all comments
+            if(vm.getPromotionCouponNum){
+                var msg = '获得' + vm.getPromotionCouponNum + '元红包';
+                vm.showTipMsg(msg);
+            }
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
             vm.getRecommendWeshares(vm.weshare.id, vm.weshare.creator.id);
@@ -1321,18 +1328,22 @@
                 vm.binding = false;
                 if (data.success) {
                     vm.hideBindMobileDialog();
+                    vm.showTipMsg('绑定成功');
                     return;
                 }
                 if (data.reason == 'code_error') {
                     vm.code.valid = false;
+                    vm.showTipMsg('绑定失败,验证码有误');
                     return;
                 }
                 if (data.reason == 'mobile_error') {
                     vm.code.valid = true;
+                    vm.showTipMsg('绑定失败,手机号有误');
                     return;
                 }
             }).error(function (data) {
                 vm.binding = false;
+                vm.hideBindMobileDialog();
             });
         }
 
@@ -1350,6 +1361,14 @@
             vm.showNotifyGetPacketDialog = false;
             vm.showCommentListDialog = false;
             vm.closeCommentDialog();
+        }
+
+        function showTipMsg(message) {
+            $rootScope.showErrorMessageLayer = true;
+            $rootScope.errorMessage = message;
+            $timeout(function () {
+                $rootScope.showErrorMessageLayer = false;
+            }, 2000);
         }
 
         function getBannerImage(){

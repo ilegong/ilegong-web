@@ -265,8 +265,12 @@ class WesharesController extends AppController
         $this->set_history();
         $this->WeshareBuy->update_share_view_count($weshare_id);
 
+        //promotions
         if ($weshare_id == WESHARE_DZX_ID) {
-            $this->get_dzx_coupon();
+            $gotResult = $this->get_dzx_coupon();
+            if ($gotResult['success']) {
+                $this->set('getCouponNum', $gotResult['couponNum']);
+            }
         }
     }
 
@@ -2404,7 +2408,8 @@ class WesharesController extends AppController
         if (!empty($uid)) {
             $shared_offer_id = WESHARE_DZX_SHARED_OFFER_ID;
             $share_id = WESHARE_DZX_ID;
-            $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
+            return $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
         }
+        return null;
     }
 }
