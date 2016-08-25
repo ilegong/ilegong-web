@@ -52,6 +52,15 @@ class RedPacketComponent extends Component
         return ['success' => true, 'expired' => $expired];
     }
 
+    private function send_dzx_coupon_msg($couponNum, $limitDate)
+    {
+        $title = '您已领取一张' . $couponNum . '元的阳澄湖大闸蟹红包，有效期截止' . $limitDate . '，请尽快使用！';
+        $keyword1 = '朋友说思念红包';
+        $desc = '[朋友说]致力于只为您精选品质产品！';
+        $detail_url = WX_HOST . '/weshares/view/' . WESHARE_DZX_ID . '.html?from=_template_msg';
+        return [$title, $keyword1, $desc, $detail_url];
+    }
+
     /**
      * @param $share_id
      * @param $shared_offer_id
@@ -86,6 +95,7 @@ class RedPacketComponent extends Component
         $now = $dt->format(FORMAT_DATETIME);
         $dt->add(new DateInterval('P' . $addDays . 'D'));
         $valid_end = $dt->format(FORMAT_DATETIME);
+        $valid_end_date = $dt->format(FORMAT_DATE);
         $insertSlice = $this->SharedSlice->save(['shared_offer_id' => $shared_offer_id,
             'number' => $avgNumber,
             'accept_time' => addslashes($now), 'accept_user' => $uid, 'modified' => addslashes($now), 'created' => addslashes($now)]);
@@ -102,20 +112,26 @@ class RedPacketComponent extends Component
                 App::uses('CakeNumber', 'Utility');
                 $couponNum = CakeNumber::precision($insertSlice['SharedSlice']['number'] / 100, 2);
                 if ($send_msg) {
-                    $packet_provider_nickname = $nickNames[$packet_provider];
-                    $title = '您已成功领取' . $nickNames[$sharedOffer['SharedOffer']['uid']] . '分享的' . $packet_provider_nickname . '红包';
-                    $keyword1 = $packet_provider_nickname . '心意一份';
-                    $desc = '谢谢你对' . $packet_provider_nickname . '支持';
-                    $detail_url = WX_HOST . '/weshares/user_share_info/' . $packet_provider;
+                    if($share_id == WESHARE_DZX_ID){
+                        $sendMsgParams = $this->send_dzx_coupon_msg($couponNum, $valid_end_date);
+                        list($title, $keyword1, $desc, $detail_url) = $sendMsgParams;
+                    }else{
+                        $packet_provider_nickname = $nickNames[$packet_provider];
+                        $title = '您已成功领取' . $nickNames[$sharedOffer['SharedOffer']['uid']] . '分享的' . $packet_provider_nickname . '红包';
+                        $keyword1 = $packet_provider_nickname . '心意一份';
+                        $desc = '谢谢你对' . $packet_provider_nickname . '支持';
+                        $detail_url = WX_HOST . '/weshares/user_share_info/' . $packet_provider;
+                        //send for sharer
+                        $this->Weixin->send_packet_be_got_message($sharedOffer['SharedOffer']['uid'], $nickNames[$uid], $couponNum, $packet_provider_nickname . "红包", $detail_url);
+                    }
                     $this->Weixin->send_packet_received_message($uid, $couponNum, $sharedOffer['ShareOffer']['name'], $title, $detail_url, $keyword1, $desc);
-                    //send for sharer
-                    $this->Weixin->send_packet_be_got_message($sharedOffer['SharedOffer']['uid'], $nickNames[$uid], $couponNum, $packet_provider_nickname . "红包", $detail_url);
                 }
                 return ['success' => true];
             }
         }
         return ['success' => false];
     }
+
 
     /**
      * @param $shared_offer_id
