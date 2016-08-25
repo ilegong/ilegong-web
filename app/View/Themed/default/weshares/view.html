@@ -513,7 +513,7 @@
             <div class="login-dialog" ng-if="vm.showBindMobileDialog">
                 <a ng-click="vm.hideBindMobileDialog()" class="close-icon" style="display: none;"><img ng-src="{{::vm.staticFilePath}}/static/img/closeicon.png"/></a>
                 <h1>绑定手机号</h1>
-                <p>将红包放入手机账户中</p>
+                <p>将红包放入手机账户中更安全</p>
                 <cite>
                     <label>
                         <input ng-model="vm.mobilePhone.value" type="text" placeholder="请输入手机号"/>
@@ -559,7 +559,7 @@
 <?php
     $this->assign('title',$page_title);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.19'
+$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.20'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
