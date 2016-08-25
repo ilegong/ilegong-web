@@ -209,34 +209,17 @@ class WeixinController extends Controller {
                     }
                 }
             }
-
-
+            $input = strtoupper($input);
 			$user_code = urlencode(authcode($user,'ENCODE'));
 			//判断输入内容
 			switch($input)
 			{
-				case "下单":
-				case "预订":
-				case "预定":
-				case "1":
-                case "１":
-                case "CLICK_URL_TECHAN":
-					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_TECHAN', $host3g)).'">预定</a>');
-					break;
-				case "查看订单":
-				case "订单":
                 case "CLICK_URL_MINE":
 				case "2":
 					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', $host3g)).'">个人中心</a>');
 					break;
-                case "3":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://wx.wsq.qq.com/177650290\" >51daifan微社区</a>");
-					break;
                 case "CLICK_URL_SALE_AFTER_SAIL":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SALE_AFTER_SAIL', $host3g)).'">售后服务</a>');
-                    break;
-                case "CLICK_URL_SHICHITUAN":
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
                     break;
                 case '6':
                 case '６':
@@ -261,17 +244,10 @@ class WeixinController extends Controller {
                     }
                     break;
                 case '19':
-                case 'uid':
+                case 'UID':
                     echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
-                    echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
-//                case '社区福利':
-//                    echo $this->newArticleMsg($user, $me, [['title' => '社区活动（每人限购一份）', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd548a-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4377?from=pineapple']]);
-//                    break;
-//                case '兑换活动':
-//                    echo $this->newArticleMsg($user, $me, [['title' => '兑换活动', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd39dc-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4507?from=pineapple']]);
-//                    break;
-                case 'dzx':
+                case 'DZX':
                     $log = [
                         "index" => "event_wx_replay",
                         "type" => "wx_replay",
