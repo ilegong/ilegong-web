@@ -203,6 +203,13 @@ class WesharesController extends AppController
         }
         //标记链接从什么地方点击来的
         $view_from = $_REQUEST['from'] ? $_REQUEST['from'] : '';
+        if (empty($view_from)) {
+            //iOS phone 微信不添加参数手工记录
+            $share_type = $_REQUEST['share_type'];
+            if ($share_type) {
+                $view_from = $share_type == 'appMsg' ? 'groupmessage' : 'timeline';
+            }
+        }
         //add logs
         $log = [
             "index" => "event_share_view",
@@ -226,19 +233,17 @@ class WesharesController extends AppController
                 return;
             }
         }
-
+        //用户支付成功
         $this->handle_weshare_view_paid($from, $uid, $weshare_id);
         $creator = $this->User->find('first', array('conditions' => array('id' => $weshare['creator'])))['User'];
         $this->set('uid', $uid);
         $this->set('weshare_id', $weshare_id);
-
         //根据粉丝来源生成返利日志
         list($rebate_log_id, $u_own_id) = $this->create_rebate_log($uid, $weshare_id, $weshare['creator']);
         if ($rebate_log_id > 0 && $u_own_id > 0) {
             $this->set('recommend_id', $u_own_id);
             $this->set('rebateLogId', $rebate_log_id);
         }
-
         //用户点击评论模板消息自动弹出评论对话框
         $comment_order_id = $_REQUEST['comment_order_id'];
         $replay_comment_id = $_REQUEST['reply_comment_id'];
@@ -247,13 +252,6 @@ class WesharesController extends AppController
         }
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
-        }
-        if (empty($view_from)) {
-            //iOS phone 微信不添加参数手工记录
-            $share_type = $_REQUEST['share_type'];
-            if ($share_type) {
-                $view_from = $share_type == 'appMsg' ? 'groupmessage' : 'timeline';
-            }
         }
         $shared_offer_id = $this->handle_weshare_view_has_shared_offer($uid, $weshare['creator']);
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
