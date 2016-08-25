@@ -272,6 +272,7 @@ class WesharesController extends AppController
             $gotResult = $this->get_dzx_coupon();
             if ($gotResult['success']) {
                 $this->set('getCouponNum', $gotResult['couponNum']);
+                $this->set('getCouponInfo', '恭喜你领到大闸蟹红包！');
             }
         }
     }

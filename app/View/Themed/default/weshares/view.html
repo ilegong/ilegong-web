@@ -19,7 +19,7 @@
      data-from="{{$click_from}}"
      data-should-bind-mobile="{{$should_bind_mobile}}"
      ng-click="clickPage();">
-    <div id="getPromotionCouponResult" style="display: none;" data-coupon-num="{{$getCouponNum}}"></div>
+    <div id="getPromotionCouponResult" style="display: none;" data-coupon-num="{{$getCouponNum}}" data-coupon-info="{{$getCouponInfo}}"></div>
     <div id="sharedOfferResult" style="display: none;" data-shared-offer="{{$follow_shared_offer_id}}" data-shared-type="{{$get_coupon_type}}" data-shared-coupon-num="{{$couponNum}}"></div>
     {{literal}}
     <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;"
@@ -424,6 +424,17 @@
                 <img class="red-packet-dialog-bg" ng-src="{{::vm.staticFilePath}}/static/weshares/images/hongbao.png">
             </div>
 
+            <div class="promotion-red-packet-dialog" ng-if="vm.showNotifyGetPromotionPacketDialog">
+                <img class="bg-color" ng-src="{{::vm.staticFilePath}}/static/weshares/images/r-close.png"
+                     ng-click="vm.showNotifyGetPromotionPacketDialog=false;vm.showLayer=false;">
+                <ul class="text-money">
+                    <li class="how-money">{{::vm.promotionCouponNum}}元</li>
+                    <li class="src-money" ng-bind="vm.promotionCouponInfo"></li>
+                    <li class="how-take" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">去使用</li>
+                </ul>
+                <img class="red-packet-dialog-bg" ng-src="{{::vm.staticFilePath}}/static/weshares/images/hongbao.png">
+            </div>
+
             <!--提示分享层-->
             <div class="share-dialog" ng-if="vm.showShareDialog">
                 <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
@@ -563,6 +574,6 @@ $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.20'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.28'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.29'
 ), array('block' => 'scripts'))
 ?>

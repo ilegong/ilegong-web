@@ -141,9 +141,11 @@
             var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
             var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
             var getPromotionCouponNum = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-num');
+            var promotionCouponInfo = angular.element(document.getElementById('getPromotionCouponResult')).attr('data-coupon-info');
             var followSharedNum = parseFloat(angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num'));
             vm.sharedOfferId = initSharedOfferId;
             vm.getPromotionCouponNum = getPromotionCouponNum;
+            vm.promotionCouponInfo = promotionCouponInfo;
             //show get packet num
             if (followSharedType) {
                 if (followSharedType == 'got' && followSharedNum > 0) {
@@ -1217,7 +1219,7 @@
 
             if(data['sub_status']){
                 $rootScope.proxies.push(parseInt(vm.weshare.creator.id));
-            };
+            }
 
             vm.autoPopCommentData = data['prepare_comment_data'];
             vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
@@ -1239,13 +1241,19 @@
             }
             //vm.checkShareInfoHeight();
             //load all comments
-            if(vm.getPromotionCouponNum){
-                var msg = '获得' + vm.getPromotionCouponNum + '元红包';
-                vm.showTipMsg(msg);
+            if (!vm.showBindMobileDialog) {
+                showPromotionCouponDialog();
             }
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
             vm.getRecommendWeshares(vm.weshare.id, vm.weshare.creator.id);
+        }
+
+        function showPromotionCouponDialog(){
+            if(vm.getPromotionCouponNum){
+                vm.showNotifyGetPromotionPacketDialog = true;
+                vm.showLayer = true;
+            }
         }
 
         function initBindMobileDialog() {
@@ -1328,7 +1336,7 @@
                 vm.binding = false;
                 if (data.success) {
                     vm.hideBindMobileDialog();
-                    vm.showTipMsg('红包已放入手机账户');
+                    showPromotionCouponDialog();
                     return;
                 }
                 if (data.reason == 'code_error') {
@@ -1344,6 +1352,7 @@
             }).error(function (data) {
                 vm.binding = false;
                 vm.hideBindMobileDialog();
+                showPromotionCouponDialog();
             });
         }
 
@@ -1359,7 +1368,7 @@
             vm.showNotifyShareDialog = false;
             vm.showNotifyShareOfferDialog = false;
             vm.showNotifyGetPacketDialog = false;
-            vm.showCommentListDialog = false;
+            vm.showNotifyGetPromotionPacketDialog = false;
             vm.closeCommentDialog();
         }
 
