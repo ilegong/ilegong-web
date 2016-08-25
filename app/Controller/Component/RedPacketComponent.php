@@ -56,7 +56,7 @@ class RedPacketComponent extends Component
     {
         $title = '您已领取一张' . $couponNum . '元的阳澄湖大闸蟹红包，有效期截止' . $limitDate . '，请尽快使用！';
         $keyword1 = '朋友说思念红包';
-        $desc = '[朋友说]致力于只为您精选品质产品！';
+        $desc = '[朋友说] 只为您提供精选品质产品！';
         $detail_url = WX_HOST . '/weshares/view/' . WESHARE_DZX_ID . '.html?from=_template_msg';
         return [$title, $keyword1, $desc, $detail_url];
     }

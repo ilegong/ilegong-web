@@ -1310,6 +1310,13 @@ class UsersController extends AppController
         if (empty($mobileUser)) {
             $this->User->update(['mobilephone' => $mobile], ['id' => $currentUserId]);
             $this->Session->write('Auth.User.mobilephone', $mobile);
+            $log = [
+                "index" => "event_user_bind_mobile",
+                "type" => "user_bind_mobile_index",
+                "user_id" => intval($this->currentUser['id']),
+                "mobile" => $mobile,
+            ];
+            add_logs_to_es($log);
         }
         echo json_encode(['success' => true]);
         exit;

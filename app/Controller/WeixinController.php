@@ -272,7 +272,14 @@ class WeixinController extends Controller {
 //                    echo $this->newArticleMsg($user, $me, [['title' => '兑换活动', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd39dc-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4507?from=pineapple']]);
 //                    break;
                 case 'dzx':
-                    echo $this->newArticleMsg($user, $me, [['title' => '一样的价格，一样的味道，去年意犹未尽的你还要来一份么？', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/08/24/93684ab0-69e4-11e6-ad1c-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/6951.html?from=wx_article']]);
+                    $log = [
+                        "index" => "event_wx_replay",
+                        "type" => "wx_replay",
+                        "user_id" => $uid,
+                        "msg" => $input
+                    ];
+                    add_logs_to_es($log);
+                    echo $this->newArticleMsg($user, $me, [['title' => '一样的价格，一样的味道，去年意犹未尽的你还要来一份么？', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/08/24/93684ab0-69e4-11e6-ad1c-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/6951.html?from=promotion']]);
                     break;
 				default:
                     $hour = date('G');

@@ -108,6 +108,16 @@ class ArticlesController extends AppController{
 
     public function dzx(){
         $this->layout = null;
+        $session_id = $this->Session->id();
+        $log = [
+            "last_view" => date('Y-m-d H:i:s'),
+            "last_ip" => $this->request->clientIp(false),
+            "session_id" => $session_id,
+            "index" => "event_user_click_dzx_article",
+            "type" => "event_promotion",
+            "source" => "sms"
+        ];
+        add_logs_to_es($log);
     }
 
     public function log_js_error() {

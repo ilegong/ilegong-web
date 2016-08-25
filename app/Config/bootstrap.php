@@ -2746,6 +2746,12 @@ function get_order_from_flag($from)
     if ($from == 'recommend') {
         return 9;
     }
+    if ($from == 'promotion') {
+        return 10;
+    }
+    if ($from == 'wx_article') {
+        return 11;
+    }
     return 0;
 }
 

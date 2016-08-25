@@ -201,13 +201,16 @@ class WesharesController extends AppController
             $this->redirect('/weshares/index.html');
             return;
         }
+        //标记链接从什么地方点击来的
+        $view_from = $_REQUEST['from'] ? $_REQUEST['from'] : '';
         //add logs
         $log = [
             "index" => "event_share_view",
             "type" => "share_view",
             "user_id" => intval($this->currentUser['id']),
             "referer" => $_SERVER["HTTP_REFERER"],
-            "weshare_id" => intval($weshare_id)
+            "weshare_id" => intval($weshare_id),
+            'from' => $view_from
         ];
         add_logs_to_es($log);
 
@@ -245,8 +248,6 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
-        //标记链接从什么地方点击来的
-        $view_from = $_REQUEST['from'];
         if (empty($view_from)) {
             //iOS phone 微信不添加参数手工记录
             $share_type = $_REQUEST['share_type'];
