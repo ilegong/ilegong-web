@@ -2404,7 +2404,6 @@ class WesharesController extends AppController
             $shared_offer_id = WESHARE_DZX_SHARED_OFFER_ID;
             $share_id = WESHARE_DZX_ID;
             $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
-            $this->redirect('/weshares/view/' . $share_id . '.html');
         }
     }
 }
