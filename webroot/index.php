@@ -95,6 +95,9 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
     define('SQL_DEBUG',false);
+    define("OAUTH2_URL","http://dev.tsjyaf.com");
+    define("OAUTH2_ID","testclient");
+    define("OAUTH2_SECRET","testpass");
 } elseif (getenv('TONGSHIJIA_ENV') == 'preprod') {
     define('STATIC_HOST', 'http://static-preprod.tongshijia.com');
     define('IMAGES_HOST', 'http://images.tongshijia.com');
@@ -105,6 +108,9 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
     define('SQL_DEBUG',false);
+    define("OAUTH2_URL","http://dev.tsjyaf.com");
+    define("OAUTH2_ID","testclient");
+    define("OAUTH2_SECRET","testpass");
 }  elseif (getenv('TONGSHIJIA_ENV') == 'branch-sh') {
     define('STATIC_HOST', 'http://static-sh.tongshijia.com');
     define('IMAGES_HOST', 'http://images.tongshijia.com');
@@ -115,6 +121,9 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
     define('SQL_DEBUG',false);
+    define("OAUTH2_URL","http://dev.tsjyaf.com");
+    define("OAUTH2_ID","testclient");
+    define("OAUTH2_SECRET","testpass");
 } elseif (getenv('TONGSHIJIA_ENV') == 'test') {
     define('STATIC_HOST', 'http://static-test.tongshijia.com');
     define('IMAGES_HOST', 'http://images-test.tongshijia.com');
@@ -125,6 +134,9 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MEMCACHE_HOST', 'test.tongshijia.com');
     define('REDIS_HOST', 'test.tongshijia.com');
     define('SQL_DEBUG',false);
+    define("OAUTH2_URL","http://dev.tsjyaf.com");
+    define("OAUTH2_ID","testclient");
+    define("OAUTH2_SECRET","testpass");
 } elseif (getenv('TONGSHIJIA_ENV') == 'virtual-env') {
     define('STATIC_HOST', 'http://local.tongshijia.com');
     define('IMAGES_HOST', 'http://local.tongshijia.com');
@@ -135,6 +147,9 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MEMCACHE_HOST', '127.0.0.1');
     define('REDIS_HOST', '127.0.0.1');
     define('SQL_DEBUG',false);
+    define("OAUTH2_URL","http://dev.tsjyaf.com");
+    define("OAUTH2_ID","testclient");
+    define("OAUTH2_SECRET","testpass");
 } else {
     define('STATIC_HOST', 'http://dev.tongshijia.com');
     define('IMAGES_HOST', 'http://dev.tongshijia.com');
@@ -145,6 +160,9 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MEMCACHE_HOST', '127.0.0.1');
     define('REDIS_HOST', '127.0.0.1');
     define('SQL_DEBUG',true);
+    define("OAUTH2_URL","http://dev.tsjyaf.com");
+    define("OAUTH2_ID","testclient");
+    define("OAUTH2_SECRET","testpass");
 }
 
 if (!include(CORE_PATH . 'Cake' . DS . 'bootstrap.php')) {
