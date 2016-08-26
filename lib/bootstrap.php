@@ -389,6 +389,12 @@ function get_order_from_tag_by_flag($flag){
     if($flag ==9){
         return '系统推荐';
     }
+    if($flag == 10){
+        return '促销';
+    }
+    if($flag == 11){
+        return '微信文章';
+    }
     if($flag ==19){
         return '其他';
     }
