@@ -1637,12 +1637,19 @@ class WeshareBuyComponent extends Component
         $cartM = ClassRegistry::init('Cart');
         $userM = ClassRegistry::init('User');
         $orders = $orderM->find('all', $cond);
-        $orderIds = Hash::extract($orders, '{n}.Order.id');
+        $orderIds = [];
+        $userIds = [];
+        $cateIds = [];
+        $order_result = [];
         $order_cart_map = array();
         $users = array();
         if ($orders) {
-            $userIds = Hash::extract($orders, '{n}.Order.creator');
-            $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
+            foreach ($orders as $order_item) {
+                $order_result[] = $order_item['Order'];
+                $userIds[] = $order_item['Order']['creator'];
+                $cateIds[] = $order_item['Order']['cate_id'];
+                $orderIds[] = $order_item['Order']['id'];
+            }
             $carts = $cartM->find('all', array(
                 'conditions' => array(
                     'order_id' => $orderIds,
@@ -1677,12 +1684,8 @@ class WeshareBuyComponent extends Component
             //reset user image
             $users = array_map('map_user_avatar2', $users);
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
-            $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
-            usort($orders, function ($a, $b) {
-                return ($a['id'] < $b['id']) ? 1 : -1;
-            });
         }
-        $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs, 'order_ids' => $orderIds);
+        $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $order_result, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs, 'order_ids' => $orderIds);
         return $result_data;
     }
 
