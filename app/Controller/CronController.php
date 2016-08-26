@@ -15,6 +15,22 @@ class CronController extends AppController
 
     public $components = array('Weixin','WeshareBuy', 'ShareUtil', 'PintuanHelper', 'RedisQueue');
 
+    /**
+     * 获取微信的token
+     */
+    public function refresh_wx_base_token() {
+        $this->autoRender = false;
+        try {
+            $this->loadModel('WxOauth');
+            $o = $this->WxOauth->get_base_access_token();
+            $log = "get_base_access_token:" . $o . ", in json:" . json_encode($o);
+            $this->log($log);
+            echo $log;
+        } catch (Exception $e) {
+            echo "exception: $e";
+        }
+        exit;
+    }
 
     function cron_send_pintuan_warn_msg(){
         $this->autoRender = false;
