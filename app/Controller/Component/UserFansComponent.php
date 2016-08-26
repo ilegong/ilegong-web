@@ -17,10 +17,10 @@ class UserFansComponent extends Component{
         $result = ['total_self' => 0, 'total_comm' => 0];
         foreach ($summary as $item) {
             $i_is_own = $item['UserRelation']['is_own'];
-            if ($i_is_own == 0) {
+            if ($i_is_own == 1) {
                 $result['total_self'] = $item['0']['u_c'];
             }
-            if ($i_is_own == 1) {
+            if ($i_is_own == 0) {
                 $result['total_comm'] = $item['0']['u_c'];
             }
         }
