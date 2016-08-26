@@ -10,6 +10,7 @@
 App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Coordinate.php'));
 App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance/Vincenty.php'));
 App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance/Haversine.php'));
+
 class TestController extends AppController
 {
 
@@ -188,20 +189,23 @@ class TestController extends AppController
         exit;
     }
 
-    public function add_oauth_client(){
+    public function add_oauth_client()
+    {
         $this->OAuth = $this->Components->load('OAuth.OAuth');
         $client = $this->OAuth->Client->add('http://www.cmlejia.com/');
         echo json_encode($client);
         exit;
     }
 
-    public function test_gen_password(){
+    public function test_gen_password()
+    {
         echo $this->Auth->password($_REQUEST['password']);
         exit;
     }
 
 
-    public function test_load_fans_by_uid(){
+    public function test_load_fans_by_uid()
+    {
         $this->autoRender = false;
         $result = $this->WeshareBuy->load_fans_buy_sharer(633345, $limit = 10, $offset = 0);
         echo json_encode($result);
@@ -234,7 +238,6 @@ class TestController extends AppController
 //        echo 'page' . $limit;
 //        exit();
 //    }
-
 
 
 //    public function test_push(){
@@ -481,20 +484,42 @@ class TestController extends AppController
         echo json_encode(array('success' => true));
     }
 
-    public function test_push_msg(){
+    public function test_push_msg()
+    {
         $this->autoRender = false;
         $this->SharePush->push_buy_msg(['user_id' => 633345, 'thumbnail' => 'www.baidu.com', 'reply_content' => 'hello world'], ['title' => 'test', 'creator' => 811917]);
         echo 'true';
         exit;
     }
 
-    public function send_msg_for_self_fans($weshare_id){
+    public function send_msg_for_self_fans()
+    {
         $this->autoRender = false;
-        $uids = [633345];
-        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
-        $msg_content = "测试";
-        $this->WeshareBuy->do_send_buy_percent_msg($share_info, $uids, $msg_content);
-        echo json_encode(['success' => true]);
+        if ($this->currentUser['id'] == 633345) {
+            $weshare_id = 6951;
+            $this->loadModel('UserRelation');
+            $fanids = $this->UserRelation->find('all', [
+                'conditions' => ['UserRelation.user_id' => 711503, 'UserRelation.is_own' => 1, 'User.wx_subscribe_status' => 1],
+                'joins' => [
+                    [
+                        'table' => 'cake_users',
+                        'alias' => 'User',
+                        'conditions' => 'User.id=UserRelation.follow_id',
+                        'type' => 'inner'
+                    ]
+                ],
+                'fields' => ['UserRelation.follow_id']
+            ]);
+            $fanids = Hash::extract($fanids, '{n}.UserRelation.follow_id');
+            $uids = ["633345"];
+            $fanids = array_merge($uids, $fanids);
+            $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
+            $msg_content = "朋友说偷偷送你个大闸蟹红包，赶快领取买大闸蟹吧~";
+            $this->WeshareBuy->do_send_buy_percent_msg($share_info, $fanids, $msg_content);
+            echo json_encode(['success' => true, 'fanids' => $fanids]);
+            exit;
+        }
+        echo json_encode(['success' => false]);
         exit;
     }
 
