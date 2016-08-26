@@ -488,4 +488,14 @@ class TestController extends AppController
         exit;
     }
 
+    public function send_msg_for_self_fans($weshare_id){
+        $this->autoRender = false;
+        $uids = [633345];
+        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
+        $msg_content = "测试";
+        $this->WeshareBuy->do_send_buy_percent_msg($share_info, $uids, $msg_content);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
 }
