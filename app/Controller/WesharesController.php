@@ -1150,7 +1150,7 @@ class WesharesController extends AppController
         if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
-
+        $this->set_history();
         //add log
         $log = [
             "user_id" => intval($uid),

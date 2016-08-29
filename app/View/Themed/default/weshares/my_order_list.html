@@ -1,7 +1,7 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.myOrderNextPage();">
     <div class="refer-back-bg menu-top">
         我的订单
-        <a href="/weshares/get_self_info">
+        <a href="{{$back_url}}">
             <img ng-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/back.png"/>
             <label>返回</label>
         </a>
