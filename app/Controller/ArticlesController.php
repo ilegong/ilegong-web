@@ -120,6 +120,11 @@ class ArticlesController extends AppController{
         add_logs_to_es($log);
     }
 
+    public function moon_cake()
+    {
+        $this->layout = null;
+    }
+
     public function log_js_error() {
         $msg = $_GET['msg'];
         $url = $_GET['url'];
