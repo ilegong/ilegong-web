@@ -792,6 +792,7 @@ class WeixinComponent extends Component {
             'conditions' => array('order_id' => $order_ids),
             'fields' => array('Cart.id', 'Cart.num', 'Cart.order_id', 'Cart.send_date', 'Cart.product_id', 'Cart.name'),
         ));
+        $this->update_weshare_product_sell_num($carts);
         foreach ($orders as $order) {
             $openid = $oauth_binds[$order['Order']['creator']];
             $good = self::get_order_weshare_product_info($order, $carts);
@@ -828,6 +829,7 @@ class WeixinComponent extends Component {
             'conditions' => array('order_id' => $order_ids),
             'fields' => array('Cart.id', 'Cart.num', 'Cart.order_id', 'Cart.send_date', 'Cart.product_id', 'Cart.name'),
         ));
+        $this->update_weshare_product_sell_num($carts);
         foreach ($orders as $order) {
             $openid = $oauth_binds[$order['Order']['creator']];
             $good = self::get_order_weshare_product_info($order, $carts);
@@ -844,6 +846,19 @@ class WeixinComponent extends Component {
             //save buy opt log
             $this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
             $this->ShareUtil->send_buy_msg_to_hx($order['Order']['member_id'], $order['Order']['chat_group_id'], $order['Order']['creator']);
+        }
+    }
+
+    /**
+     * @param $carts
+     * 跟新产品的销量
+     */
+    public function update_weshare_product_sell_num($carts){
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        foreach ($carts as $item) {
+            $pid = $item['Cart']['product_id'];
+            $num = $item['Cart']['num'];
+            $weshareProductM->update_storage_sell($pid, $num);
         }
     }
 
