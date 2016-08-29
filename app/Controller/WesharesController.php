@@ -1878,10 +1878,10 @@ class WesharesController extends AppController
             $over_num = $num - $store_num;
             return array('result' => false, 'type' => 1, 'num' => $over_num);
         }
-        $orders = $this->Order->find('all', array(
-            'conditions' => array('type' => ORDER_TYPE_WESHARE_BUY, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED), 'member_id' => $weshareId),
-            'fields' => array('id')
-        ));
+        $orders = $this->Order->find('all', [
+            'conditions' => ['type' => ORDER_TYPE_WESHARE_BUY, 'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_COMMENT, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY], 'member_id' => $weshareId],
+            'fields' => ['id']
+        ]);
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $product_id = $weshareProduct['WeshareProduct']['id'];
         if (!empty($order_ids)) {
