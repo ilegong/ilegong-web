@@ -23,17 +23,48 @@
         <div rn-carousel-indicators slides="{{json_encode(range(0, count($banners)-1))}}" rn-carousel-index="carouselIndex"></div>
         {{/if}}
     </div>
-    <div class="topic">
-        <ul class="clearfix">
+
+    <ul class="new-potoshop clearfix">
+        <li>
+            <a href="/weshares/index_special/6.html">
+                <img src="{{$STATIC_HOST}}/static/img/index/new.png">
+                <label>新品试吃</label>
+            </a>
+        </li>
+        <li>
             {{if $owner}}
-            <li><a href="/weshares/get_other_info/{{$owner}}.html?from=_u_center"><img src="{{$STATIC_HOST}}/static/img/topic-shequ.jpg" /></a></li>
+                <a href="/weshares/get_other_info/{{$owner}}.html?from=_u_center">
+                    <img src="{{$STATIC_HOST}}/static/img/index/apple.png">
+                    <label>我的关注</label>
+                </a>
             {{else}}
-            <li><a href="/weshares/index_special/7.html"><img src="{{$STATIC_HOST}}/static/img/topic-changxian.jpg" /></a></li>
+                <a href="/weshares/get_other_info/711503.html?from=_u_center">
+                    <img src="{{$STATIC_HOST}}/static/img/index/apple.png">
+                    <label>我的关注</label>
+                </a>
             {{/if}}
-            <li><a href="/weshares/index_special/6.html"><img src="{{$STATIC_HOST}}/static/img/topic-shichi.jpg" /></a></li>
-        </ul>
-    </div>
-    <a class="coupon" href="/weshares/coupons.html"><img class="coupon-icon" src="{{$STATIC_HOST}}/static/img/hongbao.jpg">你当前有<span style="color: #ff6485;">{{$coupon_count ? $coupon_count : 0}}</span>个红包</a>
+        </li>
+        <li>
+            <a href="/weshares/coupons.html">
+                <div style="position: relative; width: 37px; margin: 0 auto;">
+                    <div class="packet">{{$coupon_count ? $coupon_count : 0}}</div>
+                    <img src="{{$STATIC_HOST}}/static/img/index/money.png">
+                </div>
+                <label>我的红包</label>
+            </a>
+        </li>
+        <li>
+            <a href="/weshares/my_order_list.html">
+                <img src="{{$STATIC_HOST}}/static/img/index/orange.png">
+                <label>我的订单</label>
+            </a>
+        </li>
+    </ul>
+    <ul class="new-activity clearfix">
+        <li><a href="/weshares/view/6951.html?from=index"><img src="{{$STATIC_HOST}}/static/img/index/dzx.png"></a></li>
+        <li><a href="/weshares/view/6921.html?from=index"><img src="{{$STATIC_HOST}}/static/img/index/yuebing.png"></a></li>
+    </ul>
+
     <div class="shares-container">
         {{loop $index_products $key $index_product}}
 

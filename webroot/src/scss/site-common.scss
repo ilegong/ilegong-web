@@ -758,6 +758,59 @@ a:-webkit-any-link {
       width: 16px;
     }
   }
+  .new-potoshop {
+    background-color: #FFFFFF;
+    padding: 15px 3.8%;
+    border-bottom: 1px #eeeeee solid;
+    margin-top: 10px;
+    li {
+      float: left;
+      width: 25%;
+      a {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        img {
+          width: 37px;
+          height: 42px;
+          text-align: center;
+        }
+        label {
+          display: block;
+          line-height: 20px;
+          font-size: 1em;
+          color: #333333;
+          text-align: center;
+        }
+        .packet {
+          position: absolute;
+          background-color: red;
+          color: #FFFFFF;
+          font-size: 0.8em;
+          width: 18px;
+          height: 18px;
+          border-radius: 18px;
+          text-align: center;
+          line-height: 18px;
+          top: -3px;
+          right: -7px;
+        }
+      }
+    }
+  }
+  .new-activity {
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    li {
+      float: left;
+      width: 50%;
+      padding: 5px 0;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
 }
 
 .weshare-view-page {
