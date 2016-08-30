@@ -14,7 +14,7 @@
         <ul rn-carousel class="image-container" rn-carousel-index="carouselIndex">
             {{loop $banners $index $banner_item}}
                 <li class="image-cover">
-                    <a  href="{{$banner_item['link']}}">
+                    <a  href="{{$banner_item['link']}}?from=index">
                         <img class="image" src="{{$banner_item['banner']}}" alt="{{$banner_item['title']}}"/>
                     </a>
                 </li>
