@@ -1907,7 +1907,8 @@ class WeshareBuyComponent extends Component
         $limit_date = date('Y-m-d', strtotime("-14 days"));
         $cond = array(
             'status' => ORDER_STATUS_RECEIVED,
-            'type' => ORDER_TYPE_WESHARE_BUY
+            'type' => ORDER_TYPE_WESHARE_BUY,
+            'not' => ['flag' => ORDER_FLAG_VIRTUAL_FLAG]
         );
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
@@ -1931,7 +1932,8 @@ class WeshareBuyComponent extends Component
         $limit_date = date('Y-m-d', strtotime("-15 days"));
         $cond = array(
             'status' => ORDER_STATUS_SHIPPED,
-            'type' => ORDER_TYPE_WESHARE_BUY
+            'type' => ORDER_TYPE_WESHARE_BUY,
+            'not' => ['flag' => ORDER_FLAG_VIRTUAL_FLAG]
         );
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
