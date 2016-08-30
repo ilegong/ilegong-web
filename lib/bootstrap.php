@@ -380,22 +380,25 @@ function get_order_from_tag_by_flag($flag){
     if ($flag == 6) {
         return '微信单聊';
     }
-    if($flag == 7){
+    if ($flag == 7) {
         return '发现页面';
     }
-    if($flag ==8){
+    if ($flag == 8) {
         return '个人中心';
     }
-    if($flag ==9){
+    if ($flag == 9) {
         return '系统推荐';
     }
-    if($flag == 10){
+    if ($flag == 10) {
         return '促销';
     }
-    if($flag == 11){
+    if ($flag == 11) {
         return '微信文章';
     }
-    if($flag ==19){
+    if ($flag == 12) {
+        return 'banner';
+    }
+    if ($flag == 19) {
         return '其他';
     }
     return '直接购买';

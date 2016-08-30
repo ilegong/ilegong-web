@@ -2750,6 +2750,9 @@ function get_order_from_flag($from)
     if ($from == 'wx_article') {
         return 11;
     }
+    if($from == 'banner'){
+        return 12;
+    }
     return 0;
 }
 
