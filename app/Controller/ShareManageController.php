@@ -938,16 +938,6 @@ GROUP BY product_id";
         }
     }
 
-    /**
-     * @param $weshareId
-     * @param int $onlyPaid
-     * 导出分销订单
-     */
-    public function order_export_pool_share($weshareId, $onlyPaid = 1){
-
-    }
-
-
 
     /**
      * @param $weshareId

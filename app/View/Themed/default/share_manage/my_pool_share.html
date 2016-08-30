@@ -41,8 +41,7 @@
                             <td>{{$item['wait_ship_order_count']}}</td>
                             <td>
                                 <a href="/share_manage/pool_share_order_manage/{{$item['weshare_id']}}?name={{$item['share_name']}}" class="btn btn-outline btn-info btn-sm">订单管理</a>&nbsp;&nbsp;
-                                <a href="/share_manage/order_export/{{$item['weshare_id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>&nbsp;&nbsp;
-                                <a href="/share_manage/order_export/{{$item['weshare_id']}}/-1" target="_blank" class="btn btn-outline btn-success btn-sm">导出全部订单</a>
+                                <a href="/weshares/provide_share_order_export/{{$item['weshare_id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
                             </td>
                         </tr>
                         {{/loop}}
