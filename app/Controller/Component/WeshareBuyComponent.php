@@ -230,13 +230,17 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
-    public function get_user_provide_shares($uid){
+    public function get_user_provide_shares($uid, $keyword = null){
         $poolProductM = ClassRegistry::init('PoolProduct');
+        $queryCond = [
+            'PoolProduct.user_id' => $uid,
+            'PoolProduct.status' => [POOL_PRODUCT_PUBLISH, POOL_PRODUCT_UN_PUBLISH, POOL_PRODUCT_DRAFT],
+        ];
+        if ($keyword != null) {
+            $queryCond['PoolProduct.share_name LIKE '] = '%' . $keyword . '%';
+        }
         $poolProducts = $poolProductM->find('all', [
-            'conditions' => [
-                'PoolProduct.user_id' => $uid,
-                'PoolProduct.status' => [POOL_PRODUCT_PUBLISH, POOL_PRODUCT_UN_PUBLISH, POOL_PRODUCT_DRAFT],
-            ],
+            'conditions' => $queryCond,
             'order' => ['PoolProduct.status DESC', 'PoolProduct.created DESC']
         ]);
         $result = [];
