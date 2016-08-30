@@ -618,17 +618,17 @@ GROUP BY product_id";
             )
         );
 
-        if(!empty($weshare)){
-            $this->log('Use existing un-published weshare '. $weshare['Weshare']['id']);
-            $this->redirect("/share_manage/share_edit/".$weshare['Weshare']['id']);
+        if (!empty($weshare)) {
+            $this->log('Use existing un-published weshare ' . $weshare['Weshare']['id']);
+            $this->redirect("/share_manage/share_edit/" . $weshare['Weshare']['id']);
         }
 
-        $weshare = array('creator'=>$user_id, 'status'=>10,'title'=>'');
+        $weshare = array('creator' => $user_id, 'status' => 10, 'title' => '');
         $this->Weshare->save($weshare);
         $shareId = $this->Weshare->getLastInsertID();
-        $this->log('Admin '.$uid.' tries to create weshare '.$shareId.' for user '.$user_id);
+        $this->log('Admin ' . $uid . ' tries to create weshare ' . $shareId . ' for user ' . $user_id);
 
-        $shipSettings = [array("tag"=>"self_ziti","status"=>-1,"limit"=>0,"ship_fee"=>0,"weshare_id"=>$shareId ),array("tag"=>"kuai_di","status"=>1,"limit"=>0,"ship_fee"=>0,"weshare_id"=>$shareId )];
+        $shipSettings = [array("tag" => "self_ziti", "status" => -1, "limit" => 0, "ship_fee" => 0, "weshare_id" => $shareId), array("tag" => "kuai_di", "status" => 1, "limit" => 0, "ship_fee" => 0, "weshare_id" => $shareId)];
         $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $weshareShipSettingM->saveAll($shipSettings);
 
@@ -648,10 +648,10 @@ GROUP BY product_id";
         $weshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
         $weshareDeliveryTemplateM->saveAll($weshareDeliveryTemplate);
 
-        $rebasePercent = array("share_id"=>$shareId ,"percent"=>"0","status"=>0);
+        $rebasePercent = array("share_id" => $shareId, "percent" => "0", "status" => 0);
         $proxyRebatePercent = ClassRegistry::init('ProxyRebatePercent');
         $proxyRebatePercent->save($rebasePercent);
-        $this->redirect("/share_manage/share_edit/".$shareId);
+        $this->redirect("/share_manage/share_edit/" . $shareId);
     }
 
     /**
@@ -706,7 +706,12 @@ GROUP BY product_id";
      */
     public function my_pool_share()
     {
-        $this->process_authorize_share(SHARE_TYPE_POOL);
+        //$this->process_authorize_share(SHARE_TYPE_POOL);
+        $keyword = $_REQUEST['keyword'];
+        $uid = $this->currentUser['id'];
+        $list = $this->WeshareBuy->get_user_provide_shares($uid, $keyword);
+        $this->set('list', $list);
+        $this->set('keyword', $keyword);
     }
 
     private function process_authorize_share($type = null)
@@ -867,6 +872,18 @@ GROUP BY product_id";
 
     }
 
+    /**
+     * @param $share_id
+     * 产品街分销订单管理
+     */
+    public function pool_share_order_manage($share_id){
+        $orders = $this->WeshareBuy->get_provide_share_order(false, $share_id, 5000, 1);
+        $this->set('ship_type_list', ShipAddress::ship_type_list());
+        $this->set('all_orders', $orders);
+        $this->set('weshareId', $share_id);
+        $this->set('name', $_REQUEST['name']);
+    }
+
     public function order_manage($share_id)
     {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
@@ -920,6 +937,7 @@ GROUP BY product_id";
             return false;
         }
     }
+
 
     /**
      * @param $weshareId

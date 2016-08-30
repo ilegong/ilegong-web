@@ -15,19 +15,19 @@
       $rootScope.proxies = [];
       $rootScope.loadingPage = false;
       vm.uid = -1;
-      $rootScope.checkHasUnRead();
-      $http.get('/users/get_id_and_proxies').success(function (data) {
-        if (data.uid != null) {
-          $rootScope.uid = data.uid;
-          $rootScope.proxies = _.map(data.proxies, function (pid) {
-            return parseInt(pid);
-          })
-        }
-        else {
-        }
-      }).error(function (data, e) {
-        $log.log('Failed to get proxies: ' + e);
-      });
+      //$rootScope.checkHasUnRead();
+      //$http.get('/users/get_id_and_proxies').success(function (data) {
+      //  if (data.uid != null) {
+      //    $rootScope.uid = data.uid;
+      //    $rootScope.proxies = _.map(data.proxies, function (pid) {
+      //      return parseInt(pid);
+      //    })
+      //  }
+      //  else {
+      //  }
+      //}).error(function (data, e) {
+      //  $log.log('Failed to get proxies: ' + e);
+      //});
 
       var tag = $attrs.tag;
       vm.indexProducts = [];

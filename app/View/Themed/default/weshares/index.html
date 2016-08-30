@@ -61,8 +61,14 @@
         </li>
     </ul>
     <ul class="new-activity clearfix">
-        <li><a href="/weshares/view/6951.html?from=index"><img src="{{$STATIC_HOST}}/static/img/index/dzx.png"></a></li>
-        <li><a href="/articles/moon_cake.html?from=index"><img src="{{$STATIC_HOST}}/static/img/index/yuebing.png"></a></li>
+        {{loop $promotions $promotion}}
+            {{if $promotion['type'] == 1}}
+                <li><a href="/weshares/view/{{$promotion['data']}}.html?from=index"><img src="{{$promotion['img']}}"></a></li>
+            {{/if}}
+            {{if $promotion['type'] == 2}}
+                <li><a href="{{$promotion['data']}}?from=index"><img src="{{$promotion['img']}}"></a></li>
+            {{/if}}
+        {{/loop}}
     </ul>
 
     <div class="shares-container">
@@ -83,43 +89,6 @@
             ?>
 
         <div class="share show-summary">
-            <ul class="share-header clearfix">
-                <li class="fl">
-                    <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
-                        <img itemprop="image" class="avatar radius50"
-                             lazy-src="{{$this->Html->assetUrl($product['share_user_img'])}}"
-                             onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'">
-                    </a>
-                </li>
-                <li class="proxy-level">{{"L".($user_level['data_value']+1)}}</li>
-                <li class="fl">
-                    <a class="nickname" href="/weshares/user_share_info/{{$product['share_user_id']}}">{{$user['nickname']}}</a>
-                    <dl class="label-container clearfix">
-                        <dd class="fl label">
-                            {{$user['label'] ? : "吃货向标"}}
-                        </dd>
-                    </dl>
-                    <div class="log" style="display: none;">
-                    </div>
-                </li>
-                <li class="fr subscription" ng-controller="SubscriptionController as sub">
-                    <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed({{$product['share_user_id']}})}"
-                         ng-click="sub.subscribe({{$product['share_user_id']}})">关注TA
-                    </div>
-                    <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed({{$product['share_user_id']}})}"
-                         ng-click="sub.clickSubscribedBtn({{$product['share_user_id']}}, $event)">
-                        <a href="#X" class="clearfix">
-                            <span class="fl">
-                                已关注
-                                <i class="iconfont icon-angledown" style="font-size: 12px;"></i>
-                            </span>
-                        </a>
-                        <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
-                           ng-click="sub.unSubscribe({{$product['share_user_id']}})">取消关注</a>
-                    </div>
-                </li>
-            </ul>
-
             <a class="image-container" href="/weshares/view/{{$product['share_id']}}.html?from=index">
                 <div class="image-cover">
                     <img class="image" data-current="0"
@@ -137,7 +106,6 @@
 
                 {{if strlen($product['description'])>0}}
                 <p class="share-description digest">
-                    <span class="text-danger">{{$user['nickname']}}说: </span>
                     {{$product['description']}}
                 </p>
                 {{/if}}
@@ -173,6 +141,6 @@ $this->set('show_footer', false);
 $this->set('show_footer', 'index');
 }
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.14'
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.16'
 ), array('block' => 'scripts'))
 ?>

@@ -15,8 +15,8 @@
             <div class="panel-body">
                 <form class="form-inline pull-right" method="GET" action="/share_manage/my_pool_share">
                     <div class="form-group">
-                        <label class="sr-only">关键词</label>
-                        <input type="text" class="form-control" name="keyword" placeholder="关键词" value="{{$keyword}}">
+                        <label class="sr-only" for="key_word">关键词</label>
+                        <input type="text" class="form-control" name="key_word" id="key_word" placeholder="关键词">
                     </div>
                     <button type="submit" class="btn btn-primary">查询</button>
                 </form>
@@ -28,20 +28,21 @@
                             <th>编号</th>
                             <th>名称</th>
                             <th>状态</th>
-                            <th>待发货订单数</th>
                             <th>订单操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {{loop $list $item}}
+                        {{loop $shares $share}}
                         <tr>
-                            <td>{{$item['weshare_id']}}</td>
-                            <td>{{$item['share_name']}}</td>
-                            <td>{{if $item['deleted'] == 0}}上架{{else}}下架{{/if}}</td>
-                            <td>{{$item['wait_ship_order_count']}}</td>
+                            <td>{{$share['Weshare']['id']}}</td>
+                            <td>{{$share['Weshare']['title']}}</td>
+                            <td>{{if $share['Weshare']['status'] == 0}}进行中{{else}}截团{{/if}}</td>
                             <td>
-                                <a href="/share_manage/pool_share_order_manage/{{$item['weshare_id']}}?name={{$item['share_name']}}" class="btn btn-outline btn-info btn-sm">订单管理</a>&nbsp;&nbsp;
-                                <a href="/weshares/provide_share_order_export/{{$item['weshare_id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
+                                {{if in_array($share['Weshare']['id'].'-'.SHARE_ORDER_OPERATE_TYPE, $share_operate_settings) || in_array($share['Weshare']['id'].'-'.SHARE_MANAGE_OPERATE_TYPE, $share_operate_settings)}}
+                                <a href="/share_manage/order_manage/{{$share['Weshare']['id']}}" class="btn btn-outline btn-info btn-sm">订单管理</a>
+                                &nbsp;&nbsp;<a href="/share_manage/order_export/{{$share['Weshare']['refer_share_id']}}/{{$share['Weshare']['id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
+                                &nbsp;&nbsp;<a href="/share_manage/order_export/{{$share['Weshare']['refer_share_id']}}/{{$share['Weshare']['id']}}/-1" target="_blank" class="btn btn-outline btn-success btn-sm">导出全部订单</a>
+                                {{/if}}
                             </td>
                         </tr>
                         {{/loop}}
