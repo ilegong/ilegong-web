@@ -4,7 +4,7 @@ class VirtualUserController extends AppController
 {
 
 
-    public static $virtual_user = [926835, 928127, 928126, 929214, 929332, 929473, 930646];
+    public static $virtual_user = [926835, 928127, 928126, 929214, 929332, 929473, 930646, 711503];
 
     public function beforeFilter(){
         parent::beforeFilter();
