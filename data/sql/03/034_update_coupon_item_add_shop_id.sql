@@ -1,0 +1,1 @@
+ALTER TABLE `cake_coupon_items` ADD `shop_id` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `sent_message_status`, ADD INDEX (`shop_id`);
