@@ -2330,6 +2330,22 @@ class ShareUtilComponent extends Component
         return json_decode($cache_data, true);
     }
 
+    public function get_index_promotions(){
+        $promotions = [
+            [
+                'img' => 'http://static.tongshijia.com/static/img/index/dzx.png',
+                'data' => '6951',
+                'type' => 1
+            ],
+            [
+                'img' => 'http://static.tongshijia.com/static/img/index/yuebing.png',
+                'data' => 'http://www.tongshijia.com/articles/moon_cake.html',
+                'type' => 2
+            ]
+        ];
+        return $promotions;
+    }
+
     public function get_index_product($tag_id)
     {
         $key = INDEX_VIEW_PRODUCT_CACHE_KEY . '_' . $tag_id;

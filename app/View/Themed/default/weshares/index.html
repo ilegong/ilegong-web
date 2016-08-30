@@ -61,8 +61,14 @@
         </li>
     </ul>
     <ul class="new-activity clearfix">
-        <li><a href="/weshares/view/6951.html?from=index"><img src="{{$STATIC_HOST}}/static/img/index/dzx.png"></a></li>
-        <li><a href="/articles/moon_cake.html?from=index"><img src="{{$STATIC_HOST}}/static/img/index/yuebing.png"></a></li>
+        {{loop $promotions $promotion}}
+            {{if $promotion['type'] == 1}}
+                <li><a href="/weshares/view/{{$promotion['data']}}.html?from=index"><img src="{{$promotion['img']}}"></a></li>
+            {{/if}}
+            {{if $promotion['type'] == 2}}
+                <li><a href="{{$promotion['data']}}?from=index"><img src="{{$promotion['img']}}"></a></li>
+            {{/if}}
+        {{/loop}}
     </ul>
 
     <div class="shares-container">

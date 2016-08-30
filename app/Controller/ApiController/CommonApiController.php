@@ -68,6 +68,12 @@ class CommonApiController extends Controller
         exit;
     }
 
+    public function get_promotions(){
+        $promotions = $this->ShareUtil->get_index_promotions();
+        echo json_encode($promotions);
+        exit;
+    }
+
     public function get_app_has_new_version()
     {
         echo json_encode(['version' => strval('1.5.0'), 'force' => true, 'msg' => '解决已知问题']);
