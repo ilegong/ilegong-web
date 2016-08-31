@@ -2335,12 +2335,12 @@ class ShareUtilComponent extends Component
             [
                 'banner_img' => 'http://static.tongshijia.com/static/img/index/dzx.png',
                 'data' => '6951',
-                'type' => 1
+                'type' => "1"
             ],
             [
                 'banner_img' => 'http://static.tongshijia.com/static/img/index/yuebing.png',
                 'data' => 'http://www.tongshijia.com/articles/moon_cake.html',
-                'type' => 0
+                'type' => "0"
             ]
         ];
         return $promotions;
