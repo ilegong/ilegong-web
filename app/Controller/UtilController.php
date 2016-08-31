@@ -14,6 +14,24 @@ class UtilController extends AppController {
 
     public $components = array('ShareUtil', 'Weixin', 'WeshareBuy', 'RedisQueue', 'RedPacket');
 
+    public function log_view_position_click(){
+        $this->autoRender = false;
+        $postData = $this->get_post_raw_data();
+        $pageName = $postData['page'];
+        $pagePosition = $postData['position'];
+        $positionValue = $postData['value'];
+        $log = [
+            "index" => "event_page_click",
+            "type" => $pageName,
+            "position" => $pagePosition,
+            "positionVal" => $positionValue,
+            "user_id" => intval($this->currentUser['id'])
+        ];
+        add_logs_to_es($log);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
     public function log_js_error() {
         $msg = $_GET['msg'];
         $url = $_GET['error_url'];
