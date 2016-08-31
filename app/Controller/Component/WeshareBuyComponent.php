@@ -330,22 +330,6 @@ class WeshareBuyComponent extends Component
             'fields' => ['ShareOperateSetting.id', 'ShareOperateSetting.data_id', 'ShareOperateSetting.data_type', 'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
             'order' => ['Weshare.created DESC']
         ]);
-//        $result = $shareOperateSettingM->find('all', [
-//            'conditions' => $cond,
-//            'joins' => [
-//                [
-//                    'table' => 'weshares',
-//                    'alias' => 'Weshare',
-//                    'conditions' => [
-//                        'Weshare.id = ShareOperateSetting.data_id',
-//                    ],
-//                ]
-//            ],
-//            'fields' => ['ShareOperateSetting.id', 'ShareOperateSetting.data_id', 'ShareOperateSetting.data_type', 'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
-//            'order' => array('Weshare.created DESC'),
-//            'limit' => $limit,
-//            'page' => $page
-//        ]);
         return $result;
     }
 
