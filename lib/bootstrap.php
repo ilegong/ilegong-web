@@ -398,6 +398,9 @@ function get_order_from_tag_by_flag($flag){
     if ($flag == 12) {
         return 'banner';
     }
+    if($flag == 13){
+        return '服务号';
+    }
     if ($flag == 19) {
         return '其他';
     }
