@@ -29,8 +29,18 @@ class UserApiController extends Controller
     public function get_my_coupons(){
         $uid = $this->currentUser['id'];
         $this->loadModel("CouponItem");
+        $result = [];
         $coupons = $this->CouponItem->find_my_all_valid_share_coupons($uid);
-        echo json_encode($coupons);
+        foreach($coupons as $item){
+            $coupon = [];
+            $coupon['sharer_id'] = $item['ShareOffer']['sharer_id'];
+            $coupon['reduced_price'] = number_format($item['Coupon']['reduced_price'] / 100);
+            $coupon['product_list'] = $item['Coupon']['product_list'];
+            $coupon['name'] = $item['ShareOffer']['name'];
+            $coupon['expired'] = friendlyDateFromStr($item['Coupon']['valid_end'], 'ymd');
+            $result[] = $coupon;
+        }
+        echo json_encode($result);
         exit;
     }
 
@@ -248,7 +258,7 @@ class UserApiController extends Controller
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar', 'rebate_money')));
+            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar', 'rebate_money', 'own_id')));
         $datainfo['User']['image'] = get_user_avatar($datainfo);
 
         $payment = json_decode($datainfo['User']['payment'], true);
