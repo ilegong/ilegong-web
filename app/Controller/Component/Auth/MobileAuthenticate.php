@@ -12,8 +12,12 @@ class MobileAuthenticate extends BaseAuthenticate {
     public function authenticate(CakeRequest $request, CakeResponse $response) {
         $checkMobileCode = $request->data['checkMobileCode'];
         $mobilephone = $request->data['mobile'];
-        if($this->verify_msg_code($mobilephone, $checkMobileCode)){
+        if ($this->verify_msg_code($mobilephone, $checkMobileCode)) {
             $result = $this->_findUser(array('mobilephone' => $mobilephone));
+            if (empty($result)) {
+                createNewUserByMobile($mobilephone);
+                $result = $this->_findUser(array('mobilephone' => $mobilephone));
+            }
             return $result;
         }
     }

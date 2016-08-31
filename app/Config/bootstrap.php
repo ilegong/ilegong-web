@@ -1561,6 +1561,24 @@ function get_frid_from_request_uri(){
     return $res[1] ? $res[1] : 0;
 }
 
+function createNewUserByMobile($mobile, $is_app = false){
+    $userModel = ClassRegistry::init('User');
+    $nickname = preg_replace('/(1\d{1,2})\d\d(\d{0,3})/', '$1****$3', $mobile);
+    $is_install_app = $is_app ? INSTALL_APP : UN_INSTALL_APP;
+    $result = $userModel->save([
+        'nickname' => $nickname,
+        'sex' => 0,
+        'password' => '',
+        'uc_id' => 0,
+        'mobilephone' => $mobile,
+        'is_install_app' => $is_install_app
+    ]);
+    if (!$result) {
+        return false;
+    }
+    return $result['User']['id'];
+}
+
 /**
  * @param $userInfo
  * @param $userModel
