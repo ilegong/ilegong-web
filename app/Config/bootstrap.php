@@ -2623,7 +2623,7 @@ function is_super_share_manager($uid) {
 
 function is_product_manager($uid)
 {
-    $m = [801447, 559795, 633345];
+    $m = [801447, 559795, 633345, 701166];
     return in_array($uid, $m);
 }
 
