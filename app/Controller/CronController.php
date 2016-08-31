@@ -22,7 +22,7 @@ class CronController extends AppController
         $this->autoRender = false;
         try {
             $this->loadModel('WxOauth');
-            $o = $this->WxOauth->get_base_access_token();
+            $o = $this->WxOauth->cron_update_access_token();
             $log = "get_base_access_token:" . $o . ", in json:" . json_encode($o);
             $this->log($log);
             echo $log;

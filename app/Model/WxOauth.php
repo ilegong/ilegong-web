@@ -27,6 +27,17 @@ class WxOauth extends Model {
         ));
     }
 
+    public function cron_update_access_token(){
+        $key = self::MD_KEY_WX_BASE_ACCESS_TOKEN;
+        $rtn = $this->find('all', array('method' => 'get_base_access_token'));
+        $token = $rtn['WxOauth']['access_token'];
+        if (!empty($rtn) && $token) {
+            Cache::write($key, array('token' => $token, 'expire' => mktime() + 3600));
+            return $token;
+        }
+        return '';
+    }
+
     public function get_base_access_token() {
 
         $key = self::MD_KEY_WX_BASE_ACCESS_TOKEN;
