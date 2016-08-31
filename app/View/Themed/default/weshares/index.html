@@ -65,7 +65,7 @@
             {{if $promotion['type'] == 1}}
                 <li><a href="/weshares/view/{{$promotion['data']}}.html?from=index"><img src="{{$promotion['img']}}"></a></li>
             {{/if}}
-            {{if $promotion['type'] == 2}}
+            {{if $promotion['type'] == 0}}
                 <li><a href="{{$promotion['data']}}?from=index"><img src="{{$promotion['img']}}"></a></li>
             {{/if}}
         {{/loop}}

@@ -2340,7 +2340,7 @@ class ShareUtilComponent extends Component
             [
                 'img' => 'http://static.tongshijia.com/static/img/index/yuebing.png',
                 'data' => 'http://www.tongshijia.com/articles/moon_cake.html',
-                'type' => 2
+                'type' => 0
             ]
         ];
         return $promotions;

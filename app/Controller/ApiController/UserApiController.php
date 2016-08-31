@@ -19,7 +19,8 @@ class UserApiController extends Controller
     //获取优惠券数量
     public function get_coupon_count(){
         $uid = $this->currentUser['id'];
-        $coupon_count = $this->CouponItem->find_my_share_coupons_count($uid);
+        $couponItem = $this->Components->load("CouponItem");
+        $coupon_count = $couponItem->find_my_share_coupons_count($uid);
         echo json_encode(['coupon_count' => $coupon_count]);
         exit;
     }
@@ -27,8 +28,8 @@ class UserApiController extends Controller
     //获取我的优惠券
     public function get_my_coupons(){
         $uid = $this->currentUser['id'];
-        $this->Components->load('CouponItem');
-        $coupons = $this->CouponItem->find_my_all_valid_share_coupons($uid);
+        $couponItem = $this->Components->load("CouponItem");
+        $coupons = $couponItem->find_my_all_valid_share_coupons($uid);
         echo json_encode($coupons);
         exit;
     }
