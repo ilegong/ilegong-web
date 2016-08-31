@@ -277,33 +277,75 @@ class WeshareBuyComponent extends Component
     public function get_my_auth_shares($uid, $page, $limit, $status, $settlement, $without_pool_share = false)
     {
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $weshareM = ClassRegistry::init('Weshare');
         if ($status != WESHARE_STATUS_NORMAL) {
             $status = [$status, WESHARE_STATUS_DELETED];
         }
         $cond = [
-            'ShareOperateSetting.user' => $uid,
             'Weshare.status' => $status,
+            'ShareOperateSetting.user' => $uid,
             'Weshare.settlement' => $settlement
         ];
         if ($without_pool_share) {
             $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
         }
-        $result = $shareOperateSettingM->find('all', [
+
+        $weshareIds = $shareOperateSettingM->find('all', [
             'conditions' => $cond,
             'joins' => [
                 [
-                    'table' => 'weshares',
+                    'table' => 'cake_weshares',
                     'alias' => 'Weshare',
                     'conditions' => [
-                        'Weshare.id = ShareOperateSetting.data_id',
+                        'Weshare.id = ShareOperateSetting.data_id'
                     ],
-                ]
+                ],
+            ],
+            'fields' => ['ShareOperateSetting.id', 'Weshare.id'],
+            'order' => ['Weshare.created DESC'],
+            'limit' => $limit,
+            'page' => $page,
+            'group' => 'ShareOperateSetting.data_id'
+        ]);
+
+        $weshareIds = Hash::extract($weshareIds, '{n}.Weshare.id');
+
+        if(empty($weshareIds)){
+            return [];
+        }
+
+        $cond['Weshare.id'] = $weshareIds;
+
+        $result = $weshareM->find('all', [
+            'conditions' => $cond,
+            'joins' => [
+                [
+                    'table' => 'cake_share_operate_settings',
+                    'alias' => 'ShareOperateSetting',
+                    'conditions' => [
+                        'ShareOperateSetting.data_id = Weshare.id'
+                    ],
+                ],
             ],
             'fields' => ['ShareOperateSetting.id', 'ShareOperateSetting.data_id', 'ShareOperateSetting.data_type', 'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
-            'order' => array('Weshare.created DESC'),
-            'limit' => $limit,
-            'page' => $page
+            'order' => ['Weshare.created DESC']
         ]);
+//        $result = $shareOperateSettingM->find('all', [
+//            'conditions' => $cond,
+//            'joins' => [
+//                [
+//                    'table' => 'weshares',
+//                    'alias' => 'Weshare',
+//                    'conditions' => [
+//                        'Weshare.id = ShareOperateSetting.data_id',
+//                    ],
+//                ]
+//            ],
+//            'fields' => ['ShareOperateSetting.id', 'ShareOperateSetting.data_id', 'ShareOperateSetting.data_type', 'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
+//            'order' => array('Weshare.created DESC'),
+//            'limit' => $limit,
+//            'page' => $page
+//        ]);
         return $result;
     }
 
