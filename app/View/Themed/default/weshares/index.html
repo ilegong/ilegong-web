@@ -1,12 +1,12 @@
 <div class="index-page" ng-controller="IndexCtrl as vm" ng-click="clickPage();" data-tag="{{$tag}}">
     <ul class="clearfix menu-top">
-        <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html">新品爆款</a>
+        <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '0'});">新品爆款</a>
         </li>
-        <li {{if $tag==1}}class="focus"{{/if}}><a href="/weshares/index/1.html">水果蔬菜</a>
+        <li {{if $tag==1}}class="focus"{{/if}}><a href="/weshares/index/1.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '1'});">水果蔬菜</a>
         </li>
-        <li {{if $tag==2}}class="focus"{{/if}}><a href="/weshares/index/2.html">肉蛋粮油</a>
+        <li {{if $tag==2}}class="focus"{{/if}}><a href="/weshares/index/2.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '2'});">肉蛋粮油</a>
         </li>
-        <li {{if $tag==3}}class="focus"{{/if}}><a href="/weshares/index/3.html">零食其他</a>
+        <li {{if $tag==3}}class="focus"{{/if}}><a href="/weshares/index/3.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '3'});">零食其他</a>
         </li>
     </ul>
     <div class="banners has-menu-top">
@@ -14,7 +14,7 @@
         <ul rn-carousel class="image-container" rn-carousel-index="carouselIndex">
             {{loop $banners $index $banner_item}}
                 <li class="image-cover">
-                    <a  href="{{$banner_item['link']}}?from=banner">
+                    <a  href="{{$banner_item['link']}}?from=banner" ng-click="vm.addPageClickLog({page:'index', position:'banner', value: '{{$index}}'});">
                         <img class="image" src="{{$banner_item['banner']}}" alt="{{$banner_item['title']}}"/>
                     </a>
                 </li>
@@ -63,10 +63,10 @@
     <ul class="new-activity clearfix">
         {{loop $promotions $promotion}}
             {{if $promotion['type'] == 1}}
-                <li><a href="/weshares/view/{{$promotion['data']}}.html?from=index"><img src="{{$promotion['banner_img']}}"></a></li>
+                <li><a href="/weshares/view/{{$promotion['data']}}.html?from=index" ng-click="vm.addPageClickLog({page:'index', position:'promotion', value: '0'});"><img src="{{$promotion['banner_img']}}"></a></li>
             {{/if}}
             {{if $promotion['type'] == 0}}
-                <li><a href="{{$promotion['data']}}?from=index"><img src="{{$promotion['banner_img']}}"></a></li>
+                <li><a href="{{$promotion['data']}}?from=index" ng-click="vm.addPageClickLog({page:'index', position:'promotion', value: '1'});"><img src="{{$promotion['banner_img']}}"></a></li>
             {{/if}}
         {{/loop}}
     </ul>
@@ -141,6 +141,6 @@ $this->set('show_footer', false);
 $this->set('show_footer', 'index');
 }
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.16'
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.17'
 ), array('block' => 'scripts'))
 ?>
