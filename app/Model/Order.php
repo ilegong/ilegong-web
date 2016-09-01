@@ -315,10 +315,11 @@ class Order extends AppModel {
      * @param $toStatus
      * @param $origStatus
      * @param int $operator
+     * @param $remark
      * @return array operation update result and affected rows
      */
-    function update_order_status($order_id, $toStatus, $origStatus, $operator) {
-        $result = $this->updateAll(array('status' => $toStatus, 'lastupdator' => $operator), array('id' => $order_id, 'status' => $origStatus));
+    function update_order_status($order_id, $toStatus, $origStatus, $operator, $remark = '') {
+        $result = $this->updateAll(array('status' => $toStatus, 'lastupdator' => $operator, 'business_remark' => 'concat(business_remark, "'.$remark.'")'), array('id' => $order_id, 'status' => $origStatus));
 
         if ($result) {
             $cartM = ClassRegistry::init('Cart');
@@ -349,6 +350,9 @@ class Order extends AppModel {
                         $userM = ClassRegistry::init('User');
                         $userM->add_score($creator, $rtn['Score']['score']);
                     }
+                    $couponItemM = ClassRegistry::init('CouponItem');
+                    $couponItemM->updateAll(array('status' => COUPONITEM_STATUS_TO_USE, 'applied_order' => '0'),
+                        array('applied_order' => $order_id, 'status' => COUPONITEM_STATUS_USED));
                 }
             }
         } else {

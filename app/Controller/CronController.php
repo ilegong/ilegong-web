@@ -69,9 +69,17 @@ class CronController extends AppController
         $this->autoRender = false;
         $query_limit_time = date('Y-m-d H:i:s', strtotime('-4 hour'));
         $orderM = ClassRegistry::init('Order');
-        $updated = date('Y-m-d H:i:s');
-        $update_result = $orderM->updateAll(array('status' => ORDER_STATUS_CANCEL, 'business_remark' => 'concat(business_remark, "_canceled_by_sys")'), array('status' => ORDER_STATUS_WAITING_PAY, 'created < ' => $query_limit_time));
-        echo json_encode(array('success' => true, 'result' => $update_result));
+        $orders = $orderM->find('all', [
+            'conditions' => [
+                'status' => ORDER_STATUS_WAITING_PAY, 'created < ' => $query_limit_time
+            ],
+            'fields' => ['id']
+        ]);
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        foreach ($order_ids as $oid) {
+            $orderM->update_order_status($oid, ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY, PYS_CUSTOMER_SERVICE_ID, '_canceled_by_sys');
+        }
+        echo json_encode(array('success' => true));
         return;
     }
 

@@ -172,6 +172,11 @@ class CouponItem extends AppModel {
             array('bind_user' => $owner, 'applied_order' => $order_id, 'status' => COUPONITEM_STATUS_USED));
     }
 
+    public function unapply_coupons_by_orders($order_ids){
+        $this->updateAll(array('status' => COUPONITEM_STATUS_TO_USE, 'applied_order' => '0'),
+            array('applied_order' => $order_ids, 'status' => COUPONITEM_STATUS_USED));
+    }
+
     public function add_coupon_type($name, $brand_id, $valid_begin, $valid_end, $reduced_price, $published, $type, $operator, $status, $product_list=0) {
         if(empty($operator)){
             return 0;
