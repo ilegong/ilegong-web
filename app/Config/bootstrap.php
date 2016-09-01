@@ -326,8 +326,8 @@ const HX_CHAT_SINGLE_TARGET_TYPE = 'users';
 const HX_CHAT_ROOM_TARGET_TYPE = 'chatrooms';
 
 const USER_REBATE_MONEY_GOT = 1;
-
 const USER_REBATE_MONEY_USE = 2;
+const USER_REBATE_MONEY_UNDO = 3;
 
 
 const YLB_QR_CODE_SCENE_ID="y20160726"; //易拉宝二维码标示

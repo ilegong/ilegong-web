@@ -13,6 +13,14 @@ class RebateLog extends Model
         return false;
     }
 
+    public function restore_rebate_by_undo_order($userId, $change, $orderId){
+        if ($change > 0) {
+            $desc = $this->get_reason(USER_REBATE_MONEY_UNDO, $orderId, $change);
+            return $this->save(['user_id' => $userId, 'reason' => USER_REBATE_MONEY_UNDO, 'order_id' => $orderId, 'money' => $change, 'description' => $desc, 'created' => date('Y-m-d H:i:s')]);
+        }
+        return false;
+    }
+
     public function after_rebate_change($user_id, $change)
     {
         //todo send msg
@@ -26,6 +34,9 @@ class RebateLog extends Model
 
         if ($reason == USER_REBATE_MONEY_USE) {
             return '订单 ' . $orderId . ' 使用 ' . get_format_number(abs($change) / 100);
+        }
+        if($reason == USER_REBATE_MONEY_UNDO){
+            return '取消订单 ' . $orderId . ' 返还 ' . get_format_number(abs($change) / 100);
         }
     }
 
