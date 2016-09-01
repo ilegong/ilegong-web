@@ -89,6 +89,7 @@
                 'mobile': mobilePhone,
                 'checkMobileCode': msgCode
             }, function (data) {
+                data = JSON.parse(data);
                 if (data['error']) {
                     alert('手机号或验证码有误，请重新输入领取!');
                     resetBtn();
