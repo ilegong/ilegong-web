@@ -1292,17 +1292,19 @@ class ShareController extends AppController
         }
         if ($request_order_id) {
             $cond['id'] = $request_order_id;
-        } elseif ($query_share_id) {
+        }
+        if ($query_share_id) {
             $cond['member_id'] = $query_share_id;
-        } elseif ($query_mobile_num) {
+        }
+
+        if ($query_mobile_num) {
             $cond['consignee_mobilephone'] = $query_mobile_num;
+        }
+        if ($start_date == $end_date) {
+            $cond['DATE(created)'] = $start_date;
         } else {
-            if ($start_date == $end_date) {
-                $cond['DATE(created)'] = $start_date;
-            } else {
-                $cond['DATE(created) >='] = $start_date;
-                $cond['DATE(created) <='] = $end_date;
-            }
+            $cond['DATE(created) >='] = $start_date;
+            $cond['DATE(created) <='] = $end_date;
         }
         $order_status = $_REQUEST['order_status'];
         if ($order_status != 0) {
@@ -1329,8 +1331,8 @@ class ShareController extends AppController
             $order_query_condition['limit'] = 200;
         }
         $this->handle_query_orders($order_query_condition);
-        $this->set('start_date', $_REQUEST['start_date']);
-        $this->set('end_date', $_REQUEST['end_date']);
+        $this->set('start_date', $start_date);
+        $this->set('end_date', $end_date);
         //$this->set('order_prepaid_status', $order_repaid_status);
         $this->set('share_id', $query_share_id);
         $this->set('order_status', $order_status);
