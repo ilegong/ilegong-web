@@ -29,9 +29,9 @@
         <img src="{{STATIC_HOST}}/static/img/promotion/dzx/red-back.gif">
         <div class="main-body">
             <label>您将是第<span>{{$count}}</span>名抢到红包的伙伴儿</label>
-            <div class="tel"><input type="text" placeholder="请输入手机号" id="mobilePhone"></div>
+            <div class="tel"><input type="number" placeholder="请输入手机号" id="mobilePhone"></div>
             <div class="code">
-                <input type="text" placeholder="请输入验证码" id="msgCode">
+                <input type="number" placeholder="请输入验证码" id="msgCode">
                 <a href="#X" id="getMsgCode">获取验证码</a>
             </div>
             <a href="#X" class="packetBtn" id="doLogin"><img src="{{STATIC_HOST}}/static/img/promotion/dzx/packetBtn.gif"/></a>
@@ -70,6 +70,16 @@
         });
         $doLogin.on('click', function (e) {
             e.preventDefault();
+            var mobilePhone = $mobilePhone.val();
+            var msgCode = $msgCode.val();
+            if(!isMobile(mobilePhone)){
+                alert('请输入正确的手机号码');
+                return false;
+            }
+            if(!msgCode){
+                alert('请输入验证码');
+                return false;
+            }
             $.post('/users/login.html?inajax=1', {
                 'mobile': $mobilePhone.val(),
                 'checkMobileCode': $msgCode.val()
