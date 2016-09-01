@@ -2,7 +2,7 @@
 
 class WeshareApiController extends Controller
 {
-    var $components = ['Weshares', 'UserConsignee', 'ShareUtil', 'OAuth.OAuth', 'WeshareBuy'];
+    var $components = ['Weshares', 'UserConsignee', 'ShareUtil', 'OAuth.OAuth', 'WeshareBuy', 'RedPacket'];
 
     public function beforeFilter()
     {
@@ -134,9 +134,35 @@ class WeshareApiController extends Controller
             $users = $userM->get_users_simple_info([$uid, $detail['creator']]);
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $sharer_level_data = $this->ShareUtil->get_user_level($detail['creator']);
+            $gotCoupon = $this->getCoupon($weshare_id, $uid);
         }
-        echo json_encode(['share_string' => $share_string,'detail' => $detail, 'products' => $products, 'rebate_setting' => $rebate_set, 'recommend_data' => $recommend_data, 'has_sub' => $has_sub, 'current_user' => $users[$uid], 'sharer' => $users[$detail['creator']], 'sharer_level' => $sharer_level_data, 'user_summary' => $user_summary, 'share_summary' => $share_summary]);
+        echo json_encode(['share_string' => $share_string,
+            'detail' => $detail,
+            'products' => $products,
+            'rebate_setting' => $rebate_set,
+            'recommend_data' => $recommend_data,
+            'has_sub' => $has_sub,
+            'current_user' => $users[$uid],
+            'sharer' => $users[$detail['creator']],
+            'sharer_level' => $sharer_level_data,
+            'user_summary' => $user_summary,
+            'share_summary' => $share_summary,
+            'got_coupon' => $gotCoupon
+        ]);
         exit();
+    }
+
+    private function getCoupon($weshare_id, $uid){
+        if (empty($uid)) {
+            return [];
+        }
+        if ($weshare_id == WESHARE_DZX_ID) {
+            $rt = $this->RedPacket->gen_sliced_and_receive($weshare_id, WESHARE_DZX_SHARED_OFFER_ID, $uid, true);
+            if ($rt['success']) {
+                return ['getCouponNum' => $rt['couponNum'], 'getCouponInfo' => '恭喜你领到大闸蟹红包！'];
+            }
+        }
+        return [];
     }
 
     //获取用户的地址
