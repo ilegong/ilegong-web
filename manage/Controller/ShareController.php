@@ -1268,9 +1268,9 @@ class ShareController extends AppController
 
     public function admin_share_orders()
     {
-//        $query_date = date('Y-m-d');
-//        $start_date = $query_date;
-//        $end_date = $query_date;
+        $query_date = date('Y-m-d');
+        $start_date = $query_date;
+        $end_date = $query_date;
         if ($_REQUEST['start_date']) {
             $start_date = $_REQUEST['start_date'];
         }
