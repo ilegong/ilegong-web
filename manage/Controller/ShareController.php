@@ -1268,9 +1268,9 @@ class ShareController extends AppController
 
     public function admin_share_orders()
     {
-        $query_date = date('Y-m-d');
-        $start_date = $query_date;
-        $end_date = $query_date;
+//        $query_date = date('Y-m-d');
+//        $start_date = $query_date;
+//        $end_date = $query_date;
         if ($_REQUEST['start_date']) {
             $start_date = $_REQUEST['start_date'];
         }
@@ -1300,10 +1300,10 @@ class ShareController extends AppController
         if ($query_mobile_num) {
             $cond['consignee_mobilephone'] = $query_mobile_num;
         }
-        if ($start_date == $end_date) {
-            $cond['DATE(created)'] = $start_date;
-        } else {
+        if ($start_date) {
             $cond['DATE(created) >='] = $start_date;
+        }
+        if ($end_date) {
             $cond['DATE(created) <='] = $end_date;
         }
         $order_status = $_REQUEST['order_status'];
