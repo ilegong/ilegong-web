@@ -58,7 +58,7 @@
                 alert('请输入正确的手机号码');
                 return true;
             }
-            $.getJSON('/check/get_mobile_code?mobile=' + mobilePhone, function (data) {
+            $.getJSON('/check/get_message_code?mobile=' + mobilePhone, function (data) {
                 if (data['error']) {
                     alert('点击重新获取')
                 } else {
