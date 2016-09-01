@@ -585,6 +585,9 @@ class UsersController extends AppController
 
         $login_by_account = isset($this->data['User']['username']);
         $login_by_phone = isset($this->data['User']['mobilephone']) || isset($this->data['mobile']);
+        if(isset($this->data['mobile'])){
+            $this->log($this->data['mobile'].' login by mobile');
+        }
         if ($success) {
             $this->Hook->call('loginSuccess');
             $user = $this->Auth->user();
