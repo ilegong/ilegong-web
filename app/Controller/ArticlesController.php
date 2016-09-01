@@ -125,11 +125,18 @@ class ArticlesController extends AppController{
         $this->layout = null;
     }
 
+    public function promotion_dzx(){
+        $this->layout = null;
+        $this->loadModel('SharedSlice');
+        $count = $this->SharedSlice->find('count', ['conditions' => ['shared_offer_id' => WESHARE_DZX_SHARED_OFFER_ID]]);
+        $this->set('count', $count + 315);
+    }
+
     public function log_js_error() {
         $msg = $_GET['msg'];
         $url = $_GET['url'];
         $ln = $_GET['ln'];
-        $uid = $this->currentUser['id']?$this->currentUser['id'] : 0;
+        $uid = $this->currentUser['id'] ? $this->currentUser['id'] : 0;
 
         $this->log("$uid : $url : $ln msg=$msg");
         $this->autoRender = false;

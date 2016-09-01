@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>一年之约</title>
+    <style>
+        * { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
+        body{ min-width: 320px; max-width: 640px; font-size: 13px; background-color: #f1f1f1;}
+        ul li { list-style: none; }
+        a{text-decoration: none;}
+        .hairy-crab img{width:100%; display: block;}
+        .dzx{ margin: 18px; margin-top: 0;}
+        .dzx .main-body{ background-color:#ffffff; border-radius: 4px; padding: 20px; margin:12px 0;}
+        .dzx .main-body label{ padding-bottom: 15px; display: block; text-align:center;}
+        .dzx .main-body label span{font-size:1.25em; color:#e62101;}
+        .dzx .tel,.dzx .code{ border:1px solid #c2c2c2; border-radius:4px; padding: 10px 0; margin-bottom: 15px; position: relative;}
+        .dzx .tel input,.dzx .code input{ line-height: 20px; font-size: 1.1em; color: #333333; border: 0; margin-left: 10px; width: 80%; outline: none;}
+        .dzx .code a{ display: block; width: 100px; text-align: center; color: #FFFFFF; line-height: 40px; position: absolute; top: 0; right: 0; background-color: #e92201;}
+        .dzx .code a.unclickable{ background-color: #c2c2c2;}
+        .dzx .packetBtn{ padding-top: 10px; display: block;}
+    </style>
+</head>
+<link href="css/share.css" media="all" rel="stylesheet" type="text/css">
+<body style="background-color: #fff1c2;">
+<div class="hairy-crab">
+    <img src="{{STATIC_HOST}}/static/img/promotion/dzx/red-page.gif">
+    <div class="dzx">
+        <img src="{{STATIC_HOST}}/static/img/promotion/dzx/red-back.gif">
+        <div class="main-body">
+            <label>您将是第<span>{{$count}}</span>名抢到红包的伙伴儿</label>
+            <div class="tel"><input type="text" placeholder="请输入手机号" id="mobilePhone"></div>
+            <div class="code">
+                <input type="text" placeholder="请输入验证码" id="msgCode">
+                <a href="#X" class="unclickable" id="getMsgCode">60s后重新获取</a>
+            </div>
+            <a href="#X" class="packetBtn" id="doLogin"><img src="{{STATIC_HOST}}/static/img/promotion/dzx/packetBtn.gif"/></a>
+        </div>
+        <img src="{{STATIC_HOST}}/static/img/promotion/dzx/rule.gif">
+    </div>
+</div>
+</body>
+<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var $mobilePhone = $('#mobilePhone');
+        var $msgCode = $('#msgCode');
+        var $doLogin = $('#doLogin');
+        var $getMsgCode = $('#getMsgCode');
+        
+    });
+</script>
+</html>
