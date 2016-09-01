@@ -19,7 +19,10 @@
      data-from="{{$click_from}}"
      data-should-bind-mobile="{{$should_bind_mobile}}"
      ng-click="clickPage();">
-    <div id="getPromotionCouponResult" style="display: none;" data-coupon-num="{{$getCouponNum}}" data-coupon-info="{{$getCouponInfo}}"></div>
+    <div id="getPromotionCouponResult" style="display: none;"
+         data-coupon-num="{{$getCouponNum}}"
+         data-coupon-info="{{$getCouponInfo}}">
+    </div>
     <div id="sharedOfferResult" style="display: none;" data-shared-offer="{{$follow_shared_offer_id}}" data-shared-type="{{$get_coupon_type}}" data-shared-coupon-num="{{$couponNum}}"></div>
     {{literal}}
     <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;"

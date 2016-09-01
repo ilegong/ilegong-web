@@ -82,10 +82,10 @@ class RedPacketComponent extends Component
             return ['success' => false, 'reason' => 'has_accept', 'msg' => '已经领取过该红包'];
         }
 
-        $expired = $validResult['expired'];
-        if ($expired) {
-            return ['success' => false, 'reason' => 'share_offer_expired', 'msg' => '活动已经过期'];
-        }
+//        $expired = $validResult['expired'];
+//        if ($expired) {
+//            return ['success' => false, 'reason' => 'share_offer_expired', 'msg' => '活动已经过期'];
+//        }
         $owner = $sharedOffer['SharedOffer']['uid'];
         $addDays = $sharedOffer['ShareOffer']['valid_days'];
         $packet_provider = $sharedOffer['ShareOffer']['sharer_id'];
