@@ -1327,9 +1327,7 @@ class ShareController extends AppController
         $order_query_condition = array(
             'conditions' => $cond,
             'order' => array('created DESC'));
-        if ($query_mobile_num) {
-            $order_query_condition['limit'] = 200;
-        }
+        $order_query_condition['limit'] = 2000;
         $this->handle_query_orders($order_query_condition);
         $this->set('start_date', $start_date);
         $this->set('end_date', $end_date);
