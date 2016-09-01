@@ -77,26 +77,33 @@
             e.preventDefault();
             var mobilePhone = $mobilePhone.val();
             var msgCode = $msgCode.val();
-            if(!isMobile(mobilePhone)){
+            if (!isMobile(mobilePhone)) {
                 alert('请输入正确的手机号码');
                 return false;
             }
-            if(!msgCode){
+            if (!msgCode) {
                 alert('请输入验证码');
                 return false;
             }
             $.post('/users/login.html?inajax=1', {
-                'mobile': $mobilePhone.val(),
-                'checkMobileCode': $msgCode.val()
+                'mobile': mobilePhone,
+                'checkMobileCode': msgCode
             }, function (data) {
-                if(data['userinfo']&&data['userinfo']['id']){
-                    //success
-                    window.location.href='/weshares/view/6951.html?from=promotion';
-                }else{
+                if (data['error']) {
                     alert('手机号或验证码有误，请重新输入领取!');
                     resetBtn();
+                    return false;
                 }
-            }, 'json');
+                if (data['userinfo'] && data['userinfo']['id']) {
+                    //success
+                    window.location.href = '/weshares/view/6951.html?from=promotion';
+                    return false;
+                } else {
+                    alert('手机号或验证码有误，请重新输入领取!');
+                    resetBtn();
+                    return false;
+                }
+            });
         });
         function CountDown() {
             $getMsgCode.attr("disabled", true);

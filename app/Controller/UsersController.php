@@ -584,7 +584,7 @@ class UsersController extends AppController
         }
 
         $login_by_account = isset($this->data['User']['username']);
-        $login_by_phone = isset($this->data['User']['mobilephone']);
+        $login_by_phone = isset($this->data['User']['mobilephone']) || isset($this->data['mobile']);
         if ($success) {
             $this->Hook->call('loginSuccess');
             $user = $this->Auth->user();
@@ -623,6 +623,7 @@ class UsersController extends AppController
         } elseif ($login_by_account || $login_by_phone) {
             $loginFailMsg = __('username or password not right');
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
+                $this->autoRender = false; // 不显示模板
                 // ajax 操作
                 if ($login_by_account) {
                     $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
@@ -630,12 +631,12 @@ class UsersController extends AppController
                     $errorinfo = array('error' => '手机号码或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
                 }
                 $content = json_encode($errorinfo);
-                $this->autoRender = false; // 不显示模板
                 if ($_GET['jsoncallback']) {
-                    echo $_GET['jsoncallback'] . '(' . $content . ');';
-                } else {
-                    echo $content;
+                    $content = $_GET['jsoncallback'] . '(' . $content . ');';
                 }
+                $this->response->body($content);
+                $this->response->send();
+                return;
             } else {
                 $this->Session->setFlash($loginFailMsg);
                 $this->set('fail_msg', $loginFailMsg);
