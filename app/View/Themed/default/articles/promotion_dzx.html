@@ -59,8 +59,9 @@
                 return true;
             }
             $.getJSON('/check/get_message_code?mobile=' + mobilePhone, function (data) {
-                if (data['error']) {
-                    alert('点击重新获取')
+                if (data['msg'] != 'ok') {
+                    alert('点击重新获取');
+                    return true;
                 } else {
                     clearInterval(countdown);
                     countdown = setInterval(CountDown, 1000);
