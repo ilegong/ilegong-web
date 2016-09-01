@@ -32,7 +32,7 @@
             <div class="tel"><input type="text" placeholder="请输入手机号" id="mobilePhone"></div>
             <div class="code">
                 <input type="text" placeholder="请输入验证码" id="msgCode">
-                <a href="#X" class="unclickable" id="getMsgCode">60s后重新获取</a>
+                <a href="#X" id="getMsgCode">获取验证码</a>
             </div>
             <a href="#X" class="packetBtn" id="doLogin"><img src="{{STATIC_HOST}}/static/img/promotion/dzx/packetBtn.gif"/></a>
         </div>
@@ -47,7 +47,67 @@
         var $msgCode = $('#msgCode');
         var $doLogin = $('#doLogin');
         var $getMsgCode = $('#getMsgCode');
-        
+        var countdown = null;
+        var count = 60;
+        $getMsgCode.on('click', function () {
+            if ($getMsgCode.hasClass('unclickable')) {
+                return true;
+            }
+            var mobilePhone = $mobilePhone.val();
+            if (!isMobile(mobilePhone)) {
+                alert('请输入正确的手机号码');
+                return true;
+            }
+            $.getJSON('/check/get_mobile_code?mobile=' + mobilePhone, function (data) {
+                if (data['error']) {
+                    alert('点击重新获取')
+                } else {
+                    clearInterval(countdown);
+                    countdown = setInterval(CountDown, 1000);
+                }
+            });
+        });
+        $doLogin.on('click', function (e) {
+            e.preventDefault();
+            $.post('/users/login.html?inajax=1', {
+                'mobile': $mobilePhone.val(),
+                'checkMobileCode': $msgCode.val()
+            }, function (data) {
+                if(data['userinfo']&&data['userinfo']['id']){
+                    //success
+                    window.location.href='/weshares/view/6951.html?from=promotion';
+                }else{
+                    alert('手机号或验证码有误，请重新输入领取!');
+                    resetBtn();
+                }
+            }, 'json');
+        });
+        function CountDown() {
+            $getMsgCode.attr("disabled", true);
+            $getMsgCode.addClass('unclickable');
+            $getMsgCode.text(count + "s后重新获取");
+            if (count == 0) {
+                resetBtn();
+            }
+            count--;
+        }
+
+        function resetBtn(){
+            $getMsgCode.removeAttr("disabled");
+            $getMsgCode.removeClass('unclickable');
+            $getMsgCode.text('获取验证码');
+            clearInterval(countdown);
+            count = 60;
+        }
+
+        function isMobile(s) {
+            var pattern = /^1\d{10}$/;
+            if (pattern.test(s)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     });
 </script>
 </html>
