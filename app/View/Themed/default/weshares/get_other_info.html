@@ -30,9 +30,6 @@
                 <li ng-class="{'other-share_focus':vm.focus == 'share'}" ng-click="vm.focus = 'share';">TA分享的</li>
                 <li ng-class="{'other-share_focus':vm.focus == 'attend'}" ng-click="vm.focus = 'attend';">TA报名的</li>
             </ul>
-            {{if $user_info['User']['id'] == 701201}}
-                <a href="/vote/vote_event_view/11.html?from=osu"><img style="width: 100%;margin-top: 5px;margin-bottom: 10px;" src="{{STATIC_HOST}}/static/weshares/images/spec/spec-vote.jpg"/></a>
-            {{/if}}
             {{literal}}
             <div class="shares-container hide" ng-class="{'show-b':vm.focus == 'share'}" infinite-scroll='vm.shareNextPage()'
                  infinite-scroll-disabled='vm.sharesOver||vm.loading'

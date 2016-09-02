@@ -381,12 +381,34 @@ $(document).ready(function () {
     });
 });
 var editor = new wangEditor('share-description');
-editor.config.uploadImgUrl = 'http://images.tongshijia.com/upload_images_to';
+editor.config.uploadImgUrl = 'http://up-img.tongshijia.com/upload_images_to';
 editor.config.uploadImgFileName = 'images';
-
 editor.config.uploadParams = {
-    'category': 'PYS_IMAGES_001',
-    'token': null
+    'category': 'images/index',
+    'token': 'PYS_IMAGES_001'
+};
+editor.config.uploadImgFns.onload = function (resultText, xhr) {
+    var editor = this;
+    var originalName = editor.uploadImgOriginalName || '';
+    var img;
+    resultText = JSON.parse(resultText);
+    resultText.url[0] = 'http://static.tongshijia.com/' + resultText.url[0];
+
+    if (resultText.result) {
+        // 将结果插入编辑器
+        img = document.createElement('img');
+        img.onload = function () {
+            var html = '<img src="' + resultText.url[0] + '" alt="' + originalName + '" style="max-width:100%;"/>';
+            editor.command(null, 'insertHtml', html);
+            img = null;
+        };
+        img.onerror = function () {
+            img = null;
+        };
+        img.src = resultText.url[0];
+    } else {
+        alert("上传失败");
+    }
 };
 
 editor.config.emotions = {
