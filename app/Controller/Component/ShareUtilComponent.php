@@ -397,7 +397,7 @@ class ShareUtilComponent extends Component
                     'id' => $id
                 )
             ));
-            
+
             $ship_fee = $order['Order']['ship_fee'];
             $total_price = $order['Order']['total_all_price'];
             $ship_fee = round($ship_fee / 100, 2);
@@ -625,6 +625,31 @@ class ShareUtilComponent extends Component
             $rebateLogM = ClassRegistry::init('RebateLog');
             $rebateLogM->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
             $userM->add_rebate_money($uid, -$rebate);
+        }
+    }
+
+    /**
+     * @param $order_id
+     * save user use score log
+     */
+    public function add_use_score_log($order_id)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $order = $orderM->find('first', [
+            'conditions' => [
+                'id' => $order_id
+            ],
+            'fields' => ['id', 'creator', 'applied_score']
+        ]);
+        $score = $order['Order']['applied_score'];
+        if ($score > 0) {
+            $uid = $order['Order']['creator'];
+            $order_id = $order['Order']['id'];
+            $userM = ClassRegistry::init('User');
+            $scoreM = ClassRegistry::init('Score');
+            $order_id_to_scores = [$order_id => $score];
+            $scoreM->spent_score_by_order($uid, -$score, $order_id_to_scores);
+            $userM->add_score($uid, -$score);
         }
     }
 
