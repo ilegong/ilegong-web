@@ -17,12 +17,13 @@ class ScoresController extends AppController {
             $ref = Router::url($_SERVER['REQUEST_URI']);
             $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
         }
-
-        $this->set('hideNav', true);
+        $this->layout = 'weshare';
+        //$this->set('hideNav', true);
     }
 
     public function rules() {
-        $this->pageTitle = '积分规则';
+        //$this->pageTitle = '积分规则';
+        $this->set('title', '积分规则');
     }
 
     public function more_score() {
@@ -62,15 +63,16 @@ class ScoresController extends AppController {
     }
 
     public function detail() {
-        $uid = $this->currentUser['id'];
-        if (!empty($uid)) {
-            $arr = $this->paged_details(PHP_INT_MAX, $uid);
-            $this->set('scores', $arr);
-        } else {
-            $this->redirect('/users/login.html?referer=/scores/detail.html');
-        }
-
-        $this->pageTitle = '积分明细';
+//        $uid = $this->currentUser['id'];
+//        if (!empty($uid)) {
+//            $arr = $this->paged_details(PHP_INT_MAX, $uid);
+//            $this->set('scores', $arr);
+//        } else {
+//            $this->redirect('/users/login.html?referer=/scores/detail.html');
+//        }
+//
+//        $this->pageTitle = '积分明细';
+        $this->set('title', '积分明细');
     }
 
     public function detail_lists($next) {

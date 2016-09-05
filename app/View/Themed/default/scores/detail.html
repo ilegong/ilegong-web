@@ -1,0 +1,33 @@
+<div class="menu-top refer-back-bg">
+    积分明细
+    <a href="/">
+        <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+        <label>返回</label>
+    </a>
+</div>
+<div ng-controller="UserScoresCtrl as vm">
+    <div class="my-score">
+        <label class="fl">当前积分0</label>
+        <label class="fr"><a href="integral-rule.html">积分规则></a></label>
+    </div>
+    <ul class="my-score-url fl">
+        <li class="fl">购买：俱乐部团购49—贴秋膘第一季...</li>
+        <li class="fr">-100</li>
+    </ul>
+    <ul class="my-score-url fl">
+        <li class="fl">绑定手机号</li>
+        <li class="fr">+100</li>
+    </ul>
+</div>
+
+<?php
+$this->assign('title','积分明细');
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.12'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/user-scores-controller.min.js'
+), array('block' => 'scripts'))
+?>

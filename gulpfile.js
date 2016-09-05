@@ -128,6 +128,12 @@ var all_js = [
             'webroot/src/scripts/get-user-provide-share-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'user-scores-controller.min.js',
+        sources: [
+            'webroot/src/scripts/user-scores-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
     }
 ];
 
