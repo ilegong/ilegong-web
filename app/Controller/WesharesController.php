@@ -752,7 +752,7 @@ class WesharesController extends AppController
             $this->Cart->saveAll($cart);
             $shipFee = $this->calculate_order_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $shipInfo['provinceId']);
             $totalPrice += $shipFee;
-            $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee);
+            $update_order_data = ['total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee];
             $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
@@ -827,7 +827,7 @@ class WesharesController extends AppController
      * @param $order_id
      * @param $uid
      * 使用余额
-     * 还没有真正减去用户余额，用户使用之后减去
+     * 还没有真正减去用户余额，用户支付之后减去
      */
     private function use_rebate_money($order_id, $uid)
     {
@@ -843,12 +843,23 @@ class WesharesController extends AppController
         $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
     }
 
-    private function use_score($order_id, $uid){
+    /**
+     * @param $order_id
+     * @param $uid
+     * 使用积分
+     * 还没有真正减去用户积分，用户支付成功之后减去积分
+     */
+    private function use_score($order_id, $uid)
+    {
         $order = $this->Order->find('first', [
             'conditions' => ['id' => $order_id],
-            'fields' => ['id', 'total_all_price']
+            'fields' => ['id', 'total_price', 'ship_fee']
         ]);
-
+        $order_product_price = $order['Order']['total_price'] - ($order['Order']['ship_fee'] / 100);
+        $score = $this->get_can_use_score($uid, $order_product_price);
+        $reduced = $score / 100;
+        $toUpdate = ['applied_score' => $score, 'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')'];
+        $this->Order->updateAll($toUpdate, ['id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY]);
     }
 
     /**
