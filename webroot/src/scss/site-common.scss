@@ -1104,37 +1104,34 @@ a:-webkit-any-link {
   position: fixed;
   top: 25%;
   z-index: 100;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
 
   /*iphone-number*/
   .bind-mobile-dialog {
-    margin: 18px;
-    margin-top: 0;
-  }
-
-  .bind-mobile-dialog .main-body {
-    background-color: #ffffff;
-    border-radius: 4px;
-    padding: 20px;
-    margin: 12px 0;
-  }
-
-  .bind-mobile-dialog .main-body label {
-    padding-bottom: 15px;
-    display: block;
-    text-align: center;
-  }
-
-  .bind-mobile-dialog .main-body label span {
-    font-size: 1.25em;
-    color: #e62101;
-  }
-
-  .bind-mobile-dialog .main-body .button {
-    background-color: red;
-    color: #ffffff;
-    border-radius: 4px;
-    line-height: 40px;
-    padding-bottom: 0px;
+    .main-body {
+      background-color: #ffffff;
+      border-radius: 4px;
+      padding: 20px;
+      margin: 12px 0;
+      label {
+        padding-bottom: 15px;
+        display: block;
+        text-align: center;
+        span {
+          font-size: 1.25em;
+          color: #e62101;
+        }
+      }
+      .button {
+        background-color: red;
+        color: #ffffff;
+        border-radius: 4px;
+        line-height: 40px;
+        padding-bottom: 0px;
+      }
+    }
   }
 
   .bind-mobile-dialog .tel, .bind-mobile-dialog .code {

@@ -64,7 +64,7 @@
                 CoreReactorChannel.elevatedEvent('BindMobile', {});
                 return;
             }
-            console.log('to view score');
+            window.location.href='/scores/detail.html';
         }
     }
 })
