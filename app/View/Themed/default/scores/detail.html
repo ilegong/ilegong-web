@@ -8,7 +8,7 @@
 <div ng-controller="UserScoresCtrl as vm">
     <div class="my-score">
         <label class="fl">当前积分{{$score}}</label>
-        <label class="fr"><a href="/scores/rules.html">积分规则></a></label>
+        <label class="fr"><a href="/scores/rules.html?history={{$back_url}}">积分规则></a></label>
     </div>
     <div infinite-scroll='vm.loadData()' infinite-scroll-disabled='vm.scoreList.over||vm.loadingData'
          infinite-scroll-distance='0'>

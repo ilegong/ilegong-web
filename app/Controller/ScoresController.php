@@ -24,6 +24,7 @@ class ScoresController extends AppController {
     public function rules() {
         //$this->pageTitle = '积分规则';
         $this->set('title', '积分规则');
+        $this->set('history', $_REQUEST['history']);
     }
 
     public function more_score() {

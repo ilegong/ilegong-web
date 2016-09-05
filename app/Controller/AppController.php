@@ -277,6 +277,10 @@ class AppController extends Controller {
     }
 
     protected function set_history(){
+        if($_REQUEST['history']){
+            $this->set('back_url', $_REQUEST['history']);
+            return;
+        }
         $refer = $this->referer();
         if ($refer && strpos($refer, 'tongshijia.com')) {
             $this->set('back_url', $refer);
