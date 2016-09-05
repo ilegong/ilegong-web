@@ -16,9 +16,12 @@
         vm.bindMobile = bindMobile;
         vm.onCodeChanged = onCodeChanged;
         vm.onError = onError;
+        vm.bindAndMerge = bindAndMerge;
+        vm.hideAllLayer = hideAllLayer;
         vm.showBindMobileDialog = false;
         vm.showBindSuccess = false;
         vm.showMaskLayer = false;
+        vm.userBindMobileSuccess = false;
         vm.goBack = function () {
             window.history.back();
         };
@@ -28,10 +31,15 @@
             $rootScope.loadingPage = false;
             vm.mobilePhone = {value: '', valid: true};
             vm.code = {value: '', sent: false, timer: null, timeSpent: 60, valid: true};
-            CoreReactorChannel.onElevatedEvent($scope, 'BindMobile', function(){
+            CoreReactorChannel.onElevatedEvent($scope, 'BindMobile', function () {
                 vm.showBindMobileDialog = true;
                 vm.showMaskLayer = true;
             });
+        }
+
+        function hideAllLayer() {
+            vm.showBindMobileDialog = false;
+            vm.showMaskLayer = false;
         }
 
         function validateMobilePhone() {
@@ -91,6 +99,38 @@
 
         function canBindMobile() {
             return Utils.isMobileValid(vm.mobilePhone.value) && !_.isEmpty(vm.mobilePhone.value) && !_.isEmpty(vm.code.value);
+        }
+
+        function bindAndMerge() {
+            if (!vm.canBindMobile()) {
+                return;
+            }
+            vm.binding = true;
+            $http.post('/users/wx_user_bind_mobile', {
+                'code': vm.code.value,
+                'mobile': vm.mobilePhone.value
+            }).success(function (data) {
+                $log.log(data);
+                vm.binding = false;
+                if (data['success']) {
+                    vm.userBindMobileSuccess = true;
+                    vm.showBindSuccess = true;
+                    vm.showBindMobileDialog = false;
+                } else {
+                    if (data['reason'] == 'code_error') {
+                        alert('验证码有误');
+                    }
+                    if (data['reason'] == 'mobile_error') {
+                        alert('手机号码有误');
+                    }
+                    if (data['reason'] == 'system_error') {
+                        alert('绑定失败，请联系客服！');
+                        vm.hideAllLayer();
+                    }
+                }
+            }).error(function (data) {
+                vm.binding = false;
+            });
         }
 
         function bindMobile() {

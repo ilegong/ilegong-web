@@ -59,8 +59,12 @@
             return indexProduct.summary;
         }
 
-        function viewMyScore() {
-            CoreReactorChannel.elevatedEvent('BindMobile', {});
+        function viewMyScore(needBindMobile) {
+            if(needBindMobile){
+                CoreReactorChannel.elevatedEvent('BindMobile', {});
+                return;
+            }
+            console.log('to view score');
         }
     }
 })

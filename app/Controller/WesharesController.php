@@ -54,9 +54,10 @@ class WesharesController extends AppController
         $this->set('promotions', $promotions);
         $coupon_count = $this->CouponItem->find_my_share_coupons_count($uid);
         $this->set('coupon_count', $coupon_count);
+        $this->set('owner', $this->currentUser['own_id']);
+        $this->set('need_bind_mobile', $this->check_need_bind_mobile());
         $hide_nav = $_REQUEST['hide_nav'];
         $this->set('hide_nav', $hide_nav);
-        $this->set('owner', $this->currentUser['own_id']);
     }
 
     public function read_share_count_api($page)
@@ -277,6 +278,14 @@ class WesharesController extends AppController
                 $this->set('getCouponInfo', '恭喜你领到大闸蟹红包！');
             }
         }
+    }
+
+    private function check_need_bind_mobile()
+    {
+        if ($this->currentUser['id'] && empty($this->currentUser['mobilephone'])) {
+            return true;
+        }
+        return false;
     }
 
     private function should_bind_mobile($weshare_id)

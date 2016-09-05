@@ -62,6 +62,12 @@ class Score extends AppModel {
         return $this->save_score_log($userId, $score_change, SCORE_ORDER_COMMENT, $data, $desc, $orderId);
     }
 
+    public function add_score_by_bind_mobile($userId, $score_change, $mobile){
+        $desc = '绑定手机号码获得' . $score_change . ' 个积分';
+        $data = json_encode(['mobile' => $mobile]);
+        return $this->save_score_log($userId, $score_change, SCORE_BIND_MOBILE_OK, $data, $desc);
+    }
+
     public function spent_score_by_order($userId, $spent, $order_id_to_scores) {
         $reason = SCORE_ORDER_SPENT;
         $data = json_encode($order_id_to_scores);

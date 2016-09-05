@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="bind-mobile-dialog" ng-if="bindM.showBindSuccess" ng-class="{'show-b': bindM.showBindSuccess}" style="display: none;">
+        <div class="bind-mobile-dialog" ng-show="bindM.showBindSuccess" ng-class="{'show-b': bindM.showBindSuccess}" style="display: none;">
             <div class="main-body">
                 <label><h2>恭喜您获得100积分</h2></label>
                 <label><span>购物可抵现金使用吆</span></label>
@@ -30,5 +30,5 @@
             </div>
         </div>
     </div>
-    <div class="mask-layer" ng-show="bindM.showMaskLayer" ng-class="{'show-b': bindM.showMaskLayer}"></div>
+    <div class="mask-layer" ng-click="bindM.hideAllLayer()" ng-show="bindM.showMaskLayer" ng-class="{'show-b': bindM.showMaskLayer}"></div>
 </div>
