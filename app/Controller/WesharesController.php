@@ -816,6 +816,13 @@ class WesharesController extends AppController
         return intval($reduced * 100);
     }
 
+    //获取可用积分
+    private function  get_can_use_score($uid, $total_price){
+        $u_score = $this->User->get_score($uid, true);
+        $reduced = cal_score_money($u_score, $total_price);
+        return intval($reduced * 100);
+    }
+
     /**
      * @param $order_id
      * @param $uid
@@ -834,6 +841,14 @@ class WesharesController extends AppController
         $toUpdate = array('applied_rebate' => $rebate,
             'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
         $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+    }
+
+    private function use_score($order_id, $uid){
+        $order = $this->Order->find('first', [
+            'conditions' => ['id' => $order_id],
+            'fields' => ['id', 'total_all_price']
+        ]);
+
     }
 
     /**
