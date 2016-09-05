@@ -1,30 +1,31 @@
 <div class="menu-top refer-back-bg">
     积分明细
-    <a href="/">
+    <a href="{{$back_url}}">
         <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
         <label>返回</label>
     </a>
 </div>
 <div ng-controller="UserScoresCtrl as vm">
     <div class="my-score">
-        <label class="fl">当前积分0</label>
-        <label class="fr"><a href="integral-rule.html">积分规则></a></label>
+        <label class="fl">当前积分{{$score}}</label>
+        <label class="fr"><a href="/scores/rules.html">积分规则></a></label>
     </div>
-    <ul class="my-score-url fl">
-        <li class="fl">购买：俱乐部团购49—贴秋膘第一季...</li>
-        <li class="fr">-100</li>
-    </ul>
-    <ul class="my-score-url fl">
-        <li class="fl">绑定手机号</li>
-        <li class="fr">+100</li>
-    </ul>
+    <div infinite-scroll='vm.loadData()' infinite-scroll-disabled='vm.scoreList.over||vm.loadingData'
+         infinite-scroll-distance='0'>
+        <ul class="my-score-url fl" ng-repeat="score in vm.scoreList.scores">
+            <li class="fl" ng-bind="score.reason"></li>
+            <li class="fr" ng-bind="score.num"></li>
+        </ul>
+    </div>
+    <div style="text-align: center;color: #ffa200;margin-bottom: 10px; padding: 10px; clear: both;" ng-show='vm.loadingData'>加载中...</div>
+    <div style="text-align: center;color: #999;margin-bottom: 10px; padding: 10px; clear: both;" ng-show='vm.scoreList.over'>没有更多数据</div>
 </div>
 
 <?php
 $this->assign('title','积分明细');
 
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.12'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.13'
 ), null, array('inline' => false));
 
 $this->Html->script(array(

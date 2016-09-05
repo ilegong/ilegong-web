@@ -92,6 +92,15 @@ class Score extends AppModel {
         ));
     }
 
+    public function find_user_score_logs_by_page($userId, $page, $limit = 10){
+        return $this->find('all', [
+            'conditions' => ['user_id' => $userId],
+            'page' => $page,
+            'limit' => $limit,
+            'order' => ['id DESC']
+        ]);
+    }
+
     /**
      * @param $userId
      * @param $change

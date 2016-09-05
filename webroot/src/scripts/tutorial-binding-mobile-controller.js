@@ -32,6 +32,10 @@
             vm.mobilePhone = {value: '', valid: true};
             vm.code = {value: '', sent: false, timer: null, timeSpent: 60, valid: true};
             CoreReactorChannel.onElevatedEvent($scope, 'BindMobile', function () {
+                if (vm.userBindMobileSuccess) {
+                    window.location.href = '/scores/detail.html';
+                    return;
+                }
                 vm.showBindMobileDialog = true;
                 vm.showMaskLayer = true;
             });
@@ -40,6 +44,7 @@
         function hideAllLayer() {
             vm.showBindMobileDialog = false;
             vm.showMaskLayer = false;
+            vm.showBindSuccess = false;
         }
 
         function validateMobilePhone() {

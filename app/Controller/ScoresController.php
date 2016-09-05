@@ -63,16 +63,20 @@ class ScoresController extends AppController {
     }
 
     public function detail() {
-//        $uid = $this->currentUser['id'];
-//        if (!empty($uid)) {
-//            $arr = $this->paged_details(PHP_INT_MAX, $uid);
-//            $this->set('scores', $arr);
-//        } else {
-//            $this->redirect('/users/login.html?referer=/scores/detail.html');
-//        }
+        $uid = $this->currentUser['id'];
+        if (!empty($uid)) {
+            $arr = $this->paged_details(PHP_INT_MAX, $uid);
+            $this->set('scores', $arr);
+        } else {
+            $this->redirect('/users/login.html?referer=/scores/detail.html');
+        }
 //
 //        $this->pageTitle = '积分明细';
+        $this->loadModel('User');
+        $this->set_history();
+        $score = $this->User->get_score($uid, true);
         $this->set('title', '积分明细');
+        $this->set('score', $score);
     }
 
     public function detail_lists($next) {
@@ -81,6 +85,26 @@ class ScoresController extends AppController {
         $arr = empty($uid)? array('success' => false) : $this->paged_details($next, $uid);
 
         echo json_encode($arr);
+    }
+
+    public function score_list($page){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode([]);
+            exit;
+        }
+        $scores = $this->Score->find_user_score_logs_by_page($uid, $page);
+        $list = [];
+        foreach ($scores as $score) {
+            $list[] = [
+                'id' => $score['Score']['id'],
+                'num' => $score['Score']['score'],
+                'reason' => $score['Score']['desc']
+            ];
+        }
+        echo json_encode($list);
+        exit;
     }
 
     /**
