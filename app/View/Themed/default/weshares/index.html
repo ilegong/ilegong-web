@@ -28,7 +28,11 @@
         <li>
             <a href="#" ng-click="vm.viewMyScore({{$need_bind_mobile}})">
                 <img src="{{$STATIC_HOST}}/static/img/index/jifen.png">
-                <label>领现金喽</label>
+                {{if $need_bind_mobile}}
+                    <label>领现金喽</label>
+                {{else}}
+                    <label>我的积分</label>
+                {{/if}}
             </a>
         </li>
         <li>
