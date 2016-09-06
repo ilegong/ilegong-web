@@ -73,8 +73,16 @@
                 <li class="fr" ng-bind="vm.shipFee/100 | currency:'￥'"></li>
             </ul>
             <ul class="clearfix" ng-if="vm.myCoupons&&vm.myCoupons.length > 0">
-                <li class="fl">红包优惠：</li>
+                <li class="fl">红包：</li>
                 <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.useScore&&vm.canUseScoreTotal>0">
+                <li class="fl">积分：</li>
+                <li class="fr">-<span ng-bind="vm.canUseScoreTotal/100 | currency:'￥'"></span></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.useRebate&&vm.canUseRebateTotal>0">
+                <li class="fl">余额：</li>
+                <li class="fr">-<span ng-bind="vm.canUseRebateTotal/100 | currency:'￥'"></span></li>
             </ul>
             <dl class="clearfix">
                 <dt class="fl">应付总额：</dt>

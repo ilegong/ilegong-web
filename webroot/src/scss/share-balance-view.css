@@ -160,6 +160,7 @@
     background-color: #FFF;
     padding: 0 12px 0px;
     font-size: 1.1em;
+    margin-top: 10px;
 }
 
 .balance-detail-panel{
@@ -169,7 +170,6 @@
 
 .money-detail dl {
     line-height: 43px;
-    border-top: 1px #eee solid;
 }
 
 .money-detail dl dt.fl, .money-detail ul li.fl {
@@ -183,6 +183,7 @@
 .money-detail ul {
     padding-top: 12px;
     padding-bottom: 12px;
+    border-bottom: 1px #eee solid;
 }
 
 .rebate-balance{ background-color: #FFFFFF; padding: 10px 12px 0px; border-bottom: 1px #eee solid;}
