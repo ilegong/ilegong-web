@@ -43,7 +43,9 @@ class CommonApiController extends Controller
         $this->loadModel('OfflineStore');
         $stores = $this->OfflineStore->find('all', [
             'conditions' => [
-                'area_id' => $area_id
+                'area_id' => $area_id,
+                'deleted' => DELETED_NO,
+                'type' => OFFLINE_STORE_HAOLINJU
             ]
         ]);
         $stores = Hash::combine($stores, '{n}.OfflineStore.id', '{n}.OfflineStore');
