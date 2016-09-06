@@ -44,6 +44,23 @@ class UserApiController extends Controller
         exit;
     }
 
+    //获取积分列表
+    public function get_score_logs($page, $limit){
+        $uid = $this->currentUser['id'];
+        $this->loadModel('Score');
+        $scores = $this->Score->find_user_score_logs_by_page($uid, $page, $limit);
+        $list = [];
+        foreach ($scores as $score) {
+            $list[] = [
+                'id' => $score['Score']['id'],
+                'num' => $score['Score']['score'],
+                'reason' => $score['Score']['desc']
+            ];
+        }
+        echo json_encode($list);
+        exit;
+    }
+
     //查看别人的信息
     public function show_user_info($uid)
     {
@@ -258,7 +275,7 @@ class UserApiController extends Controller
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar', 'rebate_money', 'own_id')));
+            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar', 'rebate_money', 'own_id', 'score')));
         $datainfo['User']['image'] = get_user_avatar($datainfo);
 
         $payment = json_decode($datainfo['User']['payment'], true);
