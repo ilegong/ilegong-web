@@ -9,16 +9,6 @@
         <div class="introduction margin-bottom-12">
             <div class="status" ng-bind="::vm.shareStatusText"></div>
             <h1 class='title margin-bottom-12' ng-bind="::vm.weshare.title"></h1>
-            <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
-                <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=t01719wisq4&tiny=0&auto=0" allowfullscreen></iframe>
-            </div>
-            <div ng-if="vm.weshare.refer_share_id==3822 || vm.weshare.id==3822">
-                <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=f0194qcpnvt&tiny=0&auto=0" allowfullscreen></iframe>
-            </div>
-            <div ng-if="vm.weshare.refer_share_id==4008 || vm.weshare.id==4008">
-                <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=e0195mejuea&tiny=0&auto=0"
-                        allowfullscreen></iframe>
-            </div>
 
             <p class="margin-bottom-12"  ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html="vm.weshare.description | unsafe"></p>
 
