@@ -115,6 +115,10 @@ class ShareFaqController extends AppController {
 
     public function update_faq_read($shareId, $userId) {
         $this->autoRender = false;
+        if(empty($shareId) || empty($userId)){
+            echo json_encode(array('success' => false));
+            return;
+        }
         $this->ShareFaqUtil->update_user_faq_has_read($shareId, $userId);
         echo json_encode(array('success' => true));
         return;
