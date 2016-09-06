@@ -1214,6 +1214,7 @@
             vm.consignee = data['consignee'];
             vm.myCoupons = data['my_coupons'];
             vm.rebateTotal = parseInt(data['user_rebate_total']);
+            vm.scoreTotal = parseInt(data['user_score_total']);
             if(vm.rebateTotal > 0){
                 vm.useRebate = 1;
             }
