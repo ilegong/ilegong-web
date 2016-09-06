@@ -103,7 +103,7 @@
             vm.orderComments = [];
             vm.inWeixin = Utils.isWeixin();
             vm.recommendWeshares = [];
-            $rootScope.uid=-1;
+            $rootScope.uid = -1;
             $rootScope.proxies = [];
             vm.initWeshareData();
         }
@@ -114,9 +114,9 @@
 
         function getDate(strDate) {
             var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
-                    function (a) {
-                        return parseInt(a, 10) - 1;
-                    }).match(/\d+/g) + ')');
+                function (a) {
+                    return parseInt(a, 10) - 1;
+                }).match(/\d+/g) + ')');
             return date;
         }
 
@@ -156,8 +156,8 @@
                 cache: $templateCache
             }).success(function (data, status) {
                 vm.ordersDetail = data['ordersDetail'];
-                if(!_.isEmpty(data['ordersDetail']['order_ids'])){
-                  loadOrderCommentData(share_id);
+                if (!_.isEmpty(data['ordersDetail']['order_ids'])) {
+                    loadOrderCommentData(share_id);
                 }
                 //check user is auto comment
                 if (vm.autoPopCommentData['comment_order_info']) {
@@ -301,7 +301,7 @@
         }
 
         function viewImage(url) {
-            if(wx){
+            if (wx) {
                 wx.previewImage({
                     current: url,
                     urls: vm.weshare.images
@@ -318,7 +318,21 @@
             }).join(',');
         }
 
-        function calCanUserRebate(totalPrice){
+        function calCanUseScore(productPrice) {
+            if (vm.scoreTotal == 0) {
+                vm.canUseScoreTotal = 0;
+            } else {
+                productPrice = productPrice / 100;
+                var scoreMoney = vm.scoreTotal / 100;
+                var maxReduce = productPrice * 20 / 100;
+                if (scoreMoney > maxReduce) {
+                    scoreMoney = maxReduce;
+                }
+                vm.canUseScoreTotal = parseInt((scoreMoney * 100) + '');
+            }
+        }
+
+        function calCanUseRebate(totalPrice) {
             if (vm.rebateTotal == 0) {
                 vm.canUseRebateTotal = 0;
             } else {
@@ -344,12 +358,16 @@
             });
             if (totalPrice != 0) {
                 vm.productTotalPrice = totalPrice / 100;
+                calCanUseScore(totalPrice);
+                if (vm.useScore == '1') {
+                    totalPrice -= vm.canUseScoreTotal;
+                }
                 if (vm.userCouponReduce) {
                     totalPrice -= vm.userCouponReduce;
                 }
                 vm.shipFee = parseInt(getShipFee());
                 vm.shipSetId = getShipSetId();
-                calCanUserRebate(totalPrice);
+                calCanUseRebate(totalPrice);
                 if (vm.useRebate == '1') {
                     totalPrice -= vm.canUseRebateTotal;
                 }
@@ -639,7 +657,8 @@
                 products: submit_products,
                 ship_info: ship_info,
                 remark: vm.buyerRemark,
-                useRebate: vm.useRebate
+                useRebate: vm.useRebate,
+                useScore: vm.useScore
             };
             if (vm.useCouponId) {
                 orderData['coupon_id'] = vm.useCouponId;
@@ -737,7 +756,7 @@
                     if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
                         vm.commentOrder.status = 9;
                     }
-                  loadOrderCommentData(vm.weshare.id);
+                    loadOrderCommentData(vm.weshare.id);
                 } else {
                     alert('提交失败');
                 }
@@ -747,16 +766,19 @@
             vm.closeCommentDialog();
         }
 
-      function loadOrderCommentData(share_id) {
-        $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '/'+vm.weshare.creator.id+'.json'}).
-          success(function (data, status) {
-            vm.commentData = data['comment_data'];
-            vm.orderComments = vm.commentData['order_comments'];
-          }).
-          error(function (data, status) {
-            $log.log(data);
-          });
-      }
+        function loadOrderCommentData(share_id) {
+            $http({
+                method: 'GET',
+                url: '/weshares/get_share_comment_data/' + share_id + '/' + vm.weshare.creator.id + '.json'
+            }).
+                success(function (data, status) {
+                    vm.commentData = data['comment_data'];
+                    vm.orderComments = vm.commentData['order_comments'];
+                }).
+                error(function (data, status) {
+                    $log.log(data);
+                });
+        }
 
         function resetNotifyContent() {
             if (vm.sendNotifyType == 0) {
@@ -768,10 +790,10 @@
 
         function defaultNotifyHasBuyMsgContent() {
             var msgContent = '';
-            if(vm.notifyType() == 0){
+            if (vm.notifyType() == 0) {
                 msgContent = '我发起了一个分享，时间有限，抓紧报名啦！';
                 return msgContent;
-            }else{
+            } else {
                 if (vm.weshare.summary.order_count > 10) {
                     var index = 0;
                     for (var userId in vm.shareOrder['users']) {
@@ -1215,12 +1237,16 @@
             vm.myCoupons = data['my_coupons'];
             vm.rebateTotal = parseInt(data['user_rebate_total']);
             vm.scoreTotal = parseInt(data['user_score_total']);
-            if(vm.rebateTotal > 0){
+            if (vm.scoreTotal > 0 && _.isEmpty(vm.myCoupons)) {
+                vm.useScore = 1;
+                vm.showUseScore = 1;
+            }
+            if (vm.rebateTotal > 0) {
                 vm.useRebate = 1;
             }
             vm.weshareSettings = data['weshare_ship_settings'];
 
-            if(data['sub_status']){
+            if (data['sub_status']) {
                 $rootScope.proxies.push(parseInt(vm.weshare.creator.id));
             }
 
@@ -1232,7 +1258,7 @@
             vm.submitRecommendData.recommend_user = vm.currentUser.id;
             vm.submitRecommendData.recommend_share = vm.weshare.id;
 
-            if(vm.myCoupons&&vm.myCoupons['Coupon']&&vm.myCoupons['CouponItem']){
+            if (vm.myCoupons && vm.myCoupons['Coupon'] && vm.myCoupons['CouponItem']) {
                 vm.useCouponId = vm.myCoupons['CouponItem']['id'];
                 vm.userCouponReduce = vm.myCoupons['Coupon']['reduced_price'];
             }
@@ -1252,8 +1278,8 @@
             vm.getRecommendWeshares(vm.weshare.id, vm.weshare.creator.id);
         }
 
-        function showPromotionCouponDialog(){
-            if(vm.getPromotionCouponNum){
+        function showPromotionCouponDialog() {
+            if (vm.getPromotionCouponNum) {
                 vm.showNotifyGetPromotionPacketDialog = true;
                 vm.showLayer = true;
             }
@@ -1359,7 +1385,7 @@
             });
         }
 
-        function hideAllLayer(){
+        function hideAllLayer() {
             vm.showBindMobileDialog = false;
             vm.showShareControl = false;
             vm.showTipSubSharerDialog = false;
@@ -1383,30 +1409,30 @@
             }, 2000);
         }
 
-        function getBannerImage(){
-            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+        function getBannerImage() {
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
                 return vm.staticFilePath + '/static/weshares/images/download-ios-app-banner.jpg';
             }
             return vm.staticFilePath + '/static/weshares/images/share-banner-new.gif';
         }
 
-        function getBannerLink(){
-            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+        function getBannerLink() {
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
                 return '/pys/download_app?from=share_view';
             }
             return '/weshares/add?from=share_view';
         }
 
-        function isIOSDevice(){
-            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+        function isIOSDevice() {
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
                 return true;
             }
             return false;
         }
 
-        function getRecommendWeshares(weshareId, proxyId){
-            $http.get('/weshares/get_recommend_weshares/' +  proxyId).success(function (data) {
-                vm.recommendWeshares = _.filter(data, function(share){
+        function getRecommendWeshares(weshareId, proxyId) {
+            $http.get('/weshares/get_recommend_weshares/' + proxyId).success(function (data) {
+                vm.recommendWeshares = _.filter(data, function (share) {
                     return share.id != weshareId;
                 });
                 vm.recommendWeshares = vm.recommendWeshares.slice(0, 4);
