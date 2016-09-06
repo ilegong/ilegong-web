@@ -341,21 +341,21 @@ class Order extends AppModel {
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
                 $order = $this->findById($order_id);
-                $scoreM = ClassRegistry::init('Score');
-                $RebateLogM = ClassRegistry::init('RebateLog');
-                $userM = ClassRegistry::init('User');
+//                $scoreM = ClassRegistry::init('Score');
+//                $RebateLogM = ClassRegistry::init('RebateLog');
+//                $userM = ClassRegistry::init('User');
                 if (!empty($order)) {
-                    $creator = $order['Order']['creator'];
-                    $rtn = $scoreM->restore_score_by_undo_order($creator, $order['Order']['applied_score'], $order_id);
-                    $this->log('restore_score_by_undo_order: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($rtn));
-                    if (!empty($rtn)) {
-                        $userM->add_score($creator, $rtn['Score']['score']);
-                    }
-                    $restoreRebateRtn = $RebateLogM->restore_rebate_by_undo_order($creator, $order['Order']['applied_rebate'], $order_id);
-                    $this->log('restore_rebate_by_undo_order: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($restoreRebateRtn));
-                    if(!empty($rtn)){
-                        $userM->add_rebate_money($creator, $restoreRebateRtn['RebateLog']['money']);
-                    }
+//                    $creator = $order['Order']['creator'];
+//                    $rtn = $scoreM->restore_score_by_undo_order($creator, $order['Order']['applied_score'], $order_id);
+//                    $this->log('restore_score_by_undo_order: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($rtn));
+//                    if (!empty($rtn)) {
+//                        $userM->add_score($creator, $rtn['Score']['score']);
+//                    }
+//                    $restoreRebateRtn = $RebateLogM->restore_rebate_by_undo_order($creator, $order['Order']['applied_rebate'], $order_id);
+//                    $this->log('restore_rebate_by_undo_order: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($restoreRebateRtn));
+//                    if(!empty($rtn)){
+//                        $userM->add_rebate_money($creator, $restoreRebateRtn['RebateLog']['money']);
+//                    }
                     $couponItemM = ClassRegistry::init('CouponItem');
                     $couponItemM->updateAll(array('status' => COUPONITEM_STATUS_TO_USE, 'applied_order' => '0'),
                         array('applied_order' => $order_id, 'status' => COUPONITEM_STATUS_USED));
