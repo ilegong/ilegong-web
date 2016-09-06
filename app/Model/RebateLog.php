@@ -3,6 +3,11 @@
 class RebateLog extends Model
 {
 
+    public function has_bind_rebate_log($userId, $orderId, $reason)
+    {
+        return $this->hasAny(['user_id' => $userId, 'order_id' => $orderId, 'reason' => $reason]);
+    }
+
     public function save_rebate_log($userId, $change, $orderId, $reason)
     {
         $desc = $this->get_reason($reason, $orderId, $change);

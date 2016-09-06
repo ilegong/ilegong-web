@@ -36,14 +36,12 @@ const SCORE_ORDER_COMMENT = 1;
 const SCORE_NEW_USER = 2;
 const SCORE_ORDER_DONE = 3;
 const SCORE_ORDER_SPENT = 4;
-
 const SCORE_ORDER_SPENT_UNDO = 6; //取消/退款等，返回使用的积分
-
 const SCORE_ORDER_SPENT_CANCEL = 5; //退款取消已经发放的积分
-
 const SCORE_REFERRAL_BIND_OK = 7; //推荐人推荐某人绑定后得到的积分
 const SCORE_REFERRAL_BIND_OK_TO = 8; //推荐人推荐某人某人绑定后，被推荐人得到积分
 const SCORE_REFERRAL_FIRST_ORDER = 9; //推荐人推荐某人完成首单
+const SCORE_BIND_MOBILE_OK = 10; //用户绑定手机号码成功
 
 const SPEICAL_LIST_DAILY_ID = 4;
 

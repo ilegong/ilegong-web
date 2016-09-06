@@ -110,6 +110,8 @@ const COMMENT_AWARD_SCORE = 100;
 const COMMENT_EXTRA_SCORE = 100;
 const COMMENT_SHOW_STATUS = 1;
 
+const BIND_MOBILE_AWARD_SCORE = 100;
+
 const COMMENT_LIMIT_IN_PRODUCT_VIEW = 5;
 
 const ORDER_COMMENTED = 1;
@@ -1680,7 +1682,8 @@ function accept_user_price($product_id, $user_price) {
 
 function cal_score_money($score, $total_price) {
     $score_money = $score / 100;
-    if ($score_money > $total_price / 2) {
+    $max_reduce_money = $total_price * 20 / 100;
+    if ($score_money > $max_reduce_money) {
         return $total_price / 2;
     } else {
         return $score_money;

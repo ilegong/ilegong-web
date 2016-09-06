@@ -54,9 +54,10 @@ class WesharesController extends AppController
         $this->set('promotions', $promotions);
         $coupon_count = $this->CouponItem->find_my_share_coupons_count($uid);
         $this->set('coupon_count', $coupon_count);
+        $this->set('owner', $this->currentUser['own_id']);
+        $this->set('need_bind_mobile', $this->check_need_bind_mobile());
         $hide_nav = $_REQUEST['hide_nav'];
         $this->set('hide_nav', $hide_nav);
-        $this->set('owner', $this->currentUser['own_id']);
     }
 
     public function read_share_count_api($page)
@@ -277,6 +278,14 @@ class WesharesController extends AppController
                 $this->set('getCouponInfo', '恭喜你领到大闸蟹红包！');
             }
         }
+    }
+
+    private function check_need_bind_mobile()
+    {
+        if ($this->currentUser['id'] && empty($this->currentUser['mobilephone'])) {
+            return true;
+        }
+        return false;
     }
 
     private function should_bind_mobile($weshare_id)
@@ -743,7 +752,7 @@ class WesharesController extends AppController
             $this->Cart->saveAll($cart);
             $shipFee = $this->calculate_order_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $shipInfo['provinceId']);
             $totalPrice += $shipFee;
-            $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee);
+            $update_order_data = ['total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee];
             $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
@@ -752,9 +761,14 @@ class WesharesController extends AppController
                 if (!empty($coupon_id)) {
                     $this->order_use_coupon($coupon_id, $orderId, $uid);
                 }
+                //积分与红包不能一起使用
+                $useScore = $postDataArray['useScore'];
+                if ($useScore == 1 && empty($coupon_id)) {
+                    $this->use_score($orderId, $uid);
+                }
                 $useRebate = $postDataArray['useRebate'];
                 //余额
-                if($useRebate == 1){
+                if ($useRebate == 1) {
                     $this->use_rebate_money($orderId, $uid);
                 }
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
@@ -762,7 +776,7 @@ class WesharesController extends AppController
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
             $dataSource->commit();
             try {
-                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice/100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
+                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice / 100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
             } catch (Exception $e) {
                 $this->log('add es log error when make order');
             }
@@ -807,11 +821,18 @@ class WesharesController extends AppController
         return intval($reduced * 100);
     }
 
+    //获取可用积分
+    private function  get_can_use_score($uid, $total_price){
+        $u_score = $this->User->get_score($uid, true);
+        $reduced = cal_score_money($u_score, $total_price);
+        return intval($reduced * 100);
+    }
+
     /**
      * @param $order_id
      * @param $uid
      * 使用余额
-     * 还没有真正减去用户余额，用户使用之后减去
+     * 还没有真正减去用户余额，用户支付之后减去
      */
     private function use_rebate_money($order_id, $uid)
     {
@@ -825,6 +846,25 @@ class WesharesController extends AppController
         $toUpdate = array('applied_rebate' => $rebate,
             'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
         $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+    }
+
+    /**
+     * @param $order_id
+     * @param $uid
+     * 使用积分
+     * 还没有真正减去用户积分，用户支付成功之后减去积分
+     */
+    private function use_score($order_id, $uid)
+    {
+        $order = $this->Order->find('first', [
+            'conditions' => ['id' => $order_id],
+            'fields' => ['id', 'total_price', 'ship_fee']
+        ]);
+        $order_product_price = $order['Order']['total_price'] - ($order['Order']['ship_fee'] / 100);
+        $score = $this->get_can_use_score($uid, $order_product_price);
+        $reduced = $score / 100;
+        $toUpdate = ['applied_score' => $score, 'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')'];
+        $this->Order->updateAll($toUpdate, ['id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY]);
     }
 
     /**

@@ -3,12 +3,12 @@
     angular.module('weshares')
         .controller('IndexCtrl', IndexCtrl);
 
-
-    function IndexCtrl($scope, $rootScope, $http, $log, $attrs, Utils) {
+    function IndexCtrl($scope, $rootScope, $http, $log, $attrs, Utils, CoreReactorChannel) {
         var vm = this;
         vm.staticFilePath = Utils.staticFilePath();
         vm.getSummary = getSummary;
         vm.addPageClickLog = addPageClickLog;
+        vm.viewMyScore = viewMyScore;
 
         activate();
         function activate() {
@@ -45,7 +45,7 @@
             });
         }
 
-        function addPageClickLog(data){
+        function addPageClickLog(data) {
             $rootScope.addPageClickLog(data);
         }
 
@@ -57,6 +57,14 @@
                 return {orders_count: 0, view_count: 0, orders_and_creators: []};
             }
             return indexProduct.summary;
+        }
+
+        function viewMyScore(needBindMobile) {
+            if(needBindMobile){
+                CoreReactorChannel.elevatedEvent('BindMobile', {});
+                return;
+            }
+            window.location.href='/scores/detail.html';
         }
     }
 })

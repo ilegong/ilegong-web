@@ -843,6 +843,7 @@ class WeixinComponent extends Component {
                 //$this->ShareUtil->update_rebate_log($cate_id, $order);
             }
             $this->ShareUtil->add_use_rebate_log($order['Order']['id']);
+            $this->ShareUtil->add_use_score_log($order['Order']['id'], $good['weshare_info']['Weshare']['title']);
             //save buy opt log
             $this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
             $this->ShareUtil->send_buy_msg_to_hx($order['Order']['member_id'], $order['Order']['chat_group_id'], $order['Order']['creator']);

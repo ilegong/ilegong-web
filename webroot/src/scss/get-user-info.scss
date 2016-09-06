@@ -522,3 +522,35 @@
 .faq-balance ul li.question{ padding-bottom: 10px;}
 .faq-balance span{ color:#ff6485;}
 
+.score-rule {
+  margin-top: 44px;
+  background-color: #ffffff;
+  padding: 12px;
+  display: block;
+  clear: both;
+  li {
+    color: #333;
+    padding: 6px 0;
+    b {
+      color: #f30c5c;
+    }
+  }
+}
+
+.my-score {
+  margin: 48px 12px;
+  label {
+    padding: 12px 0;
+  }
+}
+
+.my-score-url {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  li {
+    display: block;
+    padding: 10px 12px;
+    max-width: 80%;
+  }
+}

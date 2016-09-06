@@ -1029,6 +1029,24 @@ class UsersController extends AppController
         $this->loadModel('BalanceLog');
         $this->BalanceLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
+        $this->loadModel('Score');
+        $this->Score->updateAll(['user_id' => $new_serviceAccount_bind_uid], ['user_id' => $old_serviceAccount_bind_uid]);
+
+        $this->loadModel('UserSubLog');
+        $this->UserSubLog->updateAll(['user_id' => $new_serviceAccount_bind_uid], ['user_id' => $old_serviceAccount_bind_uid]);
+        $this->UserSubLog->updateAll(['follow_id' => $new_serviceAccount_bind_uid], ['follow_id' => $old_serviceAccount_bind_uid]);
+
+        $this->loadModel('OptLog');
+        $this->OptLog->updateAll(['user_id' => $new_serviceAccount_bind_uid], ['user_id' => $old_serviceAccount_bind_uid]);
+        $this->OptLog->updateAll(['obj_creator' => $new_serviceAccount_bind_uid], ['obj_creator'=> $old_serviceAccount_bind_uid]);
+
+        $this->loadModel('NewOptLog');
+        $this->NewOptLog->updateAll(['proxy_id' => $new_serviceAccount_bind_uid], ['proxy_id' => $old_serviceAccount_bind_uid]);
+        $this->NewOptLog->updateAll(['customer_id' => $new_serviceAccount_bind_uid], ['customer_id' => $old_serviceAccount_bind_uid]);
+
+        $this->loadModel('AccessToken');
+        $this->AccessToken->updateAll(['user_id' => $new_serviceAccount_bind_uid], ['user_id' => $old_serviceAccount_bind_uid]);
+
     }
 
     /**
@@ -1314,6 +1332,11 @@ class UsersController extends AppController
         if (empty($mobileUser)) {
             $this->User->update(['mobilephone' => $mobile], ['id' => $currentUserId]);
             $this->Session->write('Auth.User.mobilephone', $mobile);
+            $this->loadModel('Score');
+            $result = $this->Score->add_score_by_bind_mobile($currentUserId, BIND_MOBILE_AWARD_SCORE, $mobile);
+            if ($result) {
+                $this->User->add_score($currentUserId, BIND_MOBILE_AWARD_SCORE);
+            }
             $log = [
                 "index" => "event_user_bind_mobile",
                 "type" => "user_bind_mobile_index",
@@ -1321,31 +1344,35 @@ class UsersController extends AppController
                 "mobile" => $mobile,
             ];
             add_logs_to_es($log);
+            echo json_encode(['success' => true]);
+            exit;
         }
-        echo json_encode(['success' => true]);
-        exit;
-
-//        $dateNow = date(FORMAT_DATETIME);
-//          merge data to wx_user
-//        $dataSource = $this->User->getDataSource();
-//        try {
-//            $dataSource->begin();
-//            $mobileUserId = $mobileUser['User']['id'];
-//            $this->loadModel('UserMigrate');
-//            $this->UserMigrate->save(['new_user_id' => $currentUserId, 'old_user_id' => $mobileUserId, 'created' => $dateNow, 'remark' => 'bind_mobile_merge']);
-//            $this->User->update(['mobilephone' => "'" . $mobile . "'", 'password' => "'" . $mobileUser['User']['password'] . "'"], ['id' => $currentUserId]);
-//            $this->User->update(['mobilephone' => "'" . "'"], ['id' => $mobileUserId]);
-//            $this->transferUserInfo($mobileUserId, $currentUserId);
-//            $dataSource->commit();
-//            $this->Session->write('Auth.User.mobilephone', $mobile);
-//            echo json_encode(['success' => true]);
-//            exit;
-//        } catch (Exception $e) {
-//            $dataSource->rollback();
-//            $this->log('merge user error msg ' . $e->getMessage());
-//            echo json_encode(['success' => false, 'reason' => 'system_error']);
-//            exit;
-//        }
+        $dateNow = date(FORMAT_DATETIME);
+         // merge data to wx_user
+        $dataSource = $this->User->getDataSource();
+        try {
+            $dataSource->begin();
+            $mobileUserId = $mobileUser['User']['id'];
+            $this->loadModel('UserMigrate');
+            $this->UserMigrate->save(['new_user_id' => $currentUserId, 'old_user_id' => $mobileUserId, 'created' => $dateNow, 'remark' => 'bind_mobile_merge']);
+            $this->User->update(['mobilephone' => "'" . $mobile . "'", 'password' => "'" . $mobileUser['User']['password'] . "'"], ['id' => $currentUserId]);
+            $this->User->update(['mobilephone' => "'" . "'"], ['id' => $mobileUserId]);
+            $this->transferUserInfo($mobileUserId, $currentUserId);
+            $this->loadModel('Score');
+            $result = $this->Score->add_score_by_bind_mobile($currentUserId, BIND_MOBILE_AWARD_SCORE, $mobile);
+            if ($result) {
+                $this->User->add_score($currentUserId, BIND_MOBILE_AWARD_SCORE);
+            }
+            $dataSource->commit();
+            $this->Session->write('Auth.User.mobilephone', $mobile);
+            echo json_encode(['success' => true]);
+            exit;
+        } catch (Exception $e) {
+            $dataSource->rollback();
+            $this->log('merge user error msg ' . $e->getMessage());
+            echo json_encode(['success' => false, 'reason' => 'system_error']);
+            exit;
+        }
     }
 
 

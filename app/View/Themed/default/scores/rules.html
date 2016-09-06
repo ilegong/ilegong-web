@@ -1,0 +1,31 @@
+<div class="menu-top refer-back-bg">
+    积分规则
+    <a href="/scores/detail.html?history={{$history}}">
+        <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+        <label>返回</label>
+    </a>
+</div>
+<div ng-controller="UserScoresCtrl as vm">
+    <ul class="score-rule">
+        <li><b>1、什么是朋友说积分</b>？</li>
+        <li>1）积分是朋友说平台送给用户的福利，100积分=1元，用户可以在朋友说平台下单时使用；</li>
+        <li><b>2、积分使用规则</b></li>
+        <li>1）100积分抵扣1元，积分不能抵扣运费；<p></p>
+            2）积分使用的额度不能超过产品金额的20%；<p></p>
+            3）已经使用优惠券、红包等活动优惠的产品不能使用积分；<p></p>
+            4）积分不能兑现，不可转让；
+        </li>
+    </ul>
+</div>
+
+<?php
+$this->assign('title','积分规则');
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.13'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/user-scores-controller.min.js'
+), array('block' => 'scripts'))
+?>

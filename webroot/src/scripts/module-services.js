@@ -27,7 +27,7 @@
             clear: function () {
                 localStorage.clear();
             }
-        }
+        };
 
         return {
             isBlank: isBlank,

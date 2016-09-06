@@ -26,9 +26,9 @@
 
     <ul class="new-potoshop clearfix">
         <li>
-            <a href="/weshares/index_special/6.html">
-                <img src="{{$STATIC_HOST}}/static/img/index/new.png">
-                <label>新品试吃</label>
+            <a href="#" ng-click="vm.viewMyScore({{$need_bind_mobile}})">
+                <img src="{{$STATIC_HOST}}/static/img/index/jifen.gif">
+                <label>我的积分</label>
             </a>
         </li>
         <li>
@@ -132,6 +132,7 @@
         {{/loop}}
     </div>
 </div>
+{{include 'Elements/bind_mobile_element'}}
 
 <?php
     $this->assign('title','分享圈');
@@ -141,6 +142,7 @@ $this->set('show_footer', false);
 $this->set('show_footer', 'index');
 }
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.17'
+$STATIC_HOST.'/static/weshares/js/tutorial.min.js?v2.5.9',
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.18'
 ), array('block' => 'scripts'))
 ?>

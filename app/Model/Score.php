@@ -32,42 +32,55 @@ class Score extends AppModel {
         }
     }
 
-    public function add_score_by_refer_user_first_order($score_change, $referral, $referral_name, $from_uid){
-        $desc = '您推荐的用户"'.$referral_name.'"首次完成下单获得'.$score_change.'个积分';
-        return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_FIRST_ORDER, json_encode(array('referral_id' => $referral)), $desc);
+//    public function add_score_by_refer_user_first_order($score_change, $referral, $referral_name, $from_uid){
+//        $desc = '您推荐的用户"'.$referral_name.'"首次完成下单获得'.$score_change.'个积分';
+//        return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_FIRST_ORDER, json_encode(array('referral_id' => $referral)), $desc);
+//    }
+//
+//    public function add_score_by_refer_bind($score_change, $referral, $referral_name, $from_uid) {
+//        $desc = '您推荐的用户"'.$referral_name.'"完成注册获得'.$score_change.'个积分';
+//        return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
+//    }
+//
+//    public function add_score_by_refer_bind_mobile($score_change, $referral, $uid){
+//        $desc = '您完成绑定手机号码获得'.$score_change.'个积分';
+//        return $this->save_score_log($referral, $score_change, SCORE_REFERRAL_BIND_OK_TO, json_encode(array('refer_user_id' => $uid)), $desc);
+//    }
+//
+//    public function add_score_by_refer_accept_order($score_change, $referral, $referral_name, $from_uid) {
+//        $desc = '您推荐的用户"'.$referral_name.'"完成第一单，您获得'.$score_change.'个积分，可去"推荐有礼"页面查看最新状态';
+//        return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
+//    }
+
+//    public function add_score_by_comment($userId, $score_change, $orderId, $order_comment_id, $award_extra_ids) {
+//        $desc = '评价订单 '.$orderId.' 获得 '.$score_change.' 个积分';
+//
+//        if (!empty($award_extra_ids)) {
+//            $desc .='，包含'.count($award_extra_ids).'种商品(ID为'.implode('、', $award_extra_ids).')的抢先评论奖励';
+//        }
+//        $data = json_encode(array('order_id' => $orderId, 'order_comment_id' => $order_comment_id));
+//        return $this->save_score_log($userId, $score_change, SCORE_ORDER_COMMENT, $data, $desc, $orderId);
+//    }
+
+    public function add_score_by_bind_mobile($userId, $score_change, $mobile){
+        $desc = '绑定手机号码获得' . $score_change . ' 个积分';
+        $data = json_encode(['mobile' => $mobile]);
+        return $this->save_score_log($userId, $score_change, SCORE_BIND_MOBILE_OK, $data, $desc);
     }
 
-    public function add_score_by_refer_bind($score_change, $referral, $referral_name, $from_uid) {
-        $desc = '您推荐的用户"'.$referral_name.'"完成注册获得'.$score_change.'个积分';
-        return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
-    }
+//    public function spent_score_by_order($userId, $spent, $order_id_to_scores) {
+//        $reason = SCORE_ORDER_SPENT;
+//        $data = json_encode($order_id_to_scores);
+//        $desc = '订单' . implode('、', array_keys($order_id_to_scores)) . '使用' . $spent . '积分';
+//
+//        return $this->save_score_log($userId, -$spent, $reason, $data, $desc);
+//    }
 
-    public function add_score_by_refer_bind_mobile($score_change, $referral, $uid){
-        $desc = '您完成绑定手机号码获得'.$score_change.'个积分';
-        return $this->save_score_log($referral, $score_change, SCORE_REFERRAL_BIND_OK_TO, json_encode(array('refer_user_id' => $uid)), $desc);
-    }
-
-    public function add_score_by_refer_accept_order($score_change, $referral, $referral_name, $from_uid) {
-        $desc = '您推荐的用户"'.$referral_name.'"完成第一单，您获得'.$score_change.'个积分，可去"推荐有礼"页面查看最新状态';
-        return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
-    }
-
-    public function add_score_by_comment($userId, $score_change, $orderId, $order_comment_id, $award_extra_ids) {
-        $desc = '评价订单 '.$orderId.' 获得 '.$score_change.' 个积分';
-
-        if (!empty($award_extra_ids)) {
-            $desc .='，包含'.count($award_extra_ids).'种商品(ID为'.implode('、', $award_extra_ids).')的抢先评论奖励';
-        }
-        $data = json_encode(array('order_id' => $orderId, 'order_comment_id' => $order_comment_id));
-        return $this->save_score_log($userId, $score_change, SCORE_ORDER_COMMENT, $data, $desc, $orderId);
-    }
-
-    public function spent_score_by_order($userId, $spent, $order_id_to_scores) {
+    public function spent_score_by_single_order($userId, $spent, $order_id, $desc){
         $reason = SCORE_ORDER_SPENT;
-        $data = json_encode($order_id_to_scores);
-        $desc = '订单' . implode('、', array_keys($order_id_to_scores)) . '使用' . $spent . '积分';
-
-        return $this->save_score_log($userId, -$spent, $reason, $data, $desc);
+        $data = json_encode(['order' => $order_id]);
+        $desc = '购买：' . $desc;
+        return $this->save_score_log($userId, -$spent, $reason, $data, $desc, $order_id);
     }
 
     public function restore_score_by_undo_order($userId, $spent, $order_id) {
@@ -84,6 +97,19 @@ class Score extends AppModel {
             'limit' => $limit,
             'order' => 'id desc',
         ));
+    }
+
+    public function find_user_score_logs_by_page($userId, $page, $limit = 10){
+        return $this->find('all', [
+            'conditions' => ['user_id' => $userId],
+            'page' => $page,
+            'limit' => $limit,
+            'order' => ['id DESC']
+        ]);
+    }
+
+    public function has_bind_score($userId, $orderId, $reason){
+        return $this->hasAny(['user_id' => $userId, 'order_id' => $orderId, 'reason' => $reason]);
     }
 
     /**
@@ -104,10 +130,10 @@ class Score extends AppModel {
             'score' => $change,
             'order_id' => empty($orderId) ? 0 : $orderId,
         ));
-        if ($saved) {
-            $action = action_of_score_item($change, $reason);
-            $this->send_score_change_message($userId, $desc, $action, $change);
-        }
+//        if ($saved) {
+//            $action = action_of_score_item($change, $reason);
+//            $this->send_score_change_message($userId, $desc, $action, $change);
+//        }
         return $saved;
     }
 
