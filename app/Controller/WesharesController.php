@@ -761,9 +761,14 @@ class WesharesController extends AppController
                 if (!empty($coupon_id)) {
                     $this->order_use_coupon($coupon_id, $orderId, $uid);
                 }
+                //积分与红包不能一起使用
+                $useScore = $postDataArray['useScore'];
+                if ($useScore == 1 && !empty($coupon_id)) {
+                    $this->use_score($orderId, $uid);
+                }
                 $useRebate = $postDataArray['useRebate'];
                 //余额
-                if($useRebate == 1){
+                if ($useRebate == 1) {
                     $this->use_rebate_money($orderId, $uid);
                 }
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
@@ -771,7 +776,7 @@ class WesharesController extends AppController
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
             $dataSource->commit();
             try {
-                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice/100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
+                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice / 100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
             } catch (Exception $e) {
                 $this->log('add es log error when make order');
             }
