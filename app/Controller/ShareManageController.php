@@ -2315,6 +2315,8 @@ GROUP BY product_id";
         $order_total_refund_fee = 0;
         $order_ship_fee = 0;
         $order_total_fee = 0;
+        $order_rebate_fee = 0;
+        $order_score_fee = 0;
         $child_share_products = Hash::combine($child_share_products, '{n}.WeshareProduct.id', '{n}.WeshareProduct.origin_product_id');
         $product_summary = [];
         foreach ($pool_product as $item) {
@@ -2324,6 +2326,8 @@ GROUP BY product_id";
             $order_pay_total_fee = $order_pay_total_fee + $orderItem['Order']['total_all_price'];
             $order_ship_fee = $order_ship_fee + $orderItem['Order']['ship_fee'];
             $order_total_fee = $order_total_fee + $orderItem['Order']['total_price'];
+            $order_rebate_fee = $order_rebate_fee + $orderItem['Order']['applied_rebate'];
+            $order_score_fee = $order_score_fee + $orderItem['Order']['applied_score'];
             if (!empty($orderItem['RefundLog']['refund_fee'])) {
                 $order_total_refund_fee = $order_total_refund_fee + $orderItem['RefundLog']['refund_fee'];
             }
@@ -2335,7 +2339,7 @@ GROUP BY product_id";
                 $product_summary[$origin_pid]['count'] = $product_summary[$origin_pid]['count'] + $cpnum;
             }
         }
-        $this->BalanceLog->update(['origin_total_fee' => $order_total_fee, 'ship_fee' => $order_ship_fee, 'transaction_fee' => $order_pay_total_fee, 'refund_fee' => $order_total_refund_fee, 'extras' => "'" . json_encode($product_summary, JSON_UNESCAPED_UNICODE) . "'"], ['id' => $balanceLog['BalanceLog']['id']]);
+        $this->BalanceLog->update(['origin_total_fee' => $order_total_fee, 'ship_fee' => $order_ship_fee, 'transaction_fee' => $order_pay_total_fee, 'refund_fee' => $order_total_refund_fee / 100, 'use_rebate_fee' => $order_rebate_fee / 100, 'use_score_fee' => $order_score_fee / 100, 'extras' => "'" . json_encode($product_summary, JSON_UNESCAPED_UNICODE) . "'"], ['id' => $balanceLog['BalanceLog']['id']]);
         $this->redirect('/share_manage/brand_wait_balance_logs.html');
     }
 
