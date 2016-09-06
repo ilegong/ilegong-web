@@ -1,1 +1,2 @@
 ALTER TABLE `cake_coupon_items` ADD `shop_id` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `sent_message_status`, ADD INDEX (`shop_id`);
+ALTER TABLE `cake_coupon_items` ADD `valid_begin` DATETIME NULL AFTER `shop_id`, ADD `valid_end` DATETIME NULL AFTER `valid_begin`;

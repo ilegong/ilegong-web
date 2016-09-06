@@ -1,0 +1,1 @@
+ALTER TABLE `cake_coupons` ADD `num` INT(11) UNSIGNED NOT NULL DEFAULT '0' AFTER `shop_id`;

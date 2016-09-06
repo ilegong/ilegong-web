@@ -125,6 +125,11 @@ class ArticlesController extends AppController{
         $this->layout = null;
     }
 
+    public function hx()
+    {
+        $this->layout = null;
+    }
+
     public function promotion_dzx(){
         $this->layout = null;
         $this->loadModel('SharedSlice');
