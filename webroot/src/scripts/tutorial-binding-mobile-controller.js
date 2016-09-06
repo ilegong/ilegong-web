@@ -109,6 +109,12 @@
         }
 
         function bindAndMerge() {
+            if (!vm.validateMobilePhone()) {
+                return;
+            }
+            if (!vm.onCodeChanged()) {
+                return;
+            }
             if (!vm.canBindMobile()) {
                 return;
             }
@@ -186,6 +192,7 @@
 
         function onCodeChanged() {
             vm.code.valid = !_.isEmpty(vm.code.value);
+            return vm.code.valid;
         }
 
         function onError(message) {
