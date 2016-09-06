@@ -1125,11 +1125,11 @@ a:-webkit-any-link {
         }
       }
       .button {
-        background-color: red;
-        color: #ffffff;
+        background-color: #ff6485;
+        color: #fff;
         border-radius: 4px;
         line-height: 40px;
-        padding-bottom: 0px;
+        padding-bottom: 0;
       }
     }
   }
@@ -1156,12 +1156,12 @@ a:-webkit-any-link {
     display: block;
     width: 100px;
     text-align: center;
-    color: #FFFFFF;
+    color: #FFF;
     line-height: 40px;
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #e92201;
+    background-color: #ff6485;
   }
 
   .bind-mobile-dialog .code a.unclickable {

@@ -2,17 +2,17 @@
     <div class="bind-mobile-view">
         <div class="bind-mobile-dialog" ng-if="bindM.showBindMobileDialog" ng-class="{'show-b': bindM.showBindMobileDialog}" style="display: none;">
             <div class="main-body">
-                <label><h2>绑定手机号</h2></label>
-                <label><span>立即获得可抵现金的100积分可购物使用</span></label>
+                <label><h2>绑定手机号得100积分</h2></label>
+                <label><span>购物可抵现金使用</span></label>
 
                 <div class="tel form-group" ng-class="{'has-error': !bindM.mobilePhone.valid}">
                     <input class="form-control" type="number" string-to-number placeholder="请输入手机号"
                            ng-model="bindM.mobilePhone.value"
-                           ng-blur="bindM.validateMobilePhoneAndAlert()"
-                           ng-change="bindM.validateMobilePhone()"/>
+                           ng-blur="bindM.validateMobilePhoneAndAlert()"/>
                 </div>
                 <div class="code form-group" ng-class="{'has-error': !bindM.code.valid}">
-                    <input class="form-control" type="number" string-to-number placeholder="请输入验证码" ng-model="bindM.code.value" ng-change="bindM.onCodeChanged()"/>
+                    <input class="form-control" type="number" string-to-number placeholder="请输入验证码" ng-model="bindM.code.value"
+                           ng-blur="bindM.onCodeChanged()"/>
                     <a href="#" ng-bind="bindM.getSendCodeText()" ng-click="bindM.sendCode()" ng-show="!bindM.code.sent">获取验证码</a>
                     <a href="#" class="unclickable" ng-show="bindM.code.sent">
                         <span ng-bind="bindM.code.timeSpent"></span>s后重新获取
