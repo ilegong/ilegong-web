@@ -763,7 +763,7 @@ class WesharesController extends AppController
                 }
                 //积分与红包不能一起使用
                 $useScore = $postDataArray['useScore'];
-                if ($useScore == 1 && !empty($coupon_id)) {
+                if ($useScore == 1 && empty($coupon_id)) {
                     $this->use_score($orderId, $uid);
                 }
                 $useRebate = $postDataArray['useRebate'];
