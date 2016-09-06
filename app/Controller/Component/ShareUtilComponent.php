@@ -618,11 +618,12 @@ class ShareUtilComponent extends Component
             'fields' => ['id', 'creator', 'applied_rebate']
         ]);
         $rebate = $order['Order']['applied_rebate'];
-        if ($rebate > 0) {
-            $uid = $order['Order']['creator'];
-            $order_id = $order['Order']['id'];
+        $uid = $order['Order']['creator'];
+        $order_id = $order['Order']['id'];
+        $rebateLogM = ClassRegistry::init('RebateLog');
+        $hasBind = $rebateLogM->has_bind_rebate_log($uid, $order_id, USER_REBATE_MONEY_USE);
+        if ($rebate > 0 && !$hasBind) {
             $userM = ClassRegistry::init('User');
-            $rebateLogM = ClassRegistry::init('RebateLog');
             $rebateLogM->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
             $userM->add_rebate_money($uid, -$rebate);
         }
@@ -630,10 +631,12 @@ class ShareUtilComponent extends Component
 
     /**
      * @param $order_id
+     * @param $desc
      * save user use score log
      */
-    public function add_use_score_log($order_id)
+    public function add_use_score_log($order_id, $desc)
     {
+        $desc = remove_emoji($desc);
         $orderM = ClassRegistry::init('Order');
         $order = $orderM->find('first', [
             'conditions' => [
@@ -642,13 +645,13 @@ class ShareUtilComponent extends Component
             'fields' => ['id', 'creator', 'applied_score']
         ]);
         $score = $order['Order']['applied_score'];
-        if ($score > 0) {
-            $uid = $order['Order']['creator'];
-            $order_id = $order['Order']['id'];
+        $uid = $order['Order']['creator'];
+        $order_id = $order['Order']['id'];
+        $scoreM = ClassRegistry::init('Score');
+        $hasBind = $scoreM->has_bind_score($uid, $order_id, SCORE_ORDER_SPENT);
+        if ($score > 0 && !$hasBind) {
             $userM = ClassRegistry::init('User');
-            $scoreM = ClassRegistry::init('Score');
-            $order_id_to_scores = [$order_id => $score];
-            $scoreM->spent_score_by_order($uid, -$score, $order_id_to_scores);
+            $scoreM->spent_score_by_single_order($uid, $score, $order_id, $desc);
             $userM->add_score($uid, -$score);
         }
     }
