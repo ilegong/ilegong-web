@@ -34,10 +34,7 @@ class TaskController extends AppController {
         $orderM->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $cartM->updateAll(array('status' => CART_ITEM_STATUS_SHIPPED), array('order_id' => $order_id));
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY);
         $this->WeshareBuy->clear_user_share_order_data_cache($order_id, $weshare_id);
         echo json_encode(array('success' => true));
     }
