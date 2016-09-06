@@ -49,11 +49,21 @@
         <!--</dl>-->
     <!--</div>-->
     <div class="balance-detail-panel">
+
+        <ul class="rebate-balance clearfix" ng-show="vm.showUseScore">
+            <li class="fl">
+                <label>可用<span ng-bind="vm.canUseScoreTotal"></span>积分抵<span ng-bind="vm.canUseScoreTotal/100"></span>元</label>
+            </li>
+            <li class="fr"><input type="checkbox" id="checkbox_score" class="chk_toggle" ng-model="vm.useScore" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_score"></label></li>
+        </ul>
+
+        <ul class="rebate-balance clearfix" ng-show="vm.rebateTotal > 0">
+            <li class="fl">
+                <label>账户余额可用<span ng-bind="vm.canUseRebateTotal/100"></span>元</label>
+            </li>
+            <li class="fr"><input type="checkbox" id="checkbox_rebate" class="chk_toggle" ng-model="vm.useRebate" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_rebate"></label></li>
+        </ul>
         <div class="money-detail">
-            <dl class="clearfix">
-                <dt class="fl">应付总额：</dt>
-                <dt class="fr" ng-bind="vm.orderPayTotalPrice | currency:'￥'"></dt>
-            </dl>
             <ul class="clearfix">
                 <li class="fl">产品总额：</li>
                 <li class="fr" ng-bind="vm.productTotalPrice | currency:'￥'"></li>
@@ -66,21 +76,11 @@
                 <li class="fl">红包优惠：</li>
                 <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
             </ul>
+            <dl class="clearfix">
+                <dt class="fl">应付总额：</dt>
+                <dt class="fr" ng-bind="vm.orderPayTotalPrice | currency:'￥'"></dt>
+            </dl>
         </div>
-        <ul class="rebate-balance clearfix" ng-show="vm.showUseScore">
-            <li class="fl">
-                <label>使用我的积分</label>
-                <em>当前可使用积分<span ng-bind="vm.canUseScoreTotal/100 | currency:'￥'"></span></em>
-            </li>
-            <li class="fr"><input type="checkbox" id="checkbox_score" class="chk_toggle" ng-model="vm.useScore" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_score"></label></li>
-        </ul>
-        <ul class="rebate-balance clearfix" ng-show="vm.rebateTotal > 0">
-            <li class="fl">
-                <label>使用我的余额</label>
-                <em>当前可使用余额<span ng-bind="vm.canUseRebateTotal/100 | currency:'￥'"></span></em>
-            </li>
-            <li class="fr"><input type="checkbox" id="checkbox_rebate" class="chk_toggle" ng-model="vm.useRebate" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_rebate"></label></li>
-        </ul>
     </div>
 
 

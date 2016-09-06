@@ -1237,12 +1237,10 @@
             vm.myCoupons = data['my_coupons'];
             vm.rebateTotal = parseInt(data['user_rebate_total']);
             vm.scoreTotal = parseInt(data['user_score_total']);
+            vm.useRebate = 0;
+            vm.useScore = 0;
             if (vm.scoreTotal > 0 && _.isEmpty(vm.myCoupons)) {
-                vm.useScore = 1;
-                vm.showUseScore = 1;
-            }
-            if (vm.rebateTotal > 0) {
-                vm.useRebate = 1;
+                vm.showUseScore = true;
             }
             vm.weshareSettings = data['weshare_ship_settings'];
 
