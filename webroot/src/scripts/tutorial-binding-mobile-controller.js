@@ -48,11 +48,8 @@
         }
 
         function validateMobilePhone() {
-            var valid = Utils.isMobileValid(vm.mobilePhone.value);
-            if (valid && !vm.mobilePhone.valid) {
-                vm.mobilePhone.valid = true;
-            }
-            return valid;
+            vm.mobilePhone.valid = Utils.isMobileValid(vm.mobilePhone.value);
+            return vm.mobilePhone.valid;
         }
 
         function validateMobilePhoneAndAlert() {
