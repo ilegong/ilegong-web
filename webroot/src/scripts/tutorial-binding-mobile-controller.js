@@ -30,7 +30,7 @@
         function activate() {
             $rootScope.loadingPage = false;
             vm.mobilePhone = {value: '', valid: true};
-            vm.code = {value: '', sent: false, timer: null, timeSpent: 60, valid: true};
+            vm.code = {value: '', sent: false, timer: null, timeSpent: 60, valid: true, sending: false};
             CoreReactorChannel.onElevatedEvent($scope, 'BindMobile', function () {
                 if (vm.userBindMobileSuccess) {
                     window.location.href = '/scores/detail.html';
@@ -74,7 +74,9 @@
             if (!vm.canSendCode()) {
                 return;
             }
-
+            if (vm.code.sending) {
+                return;
+            }
             vm.code.sending = true;
             $http.post('/check/get_mobile_code?mobile=' + vm.mobilePhone.value).success(function (data) {
                 if (data.error) {
