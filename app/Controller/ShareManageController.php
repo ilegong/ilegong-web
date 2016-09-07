@@ -208,7 +208,7 @@ class ShareManageController extends AppController
             'conditions' => [
                 'weshare_id' => $weshareIds
             ],
-            'fields' => ['weshare_id', 'name', 'price']
+            'fields' => ['weshare_id', 'name', 'price', 'sell_num']
         ]);
 
         $weshareProducts = [];
