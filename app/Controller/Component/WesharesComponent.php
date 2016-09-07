@@ -496,6 +496,8 @@ class WesharesComponent extends Component
             $product['price'] = ($product['price'] * 100);
             $store = $product['store'];
             $sellNum = $product['sell_num'];
+            $leftNum = $product['left_num'];
+            
             if (!isset($sellNum) || trim($sellNum) === '') {
                 $product['sell_num'] = 0;
             }

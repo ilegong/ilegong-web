@@ -561,25 +561,22 @@
         function getProductLeftNum(product) {
             if (vm.productSummery && vm.productSummery.details[product.id]) {
                 var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
-                var store_num = product.store;
+                var store_num = product['left_num'];
                 return store_num - product_buy_num;
             }
-            return product.store;
+            return product['left_num'];
         }
 
         function checkProductNum(product) {
-            var store_num = product.store;
+            var store_num = product['left_num'];
             //sold out
-            if (store_num == -1) {
+            if (store_num == 0) {
                 return false;
             }
-            if (store_num == 0) {
-                return true;
-            }
-            if (vm.productSummery && vm.productSummery.details[product.id] && store_num > 0) {
-                var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
-                return product_buy_num < store_num;
-            }
+            //if (vm.productSummery && vm.productSummery.details[product.id] && store_num > 0) {
+            //    var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
+            //    return product_buy_num < store_num;
+            //}
             return true;
         }
 
