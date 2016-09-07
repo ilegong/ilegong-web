@@ -1,4 +1,4 @@
-<div class="user-list-page" ng-controller="UserListCtrl as vm" id="userListView" data-user_id="{{$userId}}" data-total_self="{{$total_self}}" data-total_comm="{{$total_comm}}" data-type="{{$type}}" ng-click="clickPage();">
+<div class="user-list-page" ng-controller="UserFansListCtrl as vm" id="userListView" data-user_id="{{$userId}}" data-total_self="{{$total_self}}" data-total_comm="{{$total_comm}}" data-type="{{$type}}" ng-click="clickPage();">
     <div class="fans-back-bg">
         <ul class="clearfix">
             <li ng-class="{'cur-fans':vm.type == 1}" ng-click="vm.tab(1)">自有粉丝</li>
@@ -53,8 +53,6 @@
                 </li>
             </ul>
         </div>
-        <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
-        <div style="text-align: center;color: #999;margin-bottom: 10px;" ng-show='vm.self.over'>没有更多数据</div>
     </div>
     <div infinite-scroll='vm.loadData(1)' infinite-scroll-disabled='vm.comm.over||vm.loadingData'
          infinite-scroll-distance='0'  ng-hide="vm.type == 1">
@@ -93,10 +91,10 @@
                 </li>
             </ul>
         </div>
-        <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
-        <div style="text-align: center;color: #999;margin-bottom: 10px;" ng-show='vm.comm.over'>没有更多数据</div>
     </div>
     {{/literal}}
+    <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
+    <div style="text-align: center;color: #999;margin-bottom: 10px;" ng-show='vm.comm.over'>没有更多数据</div>
 </div>
 
 <?php
@@ -105,11 +103,11 @@
 
 <?php
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/fans-list.min.css?v2.5.14'
+$STATIC_HOST.'/static/weshares/css/user-info.min.css?v2.6.0'
 ), null, array('inline' => false));
 ?>
 <?php
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/user-info.min.js?v2.5.15'
+$STATIC_HOST.'/static/weshares/js/user-info.min.js?v2.6.0'
 ), array('block' => 'scripts'))
 ?>

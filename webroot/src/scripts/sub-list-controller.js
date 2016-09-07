@@ -1,8 +1,8 @@
 (function (window, angular) {
     angular.module('weshares')
-        .controller('UserListCtrl', UserListCtrl);
+        .controller('UserSubListCtrl', UserSubListCtrl);
 
-    function UserListCtrl($http, $log, $templateCache, $rootScope) {
+    function UserSubListCtrl($http, $log, $templateCache, $rootScope) {
         var vm = this;
         vm.loadData = loadData;
         vm.hasSub = hasSub;

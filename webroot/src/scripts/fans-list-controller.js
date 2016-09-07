@@ -1,8 +1,8 @@
 (function (window, angular) {
     angular.module('weshares')
-        .controller('UserListCtrl', UserListCtrl);
+        .controller('UserFansListCtrl', UserFansListCtrl);
 
-    function UserListCtrl($http, $log, $templateCache, $rootScope) {
+    function UserFansListCtrl($http, $log, $templateCache, $rootScope) {
         var vm = this;
         vm.loadData = loadData;
         vm.toggleHideShowUnSubBtn = toggleHideShowUnSubBtn;

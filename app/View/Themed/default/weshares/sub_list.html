@@ -1,4 +1,4 @@
-<div class="user-list-page" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}" ng-click="clickPage();">
+<div class="user-list-page" ng-controller="UserSubListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}" ng-click="clickPage();">
     <div class="menu-top refer-back-bg">
         {{$title}}
         <a href="/weshares/get_self_info">
@@ -66,6 +66,6 @@
 
 <?php
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/sub-list.min.js?v2.5.14'
+$STATIC_HOST.'/static/weshares/js/user-info.min.js?v2.6.0'
 ), array('block' => 'scripts'))
 ?>

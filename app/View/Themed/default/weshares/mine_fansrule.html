@@ -1,13 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
-    <meta charset="UTF-8">
-    <title>粉丝规则</title>
-    <link rel="stylesheet" href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.6.0" />
-    <link rel="stylesheet" href="{{$STATIC_HOST}}/static/weshares/css/fansrule.min.css" />
-</head>
-<body style="background-color: #f1f1f1;">
 <div class="refer-back-bg">
     粉丝规则
     <a href="/weshares/fans_list.html">
@@ -15,7 +5,7 @@
         <label>返回</label>
     </a>
 </div>
-<div class="faq-balance">
+<div class="faq-balance" ng-controller="UserListCtrl as vm">
     <ul>
         <li class="question"><strong>1、自有粉丝</strong></li>
         <li>指的是通过您分享的链接授权登录并关注平台的用户;</li>
@@ -26,7 +16,15 @@
     </ul>
 </div>
 
+<?php
+$this->assign('title','粉丝规则');
+$this->set('show_footer', false);
 
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/user-info.min.css?v2.6.0'
+), null, array('inline' => false));
 
-</body>
-</html>
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/user-info.min.js?v2.6.0'
+), array('block' => 'scripts'))
+?>

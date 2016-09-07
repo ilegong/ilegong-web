@@ -69,69 +69,35 @@ var all_js = [
     }, {
         name: 'user-info.min.js',
         sources: [
-            'webroot/src/scripts/user-list-controller.js',
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'sub-list.min.js',
-        sources: [
+            'webroot/src/scripts/fans-list-controller.js',
             'webroot/src/scripts/sub-list-controller.js',
+            'webroot/src/scripts/get-user-info-controller.js',
+            'webroot/src/scripts/user-scores-controller.js',
+            'webroot/src/scripts/user-rebate-list-controller.js',
+            'webroot/src/scripts/user-coupons-list-controller.js',
+            'webroot/src/scripts/user-scores-controller.js',
+            'webroot/src/scripts/read-share-count-controller.js',
+            'webroot/src/scripts/get-user-provide-share-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'get-user-info.min.js',
-        sources: [
-            'webroot/src/scripts/get-user-info-controller.js'
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
+    },  {
         name: 'tutorial.min.js',
         sources: [
             'webroot/src/scripts/tutorial-binding-card-controller.js',
             'webroot/src/scripts/tutorial-binding-mobile-controller.js',
         ],
         dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'pay-result.min.js',
-        sources: [
-            'webroot/src/scripts/pay-result-controller.js'
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'user-coupons-list-controller.min.js',
-        sources: [
-            'webroot/src/scripts/user-coupons-list-controller.js'
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'read-share-count.min.js',
-        sources: [
-            'webroot/src/scripts/read-share-count-controller.js'
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'user-rebate-list.min.js',
-        sources: [
-            'webroot/src/scripts/user-rebate-list-controller.js'
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
+    },{
         name: 'vote.min.js',
         sources: [
             'webroot/src/scripts/vote-signup-controller.js',
             'webroot/src/scripts/vote-event-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'user-provide-share-list.min.js',
+    },{
+        name: 'pay-result.min.js',
         sources: [
-            'webroot/src/scripts/get-user-provide-share-controller.js'
-        ],
-        dist: 'webroot/static/weshares/js/'
-    }, {
-        name: 'user-scores-controller.min.js',
-        sources: [
-            'webroot/src/scripts/user-scores-controller.js'
+            'webroot/src/scripts/pay-result-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
     }
@@ -139,63 +105,48 @@ var all_js = [
 
 var all_css = [
   {
-    name: 'site-common.min.css',
-    sources: [
-      'webroot/src/scss/site-common.scss',
-      'webroot/src/scss/iconfont.css'
-    ],
-    dist: 'webroot/static/weshares/css/'
+      name: 'site-common.min.css',
+      sources: [
+          'webroot/src/scss/site-common.scss',
+          'webroot/src/scss/iconfont.css'
+      ],
+      dist: 'webroot/static/weshares/css/'
   }, {
-    name: 'weshare-view.min.css',
-    sources: [
-      'webroot/src/scss/main.css',
-      'webroot/src/scss/share-balance-view.css',
-      'webroot/src/scss/share.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'weshare-edit.min.css',
-    sources: [
-      'webroot/src/scss/weshare-edit.scss',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'share-info.min.css',
-    sources: [
-      'webroot/static/weshares/css/share-info.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'fans-list.min.css',
-    sources: [
-      'webroot/src/scss/fans-list.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'fansrule.min.css',
-    sources: [
-      'webroot/src/scss/fansrule.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  },{
-    name: 'get-user-info.min.css',
-    sources: [
-      'webroot/src/scss/get-user-info.scss',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'tutorial.min.css',
-    sources: [
-      'webroot/src/scss/tutorial.scss',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'read-share-count.min.css',
-    sources: [
-      'webroot/src/scss/read-share-count.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }
+        name: 'weshare-view.min.css',
+        sources: [
+            'webroot/src/scss/main.css',
+            'webroot/src/scss/share-balance-view.css',
+            'webroot/src/scss/share.css',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    }, {
+        name: 'weshare-edit.min.css',
+        sources: [
+            'webroot/src/scss/weshare-edit.scss',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    }, {
+        name: 'share-info.min.css',
+        sources: [
+            'webroot/static/weshares/css/share-info.css',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    }, {
+        name: 'user-info.min.css',
+        sources: [
+            'webroot/src/scss/get-user-info.scss',
+            'webroot/src/scss/fans-list.css',
+            'webroot/src/scss/fansrule.css',
+            'webroot/src/scss/read-share-count.css',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    },{
+        name: 'tutorial.min.css',
+        sources: [
+            'webroot/src/scss/tutorial.scss',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    }
 ];
 
 var js_tasks = [];

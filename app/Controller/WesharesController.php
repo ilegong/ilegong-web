@@ -2312,8 +2312,7 @@ class WesharesController extends AppController
 
     public function mine_fansrule()
     {
-        $this->layout = null;
-        $this->render('mine_fansrule');
+
     }
 
     public function get_u_list_data($type, $uid, $page)
