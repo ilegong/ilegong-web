@@ -175,7 +175,7 @@
                         <dd class="fr amount" ng-bind="product.num||0">0</dd>
                         <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i
                                 class="iconfont icon-minus"></i></dd>
-                        <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store<100">仅剩<span
+                        <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store<=100">仅剩<span
                                 ng-bind="vm.getProductLeftNum(product)"></span>份
                         </dd>
                     </dl>
