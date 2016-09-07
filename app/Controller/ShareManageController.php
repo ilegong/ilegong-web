@@ -210,15 +210,13 @@ class ShareManageController extends AppController
             ],
             'fields' => ['weshare_id', 'name', 'price', 'sell_num']
         ]);
-
         $weshareProducts = [];
-
         foreach ($products as $p) {
             $weshare_id = $p['WeshareProduct']['weshare_id'];
             if(!isset($weshareProducts[$weshare_id])){
                 $weshareProducts[$weshare_id] = [];
             }
-            $weshareProducts[$weshare_id] = $p['WeshareProduct'];
+            $weshareProducts[$weshare_id][] = $p['WeshareProduct'];
         }
 
 //        foreach ($results as $index => $result) {
