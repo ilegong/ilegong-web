@@ -1333,6 +1333,11 @@ class UsersController extends AppController
             echo json_encode(['success' => false, 'reason' => 'mobile_error']);
             exit;
         }
+        if($mobile == PYS_CUSTOMER_SERVICE_MOBILE){
+            $this->log('bind mobile conflict');
+            echo json_encode(['success' => false, 'reason' => 'mobile_error']);
+            exit;
+        }
         $log = [
             "index" => "event_user_bind_mobile",
             "type" => "user_bind_mobile_index",
