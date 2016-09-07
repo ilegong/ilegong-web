@@ -495,8 +495,12 @@ class WesharesComponent extends Component
             $product['weshare_id'] = $weshareId;
             $product['price'] = ($product['price'] * 100);
             $store = $product['store'];
-            if (empty($store)) {
-                $product['store'] = 0;
+            $sellNum = $product['sell_num'];
+            if (!isset($sellNum) || trim($sellNum) === '') {
+                $product['sell_num'] = 0;
+            }
+            if (!isset($store) || trim($store) === '') {
+                $product['store'] = WESHARE_PRODUCT_STORE_MAX_COUNT;
             }
             $tag_id = $product['tag_id'];
             if (empty($tag_id)) {

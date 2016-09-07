@@ -301,6 +301,8 @@ const SHARE_GROUP_REBATE_MONEY = 500;
 
 const COMMENT_SHARE_ORDER_COUPON_MONEY = 50;//评论分享订单默认领取5毛红包
 
+const WESHARE_PRODUCT_STORE_MAX_COUNT = 9999; //商品默认库存
+
 //返利的类型
 const DEFAULT_REBATE_TYPE = 0; //默认返利
 const GROUP_SHARE_BUY_REBATE_TYPE = 1;//线下自提返利

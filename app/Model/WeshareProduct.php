@@ -11,7 +11,7 @@ class WeshareProduct extends AppModel
         if ($num != 0) {
             $tries = 10;
             while ($tries-- > 0) {
-                $product = $this->find('first', ['conditions' => ['id' => $pid], 'fields' => ['store', 'sell_num', 'left_num']]);
+                $product = $this->find('first', ['conditions' => ['id' => $pid], 'fields' => ['store', 'sell_num']]);
                 if (empty($product)) {
                     return 0;
                 }
