@@ -1328,6 +1328,13 @@ class UsersController extends AppController
             echo json_encode(['success' => false, 'reason' => 'mobile_error']);
             exit;
         }
+        $log = [
+            "index" => "event_user_bind_mobile",
+            "type" => "user_bind_mobile_index",
+            "user_id" => intval($this->currentUser['id']),
+            "mobile" => $mobile,
+        ];
+        add_logs_to_es($log);
         $mobileUser = $this->getUserByMobile($mobile);
         if (empty($mobileUser)) {
             $this->User->update(['mobilephone' => $mobile], ['id' => $currentUserId]);
@@ -1337,13 +1344,6 @@ class UsersController extends AppController
             if ($result) {
                 $this->User->add_score($currentUserId, BIND_MOBILE_AWARD_SCORE);
             }
-            $log = [
-                "index" => "event_user_bind_mobile",
-                "type" => "user_bind_mobile_index",
-                "user_id" => intval($this->currentUser['id']),
-                "mobile" => $mobile,
-            ];
-            add_logs_to_es($log);
             echo json_encode(['success' => true]);
             exit;
         }
