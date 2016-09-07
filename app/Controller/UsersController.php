@@ -1313,6 +1313,11 @@ class UsersController extends AppController
             echo json_encode(['success' => false, 'reason' => 'not_login']);
             exit;
         }
+        $currentUser =  $this->User->findById($currentUserId);
+        if (!empty($currentUser['User']['mobilephone'])) {
+            echo json_encode(['success' => false, 'reason' => 'has_bind']);
+            exit;
+        }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
         $mobileCode = $postDataArray['code'];
@@ -1325,6 +1330,11 @@ class UsersController extends AppController
             exit;
         }
         if ($mobile != $currentPostNum) {
+            echo json_encode(['success' => false, 'reason' => 'mobile_error']);
+            exit;
+        }
+        if($mobile == PYS_CUSTOMER_SERVICE_MOBILE){
+            $this->log('bind mobile conflict');
             echo json_encode(['success' => false, 'reason' => 'mobile_error']);
             exit;
         }
