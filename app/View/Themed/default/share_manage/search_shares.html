@@ -77,10 +77,10 @@
                             <td>{{$item['Weshare']['id']}}</td>
                             <td>{{$item['Weshare']['title']}}</td>
                             <td>
-                                <?php foreach($item['products'] as $v):?>
-                                        {{$v['cake_carts']['name']}}—
-                                        ¥{{$v['cake_carts']['price']/100}}—
-                                        {{$v[0]['num']}}份<br/>
+                                <?php foreach($products[$item['Weshare']['id']] as $p):?>
+                                        {{$p['name']}}—
+                                        ¥{{$p['price']/100}}—
+                                        {{$p['sell_num']}}份<br/>
                                 <?php endforeach;?>
                             </td>
                             <td>{{$item['Weshare']['created']}}</td>

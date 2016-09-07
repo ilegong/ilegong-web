@@ -202,21 +202,40 @@ class ShareManageController extends AppController
         $url = "/share_manage/search_shares?page=(:num)&creator_name={$_REQUEST['creator_name']}&id={$_REQUEST['id']}&share_status={$_REQUEST['share_status']}&title={$_REQUEST['title']}&creator_id={$_REQUEST['creator_id']}";
         $pager = new MyPaginator($count, 10, $page, $url);
 
-        foreach ($results as $index => $result) {
-            $sql = "SELECT
-  name,
-  product_id,
-  price,
-  sum(num) AS num
-FROM cake_carts
-WHERE order_id IN (
-  SELECT id
-  FROM cake_orders
-  WHERE member_id = {$result['Weshare']['id']} AND `type` = 9 AND `status` IN (9, 1, 2, 3, 14, 4) AND `deleted` = '0' AND `flag`!=19)
-GROUP BY product_id";
-            $results[$index]['products'] = $cartM->query($sql);
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $weshareIds = Hash::extract($results, '{n}.Weshare.id');
+        $products = $weshareProductM->find('all', [
+            'conditions' => [
+                'weshare_id' => $weshareIds
+            ],
+            'fields' => ['weshare_id', 'name', 'price']
+        ]);
+
+        $weshareProducts = [];
+
+        foreach ($products as $p) {
+            $weshare_id = $p['WeshareProduct']['weshare_id'];
+            if(!isset($weshareProducts[$weshare_id])){
+                $weshareProducts[$weshare_id] = [];
+            }
+            $weshareProducts[$weshare_id] = $p['WeshareProduct'];
         }
 
+//        foreach ($results as $index => $result) {
+//            $sql = "SELECT
+//  name,
+//  product_id,
+//  price,
+//  sum(num) AS num
+//FROM cake_carts
+//WHERE order_id IN (
+//  SELECT id
+//  FROM cake_orders
+//  WHERE member_id = {$result['Weshare']['id']} AND `type` = 9 AND `status` IN (9, 1, 2, 3, 14, 4) AND `deleted` = '0' AND `flag`!=19)
+//GROUP BY product_id";
+//            $results[$index]['products'] = $cartM->query($sql);
+//        }
+        $this->set('products', $weshareProducts);
         $this->set('pager', $pager);
         $this->set('results', $results);
     }
