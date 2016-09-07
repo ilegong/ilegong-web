@@ -60,7 +60,7 @@
         }
 
         function viewMyScore(needBindMobile) {
-            vm.addPageClickLog({page:'index', position:'user-func', value: 'score'});
+            vm.addPageClickLog({page:'index', position:'userFunc', value: 'score'});
             if(needBindMobile){
                 CoreReactorChannel.elevatedEvent('BindMobile', {});
                 return;

@@ -37,19 +37,19 @@
         </li>
         <li>
             {{if $owner}}
-                <a href="/weshares/get_other_info/{{$owner}}.html?from=_u_center" ng-click="vm.addPageClickLog({page:'index', position:'user-func', value: 'mySub'});">
+                <a href="/weshares/get_other_info/{{$owner}}.html?from=_u_center" ng-click="vm.addPageClickLog({page:'index', position:'userFunc', value: 'mySub'});">
                     <img src="{{$STATIC_HOST}}/static/img/index/apple.png">
                     <label>我的关注</label>
                 </a>
             {{else}}
-                <a href="/weshares/get_other_info/711503.html?from=_u_center" ng-click="vm.addPageClickLog({page:'index', position:'user-func', value: 'mySub'});">
+                <a href="/weshares/get_other_info/711503.html?from=_u_center" ng-click="vm.addPageClickLog({page:'index', position:'userFunc', value: 'mySub'});">
                     <img src="{{$STATIC_HOST}}/static/img/index/apple.png">
                     <label>我的关注</label>
                 </a>
             {{/if}}
         </li>
         <li>
-            <a href="/weshares/coupons.html" ng-click="vm.addPageClickLog({page:'index', position:'user-func', value: 'myCoupon'});">
+            <a href="/weshares/coupons.html" ng-click="vm.addPageClickLog({page:'index', position:'userFunc', value: 'myCoupon'});">
                 <div style="position: relative; width: 37px; margin: 0 auto;">
                     <div class="packet">{{$coupon_count ? $coupon_count : 0}}</div>
                     <img src="{{$STATIC_HOST}}/static/img/index/money.png">
@@ -58,7 +58,7 @@
             </a>
         </li>
         <li>
-            <a href="/weshares/my_order_list.html" ng-click="vm.addPageClickLog({page:'index', position:'user-func', value: 'myOrder'});">
+            <a href="/weshares/my_order_list.html" ng-click="vm.addPageClickLog({page:'index', position:'userFunc', value: 'myOrder'});">
                 <img src="{{$STATIC_HOST}}/static/img/index/orange.png">
                 <label>我的订单</label>
             </a>
@@ -147,6 +147,6 @@ $this->set('show_footer', 'index');
 }
 $this->Html->script(array(
 $STATIC_HOST.'/static/weshares/js/tutorial.min.js?v2.6.0',
-$STATIC_HOST.'/static/weshares/js/index.min.js?v2.6.0'
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.6.1'
 ), array('block' => 'scripts'))
 ?>
