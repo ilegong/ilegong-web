@@ -51,7 +51,9 @@
         <li>
             <a href="/weshares/coupons.html" ng-click="vm.addPageClickLog({page:'index', position:'userFunc', value: '2'});">
                 <div style="position: relative; width: 37px; margin: 0 auto;">
+                    {{if $coupon_count > 0}}
                     <div class="packet">{{$coupon_count ? $coupon_count : 0}}</div>
+                    {{/if}}
                     <img src="{{$STATIC_HOST}}/static/img/index/money.png">
                 </div>
                 <label>我的红包</label>
