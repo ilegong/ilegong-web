@@ -115,12 +115,14 @@
             if (!vm.canBindMobile()) {
                 return;
             }
+            if (vm.binding) {
+                return;
+            }
             vm.binding = true;
             $http.post('/users/wx_user_bind_mobile', {
                 'code': vm.code.value,
                 'mobile': vm.mobilePhone.value
             }).success(function (data) {
-                $log.log(data);
                 vm.binding = false;
                 if (data['success']) {
                     vm.userBindMobileSuccess = true;
@@ -135,6 +137,10 @@
                     }
                     if (data['reason'] == 'system_error') {
                         alert('绑定失败，请联系客服！');
+                        vm.hideAllLayer();
+                    }
+                    if(data['reason'] == 'has_bind'){
+                        alert('已经绑定手机！');
                         vm.hideAllLayer();
                     }
                 }
