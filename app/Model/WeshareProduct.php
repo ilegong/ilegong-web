@@ -11,11 +11,11 @@ class WeshareProduct extends AppModel
         if ($num != 0) {
             $tries = 10;
             while ($tries-- > 0) {
-                $product = $this->find('first', ['conditions' => ['id' => $pid], 'fields' => ['store', 'sell_num', 'left_num']]);
+                $product = $this->find('first', ['conditions' => ['id' => $pid], 'fields' => ['store', 'sell_num', 'store']]);
                 if (empty($product)) {
                     return 0;
                 }
-                $this->updateAll(['sell_num' => 'sell_num + ' . $num, 'left_num' => 'left_num - ' . $num], ['id' => $pid, 'sell_num' => $product['WeshareProduct']['sell_num'], 'left_num' => $product['WeshareProduct']['left_num']]);
+                $this->updateAll(['sell_num' => 'sell_num + ' . $num, 'store' => 'store - ' . $num], ['id' => $pid, 'sell_num' => $product['WeshareProduct']['sell_num'], 'store' => $product['WeshareProduct']['store']]);
                 if ($this->getAffectedRows() > 0) {
                     return 1;
                 }

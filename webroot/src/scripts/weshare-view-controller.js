@@ -559,16 +559,16 @@
         }
 
         function getProductLeftNum(product) {
-            if (vm.productSummery && vm.productSummery.details[product.id]) {
-                var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
-                var store_num = product['left_num'];
-                return store_num - product_buy_num;
-            }
-            return product['left_num'];
+            //if (vm.productSummery && vm.productSummery.details[product.id]) {
+            //    var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
+            //    var store_num = product['store'];
+            //    return store_num - product_buy_num;
+            //}
+            return product['store'];
         }
 
         function checkProductNum(product) {
-            var store_num = product['left_num'];
+            var store_num = product['store'];
             //sold out
             if (store_num == 0) {
                 return false;
@@ -1247,7 +1247,7 @@
 
             vm.autoPopCommentData = data['prepare_comment_data'];
             vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
-            vm.productSummery = data['share_summery'];
+            //vm.productSummery = data['share_summery'];
             vm.submitRecommendData = {};
             vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
             vm.submitRecommendData.recommend_user = vm.currentUser.id;

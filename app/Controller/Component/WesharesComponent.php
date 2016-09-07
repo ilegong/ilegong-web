@@ -137,7 +137,7 @@ class WesharesComponent extends Component
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
-        $share_summery = $this->WeshareBuy->get_share_buy_summery($weshareId);
+        //$share_summery = $this->WeshareBuy->get_share_buy_summery($weshareId);
         $weshare_ship_settings = $weshareInfo['ship_type'];
         unset($weshareInfo['ship_type']);
         $consignee = $this->getShareConsignees($uid);
@@ -153,7 +153,7 @@ class WesharesComponent extends Component
             'is_manage' => $is_manage_user,
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
-            'share_summery' => $share_summery,
+            //'share_summery' => $share_summery,
             'user_rebate_total' => $user_rebate_total,
             'user_score_total' => $user_score_total
         ];
@@ -496,8 +496,6 @@ class WesharesComponent extends Component
             $product['price'] = ($product['price'] * 100);
             $store = $product['store'];
             $sellNum = $product['sell_num'];
-            $leftNum = $product['left_num'];
-            
             if (!isset($sellNum) || trim($sellNum) === '') {
                 $product['sell_num'] = 0;
             }
