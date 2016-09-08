@@ -199,7 +199,7 @@ class ShareManageController extends AppController
             'joins' => $joins,
             'order' => 'Weshare.id DESC'
         ));
-        $url = "/share_manage/search_shares?page=(:num)&creator_name={$_REQUEST['creator_name']}&id={$_REQUEST['id']}&share_status={$_REQUEST['share_status']}&title={$_REQUEST['title']}&creator_id={$_REQUEST['creator_id']}";
+        $url = "/share_manage/search_shares?page=(:num)&creator_name={$_REQUEST['creator_name']}&id={$_REQUEST['id']}&share_status={$_REQUEST['share_status']}&title={$_REQUEST['title']}&creator_id={$_REQUEST['creator_id']}&start_date={$start_date}&end_date={$end_date}";
         $pager = new MyPaginator($count, 10, $page, $url);
 
         $weshareProductM = ClassRegistry::init('WeshareProduct');
