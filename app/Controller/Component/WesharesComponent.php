@@ -66,6 +66,7 @@ class WesharesComponent extends Component
         $share_creator = $weshareInfo['creator']['id'];
         $my_coupon_items = $couponItemM->find_my_valid_share_coupons($uid, $share_creator);
         $rebate_money = $userM->get_rebate_money($uid, true);
+        $score = $userM->get_score($uid, true);
         $use_coupon = $this->get_can_use_coupon($my_coupon_items, $weshare_id);
         $coupon = [];
         if (!empty($use_coupon)) {
@@ -74,6 +75,7 @@ class WesharesComponent extends Component
         }
         return [
             'balance_money' => $rebate_money,
+            'score' => $score,
             'coupons' => $coupon,
             'ship_settings' => $weshareInfo['ship_type'],
             'delivery_template' => $weshareInfo['deliveryTemplate'],
