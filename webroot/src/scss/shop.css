@@ -141,7 +141,7 @@ ul li {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 }
 
@@ -316,7 +316,7 @@ ul li {
 /*new*/
 .product-img {
     max-width: 100%;
-    height: 200px;
+    height: 140px;
     text-align: center;
     position: relative;
     background-color: #eee;

@@ -17,6 +17,7 @@
         vm.showShareDialog = false;
         vm.setTop = setTop;
         vm.sub = sub;
+        vm.unSub = unSub;
         vm.loadData = loadData;
         vm.go = go;
         vm.showShare = showShare;
@@ -80,6 +81,20 @@
                         alert('请先关注我们的服务号');
                         window.location.href = data['url'];
                     }
+                }
+                vm.loadingData = false;
+            }).error(function () {
+                vm.loadingData = false;
+            });
+        }
+
+        function unSub(){
+            vm.loadingData = true;
+            $http.get('/weshares/unSubUser/' + vm.uid).success(function (data) {
+                if (data['success']) {
+                    vm.sub_status = 0;
+                } else {
+                    alert('取消失败');
                 }
                 vm.loadingData = false;
             }).error(function () {
