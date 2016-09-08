@@ -1,0 +1,1 @@
+ALTER TABLE `cake_weshares` ADD `weight` INT(11) UNSIGNED NOT NULL AFTER `view_count`;

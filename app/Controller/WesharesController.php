@@ -381,9 +381,11 @@ class WesharesController extends AppController
         if ($this->is_new_sharer($uid)) {
             $this->set('is_new_sharer', 1);
         }
+        $back_url = preg_match('/weshares\/shop/',$_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/weshares/my_shares_list';
         $this->set('ship_type', $share_ship_set);
         $this->set('weshare_id', $weshareId);
         $this->set('user_id', $uid);
+        $this->set('back_url', $back_url);
     }
 
     /**
@@ -2426,5 +2428,79 @@ class WesharesController extends AppController
             return $this->RedPacket->gen_sliced_and_receive($share_id, $shared_offer_id, $uid, true);
         }
         return null;
+    }
+
+
+    public function shop($uid = 0)
+    {
+        $self_id = $this->currentUser['id'];
+        if (!($self_id > 0)) {
+            $this->redirect('/users/login');
+        }
+        $uid = intval($uid) > 0 ? intval($uid) : $self_id;
+
+        //add log
+        $log = [
+            "user_id" => intval($self_id),
+            "index" => "event_shop",
+            "type" => "shop",
+            'uid' => $uid
+        ];
+
+        add_logs_to_es($log);
+
+        $user_info = $this->get_user_info($uid);
+        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
+        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        $this->set_share_user_info_weixin_params($uid, $self_id, $user_info['User']);
+        $this->set('share_user', $user_info['User']);
+        $this->set('user_summary', $user_summary);
+        $this->set('uid', $uid);
+        $this->set('self_id',$self_id);
+
+        if($uid == $self_id){
+            $title = '我的小店';
+        }else{
+            $title = $user_info['User']['nickname'].'的小店';
+
+            $sub_status = $this->ShareUtil->check_user_relation($uid, $self_id);
+
+            $this->set('sub_status', $sub_status ? 0 : 1);
+        }
+        $this->set('title', $title);
+
+    }
+
+    public function shop_set_top($id)
+    {
+        $uid = $this->currentUser['id'];
+        if (!($uid > 0)) {
+            $this->redirect('/users/login');
+        }
+        $this->Weshares->weshare_set_top($uid,$id);
+        echo json_encode(['ok' => 0 , 'msg' => 'success']);
+        exit();
+    }
+
+    public function shop_shares($uid, $page)
+    {
+        $page = intval($page) ? intval($page) : 1;
+        $limit = 5;
+        $result = $this->Weshares->get_u_create_share_from_shop($uid, $limit, $page);
+
+        foreach ($result as $k => $res) {
+            $item_desc = strip_tags($result[$k]['description']);
+            $result[$k]['description'] = mb_strlen($item_desc, 'utf8') > 100 ? mb_substr($item_desc, 0, 99, 'utf8') . "..." : $item_desc;
+        }
+
+        echo json_encode($result);
+        exit();
+    }
+
+    public function notice_from_shop()
+    {
+        echo json_encode(['ok' => 0 , 'msg' => 'success']);
+        exit();
     }
 }

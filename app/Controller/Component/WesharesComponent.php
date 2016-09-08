@@ -351,6 +351,39 @@ class WesharesComponent extends Component
         return $result;
     }
 
+    public function get_u_create_share_from_shop($uid, $limit, $page)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $OrderM = ClassRegistry::init('Order');
+
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+            ],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['Weshare.weight DESC ,Weshare.id DESC'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator', 'Weshare.view_count']
+        ]);
+        foreach ($weshares as $k => $weshare) {
+            $related_share_ids = $weshareM->get_relate_share($weshare['Weshare']['id']);
+            $weshares[$k]['Weshare']['order_count'] = $OrderM->find('count', array(
+                'conditions' => array('status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY], 'member_id' => $related_share_ids, 'type' => ORDER_TYPE_WESHARE_BUY),
+            ));
+        }
+
+        return $weshares;
+    }
+
+    public function weshare_set_top($uid,$id)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareM->update(array('weight' => time()), array('id' => $id, 'creator' => $uid));
+        return true;
+    }
+
     public function get_u_buy_share($uid, $limit, $page)
     {
         $optLogM = ClassRegistry::init('OptLog');

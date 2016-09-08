@@ -100,6 +100,12 @@ var all_js = [
             'webroot/src/scripts/pay-result-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
+    }, {
+        name: 'shop.min.js',
+        sources: [
+            'webroot/src/scripts/shop-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
     }
 ];
 
@@ -144,6 +150,12 @@ var all_css = [
         name: 'tutorial.min.css',
         sources: [
             'webroot/src/scss/tutorial.scss',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    }, {
+        name: 'shop.min.css',
+        sources: [
+            'webroot/src/scss/shop.css',
         ],
         dist: 'webroot/static/weshares/css/'
     }
