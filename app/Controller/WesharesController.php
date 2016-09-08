@@ -2499,6 +2499,25 @@ class WesharesController extends AppController
         }
         $this->set('title', $title);
 
+        if (parent::is_weixin()) {
+            $wexin_params = $this->set_weixin_share_data($uid, -1);
+            $this->set($wexin_params);
+            if ($uid == $self_id) {
+                $title = '这是' . $user_info['User']['nickname'] . '的小店，快来关注我吧';
+                $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            } else {
+                $current_user = $this->currentUser;
+                $title = $current_user['nickname'] . '推荐了' . $user_info['User']['nickname'] . '的小店，快来关注ta吧！';
+                $desc = $user_info['User']['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            }
+            $detail_url = WX_HOST . "/weshares/shop/$uid.html";
+
+            $this->set('detail_url', $detail_url);
+            $this->set('title', $title);
+            $this->set('image', $user_info['User']['avatar']);
+            $this->set('desc', $desc);
+        }
+
     }
 
     public function shop_set_top($id)

@@ -18,7 +18,7 @@
         <img ng-click="vm.go(vm.top[0].Weshare.id)" src="&#123;&#123;vm.top[0].Weshare.default_image&#125;&#125;"  fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png">
         <h3 ng-click="vm.go(vm.top[0].Weshare.id)">&#123;&#123;vm.top[0].Weshare.title&#125;&#125;</h3>
         <ul ng-click="vm.go(vm.top[0].Weshare.id)" class="clearfix">
-            <li class="fr story">报名（&#123;&#123;vm.top[0].Weshare.order_count&#125;&#125;）</li>
+            <li class="fl story">报名（&#123;&#123;vm.top[0].Weshare.order_count&#125;&#125;）</li>
             <li class="fr story">浏览（&#123;&#123;vm.top[0].Weshare.view_count&#125;&#125;）</li>
         </ul>
         <?php if($uid == $self_id):?>
@@ -36,7 +36,7 @@
                 <li ng-click="vm.go(shares.Weshare.id)" class="product-img"><img lazy-src="&#123;&#123;shares.Weshare.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png"></li>
                 <li ng-click="vm.go(shares.Weshare.id)"><p>&#123;&#123;shares.Weshare.title&#125;&#125;</p></li>
                 <li ng-click="vm.go(shares.Weshare.id)" class="clearfix">
-                    <label class="fr story">报名<span>(&#123;&#123shares.Weshare.order_count&#125;&#125;)</span></label>
+                    <label class="fl story">报名<span>(&#123;&#123shares.Weshare.order_count&#125;&#125;)</span></label>
                     <label class="fr story">浏览<span>(&#123;&#123;shares.Weshare.view_count&#125;&#125;)</span></label>
                 </li>
                 <?php if($uid == $self_id):?>
