@@ -57,7 +57,7 @@
     <?php else:?>
     <ul class="clearfix bottom-operation">
         <li class="share-img" ng-click="vm.showShare()"><img src="{{$STATIC_HOST}}/static/weshares/images/share.jpg"></li>
-        <li class="attention" ng-class="{'show-b':vm.sub_status==1}" style="display: none;">已关注</li>
+        <li class="attention" ng-class="{'show-b':vm.sub_status==1}" style="display: none;" ng-click="vm.unSub()">已关注</li>
         <li class="attention not-concerned" ng-class="{'show-b':vm.sub_status==0}" style="display: none;" ng-click="vm.sub()">关注TA</li>
         <li class="message" ng-click="vm.msg()">私信TA</li>
     </ul>
