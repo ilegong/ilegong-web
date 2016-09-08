@@ -1,0 +1,85 @@
+{{literal}}
+<div ng-controller="WesharesEditConsigneeCtrl as wecc">
+    <!--操作视图-->
+    <div>
+        <!--选择快递地址-->
+        <div ng-if="wecc.selectConsignees">
+            <div class="menu-top refer-back-bg">
+                选择地址
+                <a ng-click="wecc.toBalanceView();">
+                    <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
+                    <label>返回</label>
+                </a>
+            </div>
+            <div class="select-address">
+                <a ng-class="{cur:consignee.status==1}" ng-repeat="consignee in wecc.consignees">
+                    <ul class="clearfix">
+                        <li class="fl" ng-click="wecc.chooseConsignee(consignee)">
+                            <span ng-bind="::consignee.name"></span>
+                            &nbsp;&nbsp;
+                            <span ng-bind="::consignee.mobilephone"></span>
+                            <br/>
+                            <label ng-bind="::(consignee.area+consignee.address)"></label>
+                        </li>
+                        <li ng-click="wecc.showConsigneeFormView(consignee)"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/copyreader.png"/></li>
+                    </ul>
+                </a>
+            </div>
+            <div ng-if="wecc.noConsignee" class="no-consignee-tip">您还没有添加过地址，请先新增地址</div>
+            <div class="loader" ng-if="wecc.loadingConsignee">
+                <div class="loading-3">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </div>
+            </div>
+            <div class="add-address-bg"><a ng-click="wecc.showConsigneeFormView()">新增地址</a></div>
+        </div>
+        <!--编辑快递地址-->
+        <div ng-if="wecc.editConsignee">
+            <div class="menu-top refer-back-bg">
+                编辑地址
+                <a ng-click="wecc.showConsigneeListView();" class="nav-back fl">
+                    <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
+                    <label>返回</label>
+                </a>
+            </div>
+            <div class="copyreader-address">
+                <ul class="clearfix">
+                    <li class="fl comment">收货人</li>
+                    <li class="fl content"><input ng-model="wecc.editConsigneeData.name" type="text" placeholder="请输入收货人姓名"/></li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="fl comment">联系方式</li>
+                    <li class="fl content"><input ng-model="wecc.editConsigneeData.mobilephone" type="text" placeholder="请输入收货人手机号"/></li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="fl comment">所在地区</li>
+                    <li class="fl content">
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.province_id" ng-change="wecc.loadCityData(wecc.editConsigneeData.province_id)" ng-options="province.id as province.name for province in wecc.provinceData">
+                            <option value="">选择省(市)</option>
+                        </select>
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.city_id" ng-change="wecc.loadCountyData(wecc.editConsigneeData.city_id)" ng-options="id as city for (id, city) in wecc.cityData">
+                            <option value="">选择市(区)</option>
+                        </select>
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.county_id" ng-options="id as county for (id, county) in wecc.countyData">
+                            <option value="">选择市县(街道)</option>
+                        </select>
+                    </li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="fl comment">详细地址</li>
+                    <li class="fl content"><input ng-model="wecc.editConsigneeData.address" type="text" placeholder="请输入详细地址"/></li>
+                </ul>
+            </div>
+            <a ng-click="wecc.saveConsignee()" class="saveBtn">保存</a>
+        </div>
+    </div>
+    <div class="layer-bg" ng-if="wecc.showLayerBg"></div>
+</div>
+{{/literal}}

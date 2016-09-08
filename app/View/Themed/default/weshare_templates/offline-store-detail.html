@@ -1,0 +1,29 @@
+{{literal}}
+<div style="background-color:#f5f5f5;">
+    <div class="classlist">
+        <a ng-click="vm.showChooseOfflineStore()" class="back"></a>
+        自提点详情
+        <a ng-click="vm.showShareDetail()" class="home"></a>
+    </div>
+    <div class="logistics_ziti" id="offline-store-detail">
+        <h1 ng-bind="vm.currentOfflineStore.alias" ng-click="vm.chooseOfflineStore(vm.currentOfflineStore)"></h1>
+        <p>
+            <i>自提点地址</i>
+            <em ng-bind="vm.currentOfflineStore.name"></em>
+            <a href="{{::vm.currentOfflineStore.mapDetailUrl}}" target="_blank" class="clearfix">
+                <b><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/adress.png"></b>
+                <label>查看地图</label>
+            </a>
+        </p>
+        <p>
+            <i>联系信息</i>
+            <em><span ng-bind="vm.currentOfflineStore.owner_name"></span> <span ng-bind="vm.currentOfflineStore.owner_phone"></span></em>
+        </p>
+        <div name="offlineStoreMap" id="offline-store-map">
+            <a href="{{::vm.currentOfflineStore.mapDetailUrl}}" target="_blank">
+                <img src="{{::vm.currentOfflineStore.mapImg}}">
+            </a>
+        </div>
+    </div>
+</div>
+{{/literal}}

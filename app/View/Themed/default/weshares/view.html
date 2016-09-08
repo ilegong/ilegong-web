@@ -549,25 +549,25 @@
                  ng-click="vm.hideAllLayer();"></div>
         </div>
     </div>
-
-    <div ng-if="vm.showBalanceView">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.7.8'"></ng-include>
-    </div>
-
-    <div ng-if="vm.chooseOfflineStoreView">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store.html?v0.7.8'"></ng-include>
-    </div>
-
-    <div ng-if="vm.showOfflineStoreDetailView">
-        <ng-include
-                src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.7.8'"></ng-include>
-    </div>
-
-    <div ng-if="vm.showEditConsigneeView">
-        <!--编辑地址-->
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.8'"></ng-include>
-    </div>
     {{/literal}}
+
+    <div ng-if="vm.showBalanceView" style="display: none" ng-class="{'show-b': vm.showBalanceView}">
+        {{include 'weshare_templates/balance'}}
+    </div>
+
+    <div ng-if="vm.showEditConsigneeView" style="display: none" ng-class="{'show-b': vm.showEditConsigneeView}">
+        <!--编辑地址-->
+        {{include 'weshare_templates/edit-consignee'}}
+    </div>
+
+    <div ng-if="vm.chooseOfflineStoreView" style="display: none" ng-class="{'show-b': vm.chooseOfflineStoreView}">
+        {{include 'weshare_templates/offline-store'}}
+    </div>
+
+    <div ng-if="vm.showOfflineStoreDetailView" style="display: none" ng-class="{'show-b': vm.showOfflineStoreDetailView}">
+        {{include 'weshare_templates/offline-store-detail'}}
+    </div>
+
 </div>
 
 <?php

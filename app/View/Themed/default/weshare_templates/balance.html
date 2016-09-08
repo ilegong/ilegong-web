@@ -1,0 +1,185 @@
+{{literal}}
+<div>
+    <div class="menu-top refer-back-bg">
+        设置配送信息
+        <a href="#" ng-click="vm.showShareDetail()">
+            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <!--收货信息-->
+    <div class="has-menu-top extra-margin" ng-controller="WesharesConsigneeCtrl as wcc">
+        <!--Tab切换-->
+        <ul class="clearfix logistics-nav" ng-if="wcc.availableShipTypes > 1">
+            <li ng-if="vm.weshareSettings.kuai_di.status==1" style="width:{{100/wcc.availableShipTypes}}%"
+                ng-class="{'cur': vm.selectShipType==0}" ng-click="wcc.changeShipTab(0)">快递
+            </li>
+            <li ng-if="vm.weshareSettings.self_ziti.status==1" style="width:{{100/wcc.availableShipTypes}}%"
+                ng-class="{'cur': vm.selectShipType==1}" ng-click="wcc.changeShipTab(1)">自提
+            </li>
+            <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="width:{{100/wcc.availableShipTypes}}%"
+                ng-class="{'cur': vm.selectShipType==2}" ng-click="wcc.changeShipTab(2)">好邻居自提
+            </li>
+        </ul>
+        <!--主面板-->
+        <div class="expressage">
+            <!-- 使用快递的时候出现 -->
+            <ul class="clearfix" ng-if="vm.selectShipType==0" ng-click="wcc.toEditConsigneeView()">
+                <li class="fl">
+                    <a class="defaultText" ng-show="_.isEmpty(vm.expressShipInfo)">填写收货信息</a>
+                    <a class="address" ng-show="!_.isEmpty(vm.expressShipInfo)">
+                        <span ng-bind="vm.expressShipInfo.name"></span><span ng-bind="vm.expressShipInfo.mobilephone"></span>
+                        <br/>(<span ng-bind="vm.expressShipInfo.area"></span><span ng-bind="vm.expressShipInfo.address"></span>)
+                    </a>
+                </li>
+                <li class="fr">
+                    <a class="next-icon clearfix">
+                        <label ng-if="!vm.expressShipInfo">添加</label>
+                        <label ng-if="vm.expressShipInfo">修改</label>
+                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
+                    </a>
+                </li>
+            </ul>
+            <!-- 使用好邻居自提的时候出现 -->
+            <ul class="clearfix" ng-if="vm.selectShipType==2" ng-click="vm.showChooseOfflineStore()">
+                <li class="fl">
+                    <a href="#" class="defaultText" ng-if="!vm.checkedOfflineStore">请选择好邻居线下店</a>
+                    <a href="#" class="address" ng-if="vm.checkedOfflineStore">
+                        <span ng-bind="vm.checkedOfflineStore.owner_name"></span><span
+                            ng-bind="vm.checkedOfflineStore.owner_phone"></span>
+                        <br/><span ng-bind="vm.checkedOfflineStore.alias"></span>
+                    </a>
+                </li>
+                <li class="fr">
+                    <a href="#" class="next-icon clearfix">
+                        <label ng-if="!vm.checkedOfflineStore">选择</label>
+                        <label ng-if="vm.checkedOfflineStore">重新选择</label>
+                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
+                    </a>
+                </li>
+            </ul>
+            <!--自有自提-->
+            <ul class="clearfix" ng-if="vm.selectShipType==1">
+                <li class="fl comment">自提地址</li>
+                <li class="fl content">
+                    <select ng-model='vm.selectedPickUpAddressId'
+                            ng-options="address.id as address.address for address in vm.weshare.addresses">
+                        <option value="-1">请选择地址</option>
+                    </select>
+                </li>
+            </ul>
+            <!-- 选择自提方式-->
+            <div ng-if="vm.selectShipType!=0">
+                <ul class="clearfix">
+                    <li class="fl comment">收货人</li>
+                    <li class="fl content"><input ng-model='vm.buyerName' type="text" placeholder="请输入收货人姓名"/></li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="fl comment">联系方式</li>
+                    <li class="fl content"><input ng-model='vm.buyerMobilePhone' type="text" placeholder="请输入收货人手机号"/></li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="fl comment">详细地址</li>
+                    <li class="fl content"><input ng-model='vm.buyerPatchAddress' type="text"
+                                                  placeholder="小区-楼号-门牌(必要时送货上门)"/></li>
+                </ul>
+            </div>
+            <!--都可选-->
+            <ul class="clearfix">
+                <li class="fl comment">备注</li>
+                <li class="fl content"><input ng-model='vm.buyerRemark' type="text" placeholder="告诉团长你的特殊需求"/></li>
+            </ul>
+        </div>
+    </div>
+    <!-- 这个元素在各个tab里面都会出现 -->
+    <div class="selection-product">
+        <h1>选择的产品</h1>
+
+        <div class="product" ng-repeat="product in vm.weshare.products | filter : vm.filterProductByNum">
+            <ul class="clearfix">
+                <li class="fl">
+                    <div class="product-name">
+                        <span ng-bind="$index+1"></span>：<span ng-bind="product.name"></span>
+                    </div>
+
+                    <div class="product-price" ng-bind="product.price/100 | currency:'￥'">
+                    </div>
+                </li>
+            </ul>
+
+            <dl class="clearfix" ng-if="!vm.checkProductNum(product)">
+                <dd class="fr sold-out">已抢光</dd>
+            </dl>
+            <dl class="clearfix" ng-if="vm.checkProductNum(product)">
+                <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="iconfont icon-jiahao"></i></dd>
+                <dd class="fr amount" ng-bind="product.num||0">0</dd>
+                <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="iconfont icon-minus"></i></dd>
+                <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store<=100">仅剩<span
+                        ng-bind="vm.getProductLeftNum(product)"></span>份
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- 这个元素在各个tab里面都会出现 -->
+    <!--<div class="promotion" ng-if="vm.weshare.id==4507">-->
+        <!--<dl class="clearfix">-->
+            <!--<dd class="promotion-title">优惠码：</dd>-->
+            <!--<dd><div><input type="text" placeholder="请输入优惠码" ng-model="vm.useCouponCode" ng-disabled="vm.myCoupons" /></div></dd>-->
+            <!--<dd><a href="javascript:;" ng-click='vm.useCoupons();'>确定</a></dd>-->
+        <!--</dl>-->
+    <!--</div>-->
+    <div class="balance-detail-panel">
+
+        <ul class="rebate-balance clearfix" ng-show="vm.showUseScore">
+            <li class="fl">
+                <label>可用<span ng-bind="vm.canUseScoreTotal"></span>积分抵<span ng-bind="vm.canUseScoreTotal/100"></span>元</label>
+            </li>
+            <li class="fr"><input type="checkbox" id="checkbox_score" class="chk_toggle" ng-model="vm.useScore" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_score"></label></li>
+        </ul>
+
+        <ul class="rebate-balance clearfix" ng-show="vm.rebateTotal > 0">
+            <li class="fl">
+                <label>账户余额可用<span ng-bind="vm.canUseRebateTotal/100"></span>元</label>
+            </li>
+            <li class="fr"><input type="checkbox" id="checkbox_rebate" class="chk_toggle" ng-model="vm.useRebate" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_rebate"></label></li>
+        </ul>
+        <div class="money-detail">
+            <ul class="clearfix">
+                <li class="fl">产品总额：</li>
+                <li class="fr" ng-bind="vm.productTotalPrice | currency:'￥'"></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.shipFee>0">
+                <li class="fl">快递费：</li>
+                <li class="fr" ng-bind="vm.shipFee/100 | currency:'￥'"></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.myCoupons&&vm.myCoupons.length > 0">
+                <li class="fl">红包：</li>
+                <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.useScore&&vm.canUseScoreTotal>0">
+                <li class="fl">积分：</li>
+                <li class="fr">-<span ng-bind="vm.canUseScoreTotal/100 | currency:'￥'"></span></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.useRebate&&vm.canUseRebateTotal>0">
+                <li class="fl">余额：</li>
+                <li class="fr">-<span ng-bind="vm.canUseRebateTotal/100 | currency:'￥'"></span></li>
+            </ul>
+            <dl class="clearfix">
+                <dt class="fl">应付总额：</dt>
+                <dt class="fr" ng-bind="vm.orderPayTotalPrice | currency:'￥'"></dt>
+            </dl>
+        </div>
+    </div>
+
+
+    <!-- 这个元素在各个tab里面都会出现 -->
+    <ul class="payment-bg clearfix">
+        <li class="fl">应付<span ng-bind="vm.orderPayTotalPrice | currency:'￥'"></span></li>
+        <li class="fr"><a class="zfbPay" ng-click='vm.submitOrder(1);'>支付宝支付</a></li>
+        <li class="fr" ng-show="vm.inWeixin"><a class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
+    </ul>
+</div>
+{{/literal}}
+
+
