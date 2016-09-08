@@ -67,7 +67,7 @@
     <div class="mine-story-more" style="display: none" ng-class="{'show-b':vm.show_desc}">
         <p>{{$share_user['description']}}</p>
     </div>
-    <a style="display: none" ng-class="{'show-b':vm.show_desc}" ng-click="vm.show_desc=false;" class="mine-story-close">取消</a>
+    <button style="display: none" ng-class="{'show-b':vm.show_desc}" ng-click="vm.show_desc=false;" class="mine-story-close">取消</button>
     <div ng-class="{'show-b':vm.show_desc}" class="mine-story-bg" style="display: none"></div>
 
     <!--提示分享层-->
@@ -83,7 +83,7 @@
 
 <?php
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/shop.min.css?v2.5.14'
+$STATIC_HOST.'/static/weshares/css/shop.min.css?v2.5.16'
 ), null, array('inline' => false));
 ?>
 <?php
