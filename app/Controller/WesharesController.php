@@ -686,7 +686,7 @@ class WesharesController extends AppController
                     'weshare_id' => $weshareId
                 )
             ));
-            $checkProductStoreResult = $this->check_product_store($weshareProducts, $weshareId, $productIdNumMap);
+            $checkProductStoreResult = $this->check_product_store($weshareProducts, $productIdNumMap);
             if (!empty($checkProductStoreResult)) {
                 $this->log('Failed to create order for ' . $uid . ' with weshare ' . $weshareId . ': product is sold out.', LOG_WARNING);
                 echo json_encode($checkProductStoreResult);
@@ -1901,50 +1901,22 @@ class WesharesController extends AppController
 
 
     /**
-     * @param $weshareId
      * @param $weshareProduct
      * @param $num
      * @return array
      * 购买前检查库存
      */
-    private function check_product_num($weshareId, $weshareProduct, $num)
+    private function check_product_num($weshareProduct, $num)
     {
         $store_num = $weshareProduct['WeshareProduct']['store'];
-        if ($store_num == -1) {
-            return array('result' => false, 'type' => 0);
-        }
-        if ($store_num == 0) {
-            return array('result' => true);
+        if ($store_num == 0 || $store_num < 0) {
+            return ['result' => false, 'type' => 0];
         }
         if ($num > $store_num) {
             $over_num = $num - $store_num;
-            return array('result' => false, 'type' => 1, 'num' => $over_num);
+            return ['result' => false, 'type' => 1, 'num' => $over_num];
         }
-        $orders = $this->Order->find('all', [
-            'conditions' => ['type' => ORDER_TYPE_WESHARE_BUY, 'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_COMMENT, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY], 'member_id' => $weshareId],
-            'fields' => ['id']
-        ]);
-        $order_ids = Hash::extract($orders, '{n}.Order.id');
-        $product_id = $weshareProduct['WeshareProduct']['id'];
-        if (!empty($order_ids)) {
-            $sum_data = $this->Cart->find('all', array(
-                'fields' => array('sum(num) AS total'),
-                'conditions' => array(
-                    'product_id' => $product_id,
-                    'order_id' => $order_ids
-                )
-            ));
-            $buy_num = $sum_data[0][0]['total'];
-            if (($buy_num + $num) > $store_num) {
-                //买完了
-                if ($buy_num >= $store_num) {
-                    return array('result' => false, 'type' => 0);
-                }
-                $over_num = $buy_num + $buy_num - $store_num;
-                return array('result' => false, 'type' => 1, 'num' => $over_num);
-            }
-        }
-        return array('result' => true);
+        return ['result' => true];
     }
 
     /**
@@ -2138,18 +2110,17 @@ class WesharesController extends AppController
 
     /**
      * @param $weshareProducts
-     * @param $weshareId
      * @param $productIdNumMap
      * @return array|null
      * 检查库存
      */
-    private function check_product_store($weshareProducts, $weshareId, $productIdNumMap)
+    private function check_product_store($weshareProducts, $productIdNumMap)
     {
         $reason = '';
         foreach ($weshareProducts as $p) {
             $product_id = $p['WeshareProduct']['id'];
             $cart_num = $productIdNumMap[$product_id];
-            $check_num_result = $this->check_product_num($weshareId, $p, $cart_num);
+            $check_num_result = $this->check_product_num($p, $cart_num);
             if (!$check_num_result['result']) {
                 if ($check_num_result['type'] == 0) {
                     $reason = $reason . ' ' . $p['WeshareProduct']['name'] . '已经售罄';
