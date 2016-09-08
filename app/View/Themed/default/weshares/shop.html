@@ -1,0 +1,93 @@
+<div ng-controller="ShopCtrl as vm" id="ShopCtrl" data-user_id="{{$share_user['id']}}" style="background-color:#ffffff;" data-sub_status="{{$sub_status}}">
+    <div class="mine-bg clearfix">
+        <img src="{{$share_user['avatar']}}">
+        <h1>{{$share_user['nickname']}}</h1>
+        <ul class="clearfix">
+            <li class="fl">评价<label>{{$user_summary['comment_count']}}</label></li>
+            <li class="fr">粉丝<label>{{$user_summary['follower_count']}}</label></li>
+        </ul>
+    </div>
+    <ul class="mine-story clearfix">
+        <li class="fl story">{{$share_user['description']}}</li>
+        <li class="fr more-information clearfix">
+            <label class="fl" ng-click="vm.show_desc=true;">完整故事</label>
+            <img class="fl" src="{{$STATIC_HOST}}/static/weshares/images/next-icon.png">
+        </li>
+    </ul>
+    <div class="mine-photoshop clearfix" ng-show="vm.top.length > 0">
+        <img ng-click="vm.go(vm.top[0].Weshare.id)" src="&#123;&#123;vm.top[0].Weshare.default_image&#125;&#125;"  fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png">
+        <h3 ng-click="vm.go(vm.top[0].Weshare.id)">&#123;&#123;vm.top[0].Weshare.title&#125;&#125;</h3>
+        <ul ng-click="vm.go(vm.top[0].Weshare.id)" class="clearfix">
+            <li class="fr story">报名（&#123;&#123;vm.top[0].Weshare.order_count&#125;&#125;）</li>
+            <li class="fr story">浏览（&#123;&#123;vm.top[0].Weshare.view_count&#125;&#125;）</li>
+        </ul>
+        <?php if($uid == $self_id):?>
+        <dl class="clearfix">
+            <dd><a href="/weshares/share_order_list/&#123;&#123;vm.top[0].Weshare.id&#125;&#125;">订单</a></dd>
+            <dd><a href="/weshares/update/&#123;&#123;vm.top[0].Weshare.id&#125;&#125;" style="border-left: 0;">编辑</a></dd>
+        </dl>
+        <?php endif;?>
+    </div>
+
+    <div class="clearfix all-good" infinite-scroll='vm.loadData()' infinite-scroll-disabled='vm.over||vm.loadingData'
+         infinite-scroll-distance='0'>
+        <div class="single-good" ng-repeat="shares in vm.shares" >
+            <ul>
+                <li ng-click="vm.go(shares.Weshare.id)" class="product-img"><img lazy-src="&#123;&#123;shares.Weshare.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png"></li>
+                <li ng-click="vm.go(shares.Weshare.id)"><p>&#123;&#123;shares.Weshare.title&#125;&#125;</p></li>
+                <li ng-click="vm.go(shares.Weshare.id)" class="clearfix">
+                    <label class="fr story">报名<span>(&#123;&#123shares.Weshare.order_count&#125;&#125;)</span></label>
+                    <label class="fr story">浏览<span>(&#123;&#123;shares.Weshare.view_count&#125;&#125;)</span></label>
+                </li>
+                <?php if($uid == $self_id):?>
+                <li class="order-button clearfix">
+                    <span><a href="javascript:;" ng-click="vm.setTop(shares.Weshare.id)">置顶</a></span>
+                    <span><a href="/weshares/share_order_list/&#123;&#123;shares.Weshare.id&#125;&#125;" style="border-left: 0;">订单</a></span>
+                    <span><a href="/weshares/update/&#123;&#123;shares.Weshare.id&#125;&#125;" style="border-left: 0;">编辑</a></span>
+                </li>
+                <?php endif;?>
+            </ul>
+        </div>
+    </div>
+    <?php if($uid == $self_id):?>
+    <ul class="clearfix bottom-operation">
+        <li class="My-shop" ng-click="vm.showShare()">分享我的小铺</li>
+        <li class="look-mygood" ng-click="vm.notice()">参团提醒</li>
+    </ul>
+    <?php else:?>
+    <ul class="clearfix bottom-operation">
+        <li class="share-img" ng-click="vm.showShare()"><img src="{{$STATIC_HOST}}/static/weshares/images/share.jpg"></li>
+        <li class="attention" ng-class="{'show-b':vm.sub_status==1}" style="display: none;">已关注</li>
+        <li class="attention not-concerned" ng-class="{'show-b':vm.sub_status==0}" style="display: none;" ng-click="vm.sub()">关注TA</li>
+        <li class="message" ng-click="vm.msg()">私信TA</li>
+    </ul>
+    <?php endif;?>
+
+
+    <div class="mine-story-more" style="display: none" ng-class="{'show-b':vm.show_desc}">
+        <p>{{$share_user['description']}}</p>
+    </div>
+    <a style="display: none" ng-class="{'show-b':vm.show_desc}" ng-click="vm.show_desc=false;" class="mine-story-close">取消</a>
+    <div ng-class="{'show-b':vm.show_desc}" class="mine-story-bg" style="display: none"></div>
+
+    <!--提示分享层-->
+    <div class="share-dialog" ng-class="{'show-b':vm.showShareDialog}" style="display: none;">
+        <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
+    </div>
+    <div class="background-layer" ng-class="{'show-b':vm.showShareDialog}" style="display: none;"
+         ng-click="vm.hideShare();"></div>
+</div>
+<?php
+    $this->assign('title','朋友说-'.$title);
+?>
+
+<?php
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/shop.min.css?v2.5.14'
+), null, array('inline' => false));
+?>
+<?php
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/shop.min.js?v2.5.15'
+), array('block' => 'scripts'))
+?>

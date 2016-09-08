@@ -230,6 +230,11 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
+    public function get()
+    {
+
+    }
+
     public function get_user_provide_shares($uid, $keyword = null){
         $poolProductM = ClassRegistry::init('PoolProduct');
         $queryCond = [
