@@ -184,7 +184,7 @@
             <div class="section recommend-section" ng-show="vm.recommendWeshares.length > 0">
                 <h1>大家都在买</h1>
                 <ul class="recommend-weshares clearfix">
-                    <li class="recommend-weshare fl" ng-repeat="weshare in vm.recommendWeshares">
+                    <li class="recommend-weshare" ng-class="$index%2==0?'fl':'fr'" ng-repeat="weshare in vm.recommendWeshares">
                         <ul class="recommend-weshare-details">
                             <li class="product-img">
                                 <a href="/weshares/view/{{weshare.id}}.html?from=recommend"><img ng-src="{{weshare.default_image}}"></a>
