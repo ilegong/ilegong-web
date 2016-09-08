@@ -892,38 +892,38 @@ class WeixinComponent extends Component {
             return;
         }
         if ($order['Order']['status'] == ORDER_STATUS_PAID && !empty($openid)) {
-            $this->send_pintuan_buy_order_paid_msg($openid, $order, $good);
+            //$this->send_pintuan_buy_order_paid_msg($openid, $order, $good);
             //$this->notify_weshare_buy_creator($order, $good);
         }
     }
 
-    public function send_pintuan_buy_order_paid_msg($open_id, $order, $good) {
-        $weshare_info = $good['weshare_info'];
-        $title = $weshare_info['Weshare']['title'];
-        $userM = ClassRegistry::init('User');
-        $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
-        $creatorNickName = $creatorInfo['User']['nickname'];
-        $org_msg = "亲，您报名了" . $creatorNickName . "分享的" . $title;
-        $org_msg = $org_msg . '，1月5日截止报名，1月6日统一发货。';//todo custom it
-        $org_msg = $org_msg . $creatorNickName;
-        $post_data = array(
-            "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
-            "url" => $this->get_pintuan_detail($order['Order']['member_id'], $order['Order']['group_id']),
-            "topcolor" => "#FF0000",
-            "data" => array(
-                "first" => array("value" => $org_msg),
-                "orderProductPrice" => array("value" => $order['Order']['total_all_price']),
-                "orderProductName" => array("value" => $good['good_info']),
-                "orderAddress" => array("value" => empty($good['ship_info']) ? '' : $good['ship_info']),
-                "orderName" => array("value" => $order['Order']['id']),
-                "remark" => array("value" => "分享，让生活更美。点击查看详情。", "color" => "#FF8800")
-            )
-        );
-        //save relation
-        $this->ShareUtil->save_relation($creatorInfo['User']['id'], $order['Order']['creator']);
-        return $this->send_weixin_message($post_data);
-    }
+//    public function send_pintuan_buy_order_paid_msg($open_id, $order, $good) {
+//        $weshare_info = $good['weshare_info'];
+//        $title = $weshare_info['Weshare']['title'];
+//        $userM = ClassRegistry::init('User');
+//        $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
+//        $creatorNickName = $creatorInfo['User']['nickname'];
+//        $org_msg = "亲，您报名了" . $creatorNickName . "分享的" . $title;
+//        $org_msg = $org_msg . '，1月5日截止报名，1月6日统一发货。';//todo custom it
+//        $org_msg = $org_msg . $creatorNickName;
+//        $post_data = array(
+//            "touser" => $open_id,
+//            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+//            "url" => $this->get_pintuan_detail($order['Order']['member_id'], $order['Order']['group_id']),
+//            "topcolor" => "#FF0000",
+//            "data" => array(
+//                "first" => array("value" => $org_msg),
+//                "orderProductPrice" => array("value" => $order['Order']['total_all_price']),
+//                "orderProductName" => array("value" => $good['good_info']),
+//                "orderAddress" => array("value" => empty($good['ship_info']) ? '' : $good['ship_info']),
+//                "orderName" => array("value" => $order['Order']['id']),
+//                "remark" => array("value" => "分享，让生活更美。点击查看详情。", "color" => "#FF8800")
+//            )
+//        );
+//        //save relation
+//        $this->ShareUtil->save_relation($creatorInfo['User']['id'], $order['Order']['creator']);
+//        return $this->send_weixin_message($post_data);
+//    }
 
     public function send_weshare_buy_order_paid_msg($open_id, $order, $good) {
         $weshare_info = $good['weshare_info'];
