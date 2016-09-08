@@ -14,6 +14,8 @@ SET cwp.sell_num = p_summary.sell_num
 
 
 --reset product store
+update 51daifan.cake_weshare_products set store=store-cast(sell_num as signed) where store > 0;
+
 update 51daifan.cake_weshare_products set store=9999 where store=0;
 
 update 51daifan.cake_weshare_products set store=0 where store=-1;
