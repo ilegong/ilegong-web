@@ -2513,7 +2513,7 @@ class WesharesController extends AppController
             $detail_url = WX_HOST . "/weshares/shop/$uid.html";
 
             $this->set('detail_url', $detail_url);
-            $this->set('title', $title);
+            //$this->set('title', $title);
             $this->set('image', $user_info['User']['avatar']);
             $this->set('desc', $desc);
         }
