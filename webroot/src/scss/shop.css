@@ -281,6 +281,7 @@ ul li {
     text-align: center;
     text-decoration: none;
     z-index: 998;
+    background-color: transparent;
 }
 
 .mine-story-more {
