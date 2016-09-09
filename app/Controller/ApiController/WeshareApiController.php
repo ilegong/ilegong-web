@@ -205,6 +205,29 @@ class WeshareApiController extends Controller
         $this->set('detail', $detail);
     }
 
+    public function shop_set_top($id)
+    {
+        $uid = $this->currentUser['id'];
+        $this->Weshares->weshare_set_top($uid,$id);
+        echo json_encode(['ok' => 0 , 'msg' => 'success']);
+        exit();
+    }
+
+    public function shop_shares($uid, $page)
+    {
+        $page = intval($page) ? intval($page) : 1;
+        $limit = 5;
+        $result = $this->Weshares->get_u_create_share_from_shop($uid, $limit, $page);
+
+        foreach ($result as $k => $res) {
+            $item_desc = strip_tags($result[$k]['description']);
+            $result[$k]['description'] = mb_strlen($item_desc, 'utf8') > 100 ? mb_substr($item_desc, 0, 99, 'utf8') . "..." : $item_desc;
+        }
+
+        echo json_encode($result);
+        exit();
+    }
+
     //组合首页数据
     private function combine_index_data($products)
     {
