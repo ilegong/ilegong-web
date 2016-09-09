@@ -570,7 +570,7 @@
         function checkProductNum(product) {
             var store_num = product['store'];
             //sold out
-            if (store_num == 0) {
+            if (store_num == 0 || store_num < 0) {
                 return false;
             }
             //if (vm.productSummery && vm.productSummery.details[product.id] && store_num > 0) {
