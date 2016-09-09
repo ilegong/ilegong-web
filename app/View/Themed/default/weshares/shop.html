@@ -74,8 +74,24 @@
     <div class="share-dialog" ng-class="{'show-b':vm.showShareDialog}" style="display: none;">
         <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
     </div>
-    <div class="background-layer" ng-class="{'show-b':vm.showShareDialog}" style="display: none;"
-         ng-click="vm.hideShare();"></div>
+    <!--店铺通知信息-->
+    <div class="notify-dialog" ng-class="{'show-b':vm.showNotifyView}" style="display: none;">
+        <div class="clearfix title" style="padding: 0 10px 10px;">
+            <label style="font-size: 18px;">店铺动态通知</label>
+            <a ng-click="vm.hideAllLayer();" class="closebtn fr"></a>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;margin-bottom: 10px;">
+            <div class="form-group">
+                <textarea style="height: 100px; width: 100%;" class='form-control' ng-model='vm.notify.title' placeholder="请输入店铺动态"></textarea>
+            </div>
+        </div>
+        <div class="clearfix notify_btn">
+            <a ng-click='vm.sendNotice();' style="background-color: #ffa200; width: 100%;">通知粉丝</a>
+        </div>
+    </div>
+
+    <div class="background-layer" ng-class="{'show-b':vm.showMaskBackGround}" style="display: none;"
+         ng-click="vm.hideAllLayer();"></div>
 </div>
 <?php
     $this->assign('title','朋友说-'.$title);
@@ -83,11 +99,11 @@
 
 <?php
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/shop.min.css?v2.5.16'
+$STATIC_HOST.'/static/weshares/css/shop.min.css?v2.6.1'
 ), null, array('inline' => false));
 ?>
 <?php
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/shop.min.js?v2.5.15'
+$STATIC_HOST.'/static/weshares/js/shop.min.js?v2.6.1'
 ), array('block' => 'scripts'))
 ?>

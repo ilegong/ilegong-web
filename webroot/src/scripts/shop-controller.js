@@ -15,15 +15,19 @@
         vm.over = false;
         vm.show_desc = false;
         vm.showShareDialog = false;
+        vm.showMaskBackGround = false;
+        vm.showNotifyView = false;
         vm.setTop = setTop;
         vm.sub = sub;
         vm.unSub = unSub;
         vm.loadData = loadData;
         vm.go = go;
         vm.showShare = showShare;
-        vm.hideShare = hideShare;
+        vm.hideAllLayer = hideAllLayer;
         vm.msg = msg;
         vm.notice = notice;
+        vm.sendNotice = sendNotice;
+        vm.notify = {title: ''};
         active();
         function active() {
             $rootScope.uid = angular.element(document.getElementById('ShopCtrl')).attr('data-user_id');
@@ -37,11 +41,10 @@
             vm.loadingData = true;
             var url = "/weshares/shop_shares/" + vm.uid + "/" + vm.page;
             $http({method: 'GET', url: url, cache: $templateCache}).success(function (data) {
-                if(data.length == 0)
-                {
+                if (data.length == 0) {
                     vm.over = false;
-                }else {
-                    if(vm.page == 1){
+                } else {
+                    if (vm.page == 1) {
                         vm.top[0] = data.shift();
                     }
                     vm.shares = vm.shares.concat(data);
@@ -52,17 +55,16 @@
             });
         }
 
-        function setTop(id){
+        function setTop(id) {
             vm.loadingData = true;
             var url = "/weshares/shop_set_top/" + id;
             $http({method: 'GET', url: url, cache: $templateCache}).success(function (data) {
                 var tmp = [];
                 tmp[0] = vm.top[0];
-                for(var i = 0;i<vm.shares.length;i++)
-                {
-                    if(id != vm.shares[i].Weshare.id){
+                for (var i = 0; i < vm.shares.length; i++) {
+                    if (id != vm.shares[i].Weshare.id) {
                         tmp[tmp.length] = vm.shares[i];
-                    }else{
+                    } else {
                         vm.top[0] = vm.shares[i];
                     }
                 }
@@ -88,7 +90,7 @@
             });
         }
 
-        function unSub(){
+        function unSub() {
             vm.loadingData = true;
             $http.get('/weshares/unSubUser/' + vm.uid).success(function (data) {
                 if (data['success']) {
@@ -102,30 +104,45 @@
             });
         }
 
-        function go(id){
-            if (id > 0){
-                window.location.href = "/weshares/view/"+id+".html?from=shop";
+        function go(id) {
+            if (id > 0) {
+                window.location.href = "/weshares/view/" + id + ".html?from=shop";
             }
         }
 
         function showShare() {
             vm.showShareDialog = true;
+            vm.showMaskBackGround = true;
         }
 
-        function hideShare(){
+        function hideAllLayer() {
             vm.showShareDialog = false;
+            vm.showMaskBackGround = false;
+            vm.showNotifyView = false;
         }
 
-        function msg(){
-            if (vm.uid > 0){
-                window.location.href = "/share_faq/faq/0/"+vm.uid;
+        function msg() {
+            if (vm.uid > 0) {
+                window.location.href = "/share_faq/faq/0/" + vm.uid;
             }
         }
 
-        function notice(){
+        function notice() {
+            vm.showMaskBackGround = true;
+            vm.showNotifyView = true;
+        }
+
+        function sendNotice() {
+            if (!vm.notify.title || !vm.notify.title.trim()) {
+                alert('请输入动态！');
+                return false;
+            }
+            if (vm.loadingData) {
+                return false;
+            }
             vm.loadingData = true;
-            $http.get('/weshares/notice_from_shop').success(function (data) {
-                alert("发送成功");
+            $http.post('/weshares/notice_from_shop', vm.notify).success(function (data) {
+                $log.log(data);
                 vm.loadingData = false;
             }).error(function () {
                 vm.loadingData = false;
