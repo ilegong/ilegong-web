@@ -454,6 +454,18 @@ class SharerApiController extends Controller
     }
 
     /**
+     * 发送店铺通知
+     */
+    public function send_shop_notify(){
+        $postData = $this->get_post_raw_data();
+        $title = $postData['title'];
+        $uid = $this->currentUser['id'];
+        $this->ShareUtil->send_shop_notify_msg_job($uid, $title);
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
+    /**
      * 发送推荐通知
      */
     public function send_recommend()
