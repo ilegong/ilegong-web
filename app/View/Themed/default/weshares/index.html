@@ -66,16 +66,16 @@
             </a>
         </li>
     </ul>
-    <!--<ul class="new-activity clearfix">-->
-        <!--{{loop $promotions $promotion}}-->
-            <!--{{if $promotion['type'] == 1}}-->
-                <!--<li><a href="/weshares/view/{{$promotion['data']}}.html?from=index" ng-click="vm.addPageClickLog({page:'index', position:'promotion', value: '0'});"><img src="{{$promotion['banner_img']}}"></a></li>-->
-            <!--{{/if}}-->
-            <!--{{if $promotion['type'] == 0}}-->
-                <!--<li><a href="{{$promotion['data']}}?from=index" ng-click="vm.addPageClickLog({page:'index', position:'promotion', value: '1'});"><img src="{{$promotion['banner_img']}}"></a></li>-->
-            <!--{{/if}}-->
-        <!--{{/loop}}-->
-    <!--</ul>-->
+    <ul class="new-activity clearfix">
+        {{loop $promotions $promotion}}
+            {{if $promotion['type'] == 1}}
+                <li><a href="/weshares/view/{{$promotion['data']}}.html?from=index" ng-click="vm.addPageClickLog({page:'index', position:'promotion', value: '0'});"><img src="{{$promotion['banner_img']}}"></a></li>
+            {{/if}}
+            {{if $promotion['type'] == 0}}
+                <li><a href="{{$promotion['data']}}?from=index" ng-click="vm.addPageClickLog({page:'index', position:'promotion', value: '1'});"><img src="{{$promotion['banner_img']}}"></a></li>
+            {{/if}}
+        {{/loop}}
+    </ul>
 
     <div class="shares-container">
         {{loop $index_products $key $index_product}}
