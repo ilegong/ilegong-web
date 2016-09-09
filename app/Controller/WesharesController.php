@@ -2531,8 +2531,11 @@ class WesharesController extends AppController
      * 店铺通知任务
      */
     public function shop_notify_task($sharer_id, $page_size, $offset){
+        $this->autoRender = false;
         $title = $_REQUEST['title'];
         $shop_name = $_REQUEST['shop_name'];
-
+        $this->WeshareBuy->send_shop_notify($sharer_id, $title, $shop_name, $page_size , $offset);
+        echo json_encode(['success' => true]);
+        exit;
     }
 }
