@@ -144,6 +144,7 @@
             $http.post('/weshares/notice_from_shop', vm.notify).success(function (data) {
                 $log.log(data);
                 vm.loadingData = false;
+                vm.hideAllLayer();
             }).error(function () {
                 vm.loadingData = false;
             });
