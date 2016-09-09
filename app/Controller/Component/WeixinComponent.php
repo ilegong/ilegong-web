@@ -1613,11 +1613,10 @@ class WeixinComponent extends Component
      * @param $sharer_id
      * @param $shop_name
      * @param $title
-     * @param $desc
      * @return bool
      * 发送店铺动态通知
      */
-    public function send_shop_notify_msg($user_open_id, $sharer_id, $shop_name, $title, $desc)
+    public function send_shop_notify_msg($user_open_id, $sharer_id, $shop_name, $title)
     {
         $post_data = [
             "touser" => $user_open_id,
@@ -1627,8 +1626,8 @@ class WeixinComponent extends Component
             "data" => [
                 "first" => ["value" => $title],
                 "keyword1" => ["value" => $shop_name],
-                "keyword2" => ["value" => $desc],
-                "remark" => ["value" => '', "color" => "#FF8800"]
+                "keyword2" => ["value" => '这个小铺有新动态喽！'],
+                "remark" => ["value" => '既然你关注了我，说明你是有眼光的，戳这里放眼看去~', "color" => "#FF8800"]
             ]
         ];
         return $this->send_weixin_message($post_data);
