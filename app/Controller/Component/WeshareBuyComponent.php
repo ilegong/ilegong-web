@@ -861,23 +861,23 @@ class WeshareBuyComponent extends Component
         $this->do_send_new_share_msg($weshare, $share_manager);
     }
 
-    /**
-     * @param $weshareId
-     * @param $limit
-     * @param $offset
-     * 创建新的分享之后发送模板消息
-     */
-    public function send_new_share_msg($weshareId, $limit = null, $offset = null)
-    {
-        $this->Weshare = ClassRegistry::init('Weshare');
-        $weshare = $this->Weshare->find('first', array(
-            'conditions' => array(
-                'id' => $weshareId
-            )
-        ));
-        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'], $limit, $offset);
-        $this->do_send_new_share_msg($weshare, $followers);
-    }
+//    /**
+//     * @param $weshareId
+//     * @param $limit
+//     * @param $offset
+//     * 创建新的分享之后发送模板消息
+//     */
+//    public function send_new_share_msg($weshareId, $limit = null, $offset = null)
+//    {
+//        $this->Weshare = ClassRegistry::init('Weshare');
+//        $weshare = $this->Weshare->find('first', array(
+//            'conditions' => array(
+//                'id' => $weshareId
+//            )
+//        ));
+//        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'], $limit, $offset);
+//        $this->do_send_new_share_msg($weshare, $followers);
+//    }
 
     /**
      * @param $share_id

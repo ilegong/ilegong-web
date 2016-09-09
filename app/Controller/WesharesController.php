@@ -1626,76 +1626,76 @@ class WesharesController extends AppController
         return;
     }
 
-    /**
-     * @param $weshare_id
-     * 发送建团消息 采用队列
-     */
-    public function send_new_share_msg($weshare_id)
-    {
-        $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        if (empty($uid)) {
-            echo json_encode(array('success' => false, 'reason' => 'not_login'));
-            return;
-        }
-        if (is_blacklist_user($uid)) {
-            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
-            return;
-        }
-        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
-            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
-            return;
-        }
-        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
-        if (!$checkCanSendMsgResult['success']) {
-            echo json_encode($checkCanSendMsgResult);
-            return;
-        }
-        $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
-        $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
-        $this->WeshareBuy->send_new_share_msg_to_share_manager($weshare_id);
-        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
-        $pageCount = $fansPageInfo['pageCount'];
-        $pageSize = $fansPageInfo['pageSize'];
-        $task_url = "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize;
-        $this->RedisQueue->add_tasks('share', $task_url);
-        echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
-        return;
-    }
+//    /**
+//     * @param $weshare_id
+//     * 发送建团消息 采用队列
+//     */
+//    public function send_new_share_msg($weshare_id)
+//    {
+//        $this->autoRender = false;
+//        $uid = $this->currentUser['id'];
+//        if (empty($uid)) {
+//            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+//            return;
+//        }
+//        if (is_blacklist_user($uid)) {
+//            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
+//            return;
+//        }
+//        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
+//        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
+//            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
+//            return;
+//        }
+//        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
+//        if (!$checkCanSendMsgResult['success']) {
+//            echo json_encode($checkCanSendMsgResult);
+//            return;
+//        }
+//        $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
+//        $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
+//        $this->WeshareBuy->send_new_share_msg_to_share_manager($weshare_id);
+//        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+//        $pageCount = $fansPageInfo['pageCount'];
+//        $pageSize = $fansPageInfo['pageSize'];
+//        $task_url = "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize;
+//        $this->RedisQueue->add_tasks('share', $task_url);
+//        echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
+//        return;
+//    }
+//
+//    /**
+//     * @param $shareId
+//     * @param $pageCount
+//     * @param $pageSize
+//     * 处理 建团消息 task
+//     */
+//    public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
+//    {
+//        $this->autoRender = false;
+//        $tasks = array();
+//        foreach (range(0, $pageCount) as $page) {
+//            $offset = $page * $pageSize;
+//            $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
+//        }
+//        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
+//        echo json_encode(array('success' => true, 'ret' => $ret));
+//        return;
+//    }
 
-    /**
-     * @param $shareId
-     * @param $pageCount
-     * @param $pageSize
-     * 处理 建团消息 task
-     */
-    public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
-    {
-        $this->autoRender = false;
-        $tasks = array();
-        foreach (range(0, $pageCount) as $page) {
-            $offset = $page * $pageSize;
-            $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
-        }
-        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
-        echo json_encode(array('success' => true, 'ret' => $ret));
-        return;
-    }
-
-    /**
-     * @param $shareId
-     * @param $limit
-     * @param $offset
-     * 处理建团消息子任务
-     */
-    public function send_new_share_msg_task($shareId, $limit, $offset)
-    {
-        $this->autoRender = false;
-        $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
-        echo json_encode(array('success' => true));
-        return;
-    }
+//    /**
+//     * @param $shareId
+//     * @param $limit
+//     * @param $offset
+//     * 处理建团消息子任务
+//     */
+//    public function send_new_share_msg_task($shareId, $limit, $offset)
+//    {
+//        $this->autoRender = false;
+//        $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
 
     /**
      * @param $weshareId
