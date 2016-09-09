@@ -218,13 +218,12 @@ class WeshareApiController extends Controller
         $page = intval($page) ? intval($page) : 1;
         $limit = 5;
         $result = $this->Weshares->get_u_create_share_from_shop($uid, $limit, $page);
-
-        foreach ($result as $k => $res) {
-            $item_desc = strip_tags($result[$k]['description']);
-            $result[$k]['description'] = mb_strlen($item_desc, 'utf8') > 100 ? mb_substr($item_desc, 0, 99, 'utf8') . "..." : $item_desc;
+        $res = [];
+        foreach ($result as $index => $item) {
+            $res[] = $item['Weshare'];
         }
 
-        echo json_encode($result);
+        echo json_encode($res);
         exit();
     }
 
