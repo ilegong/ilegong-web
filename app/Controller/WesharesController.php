@@ -1722,6 +1722,10 @@ class WesharesController extends AppController
         $this->autoRender = false;
         $tasks = array();
         $msg_content = $_REQUEST['content'];
+        if ($pageCount <= 0) {
+            echo json_encode(array('success' => false));
+            return;
+        }
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/weshares/send_buy_percent_msg_task/" . $weshare_id . "/" . $pageSize . "/" . $offset, "postdata" => "content=" . $msg_content);
@@ -2505,9 +2509,28 @@ class WesharesController extends AppController
         exit();
     }
 
+    /**
+     * 店铺通知
+     */
     public function notice_from_shop()
     {
-        echo json_encode(['ok' => 0 , 'msg' => 'success']);
+        $uid = $this->currentUser['id'];
+        $params = json_decode(file_get_contents('php://input'), true);
+        $title = $params['title'];
+        $r = $this->ShareUtil->send_shop_notify_msg_job($uid, $title);
+        echo json_encode(['ok' => 0, 'msg' => 'success', 'r' => $r]);
         exit();
+    }
+
+    /**
+     * @param $sharer_id
+     * @param $page_size
+     * @param $offset
+     * 店铺通知任务
+     */
+    public function shop_notify_task($sharer_id, $page_size, $offset){
+        $title = $_REQUEST['title'];
+        $shop_name = $_REQUEST['shop_name'];
+
     }
 }

@@ -1185,7 +1185,13 @@ class ShareUtilComponent extends Component
         }
     }
 
-
+    /**
+     * @param $shareId
+     * @param $groupId
+     * @param $order_creator
+     * @return bool
+     * 通知环信
+     */
     public function send_buy_msg_to_hx($shareId, $groupId, $order_creator)
     {
         //none group
@@ -2256,6 +2262,11 @@ class ShareUtilComponent extends Component
         return get_user_level_msg_count($user_val);
     }
 
+    /**
+     * @param $category
+     * @return array
+     * 根据分类获取产品
+     */
     public function get_product_by_category($category)
     {
         $indexProductM = ClassRegistry::init('IndexProduct');
@@ -2346,6 +2357,10 @@ class ShareUtilComponent extends Component
         return $res;
     }
 
+    /**
+     * @return mixed
+     * 获取banner
+     */
     public function get_index_banners()
     {
         $key = INDEX_VIEW_BANNER_CACHE_KEY;
@@ -2358,6 +2373,10 @@ class ShareUtilComponent extends Component
         return json_decode($cache_data, true);
     }
 
+    /**
+     * @return array
+     * 首页促销信息
+     */
     public function get_index_promotions(){
         $promotions = [
             [
@@ -2494,7 +2513,7 @@ class ShareUtilComponent extends Component
 
         return $summary;
     }
-    
+
     private function query_share_detail($weshare_id)
     {
         $weshareM = ClassRegistry::init('Weshare');
@@ -2624,6 +2643,32 @@ class ShareUtilComponent extends Component
             //发送给全部用户
 
         }
+    }
+
+    /**
+     * @param $sharer_id
+     * @param $title
+     * @return array
+     * 发送店铺提醒
+     */
+    public function send_shop_notify_msg_job($sharer_id, $title)
+    {
+        $userM = ClassRegistry::init('User');
+        $sharer = $userM->find('first', ['conditions' => ['id' => $sharer_id], 'fields' => ['id', 'nickname']]);
+        $shop_name = $sharer['User']['nickname'] . '的小铺';
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($sharer_id);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        if ($pageCount <= 0) {
+            return ['success' => false];
+        }
+        $tasks = [];
+        foreach (range(0, $pageCount) as $page) {
+            $offset = $page * $pageSize;
+            $tasks[] = ['url' => "/weshares/shop_notify_task/" . $sharer_id . "/" . $pageSize . "/" . $offset, "postdata" => "title=" . $title . "&shop_name=" . $shop_name];
+        }
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
+        return ['success' => true, 'ret' => $ret];
     }
 
     /**
