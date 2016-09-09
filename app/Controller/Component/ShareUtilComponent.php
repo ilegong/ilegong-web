@@ -1185,7 +1185,13 @@ class ShareUtilComponent extends Component
         }
     }
 
-
+    /**
+     * @param $shareId
+     * @param $groupId
+     * @param $order_creator
+     * @return bool
+     * 通知环信
+     */
     public function send_buy_msg_to_hx($shareId, $groupId, $order_creator)
     {
         //none group
@@ -2256,6 +2262,11 @@ class ShareUtilComponent extends Component
         return get_user_level_msg_count($user_val);
     }
 
+    /**
+     * @param $category
+     * @return array
+     * 根据分类获取产品
+     */
     public function get_product_by_category($category)
     {
         $indexProductM = ClassRegistry::init('IndexProduct');
@@ -2346,6 +2357,10 @@ class ShareUtilComponent extends Component
         return $res;
     }
 
+    /**
+     * @return mixed
+     * 获取banner
+     */
     public function get_index_banners()
     {
         $key = INDEX_VIEW_BANNER_CACHE_KEY;
@@ -2358,6 +2373,10 @@ class ShareUtilComponent extends Component
         return json_decode($cache_data, true);
     }
 
+    /**
+     * @return array
+     * 首页促销信息
+     */
     public function get_index_promotions(){
         $promotions = [
             [
@@ -2596,7 +2615,7 @@ class ShareUtilComponent extends Component
      * @return array
      * 发送团购进度提醒
      */
-    public function send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id)
+    public function send_buy_percent_msg_job($type, $uid, $share_info, $content, $weshare_id)
     {
         if ($type == 0) {
             //发送给分享的管理者
@@ -2626,7 +2645,39 @@ class ShareUtilComponent extends Component
         }
     }
 
+    /**
+     * @param $sharer_id
+     * @param $title
+     * @return array
+     * 发送店铺提醒
+     */
+    public function send_shop_notify_msg_job($sharer_id, $title)
+    {
+        $userM = ClassRegistry::init('User');
+        $sharer = $userM->find('first', ['conditions' => ['id' => $sharer_id], 'fields' => ['id', 'nickname']]);
+        $shop_name = $sharer['User']['nickname'] . '的小铺';
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($sharer_id);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        if ($pageCount <= 0) {
+            return ['success' => false];
+        }
+        $tasks = [];
+        foreach (range(0, $pageCount) as $page) {
+            $offset = $page * $pageSize;
+            $tasks[] = ['url' => "/weshares/shop_notify_task/" . $sharer_id . "/" . $pageSize . "/" . $offset, "postdata" => "title=" . $title . "&shop_name=" . $shop_name];
+        }
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
+        return ['success' => true, 'ret' => $ret];
+    }
 
+    /**
+     * @param $ship_company_id
+     * @param $weshare_id
+     * @param $ship_code
+     * @param $order_id
+     * 设置快递单号
+     */
     public function set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id)
     {
         $ship_type_list = ShipAddress::ship_type_list();
@@ -2640,6 +2691,14 @@ class ShareUtilComponent extends Component
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
     }
 
+    /**
+     * @param $ship_code
+     * @param $weshare_id
+     * @param $order_id
+     * @param $company_id
+     * @param $ship_type_name
+     * 更新快递单号
+     */
     public function update_order_ship_code($ship_code, $weshare_id, $order_id, $company_id, $ship_type_name)
     {
         if (empty($company_id)) {
@@ -2654,6 +2713,12 @@ class ShareUtilComponent extends Component
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
     }
 
+    /**
+     * @param $order_id
+     * @param $uid
+     * @return array
+     * 确认收货
+     */
     public function confirm_received_order($order_id, $uid)
     {
         $orderM = ClassRegistry::init('Order');
@@ -2689,6 +2754,14 @@ class ShareUtilComponent extends Component
         return array("success" => true);
     }
 
+    /**
+     * @param $order_ids
+     * @param $share_id
+     * @param $uid
+     * @param $content
+     * @return array
+     * 发送到货提醒
+     */
     public function send_arrival_msg($order_ids, $share_id, $uid, $content)
     {
         $weshareM = ClassRegistry::init('Weshare');
@@ -2715,6 +2788,15 @@ class ShareUtilComponent extends Component
         $this->WeshareBuy->send_share_product_arrive_msg($share_info, $content, $order_ids);
     }
 
+    /**
+     * @param $shareId
+     * @param $uid
+     * @param $orderId
+     * @param $refundMoney
+     * @param $refundMark
+     * @return array
+     * 订单退款
+     */
     public function order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark)
     {
         $share_info = $this->get_weshare_detail($shareId);
@@ -2945,7 +3027,13 @@ class ShareUtilComponent extends Component
         return $result;
     }
 
-
+    /**
+     * @param $uid
+     * @param $page
+     * @param $limit
+     * @return array
+     * 获取返利提醒
+     */
     public function get_rebate_list($uid, $page, $limit){
         $rebateLogM = ClassRegistry::init('RebateLog');
         $logs = $rebateLogM->find('all', [

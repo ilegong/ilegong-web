@@ -448,7 +448,7 @@ class SharerApiController extends Controller
         $postData = $this->get_post_raw_data();
         $weshare_id = $postData['share_id'];
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
-        $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
+        $result = $this->ShareUtil->send_buy_percent_msg_job($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
         echo json_encode($result);
         exit;
     }

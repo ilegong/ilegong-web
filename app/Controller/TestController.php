@@ -207,7 +207,7 @@ class TestController extends AppController
     public function test_load_fans_by_uid()
     {
         $this->autoRender = false;
-        $result = $this->WeshareBuy->load_fans_buy_sharer(633345, $limit = 10, $offset = 0);
+        $result = $this->WeshareBuy->load_fans_by_sharer(633345, $limit = 10, $offset = 0);
         echo json_encode($result);
         exit;
     }
@@ -410,12 +410,12 @@ class TestController extends AppController
         return;
     }
 
-    public function test_send_weshare_new_msg($weshareId)
-    {
-        $this->autoRender = false;
-        $this->WeshareBuy->send_new_share_msg($weshareId);
-        echo json_encode(array('success' => true));
-    }
+//    public function test_send_weshare_new_msg($weshareId)
+//    {
+//        $this->autoRender = false;
+//        $this->WeshareBuy->send_new_share_msg($weshareId);
+//        echo json_encode(array('success' => true));
+//    }
 
     public function test_product_id_map()
     {

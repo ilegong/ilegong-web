@@ -1623,81 +1623,82 @@ class WesharesController extends AppController
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
         $type = $params['type'];
-        $result = $this->ShareUtil->send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id);
+        //建立发送消息任务
+        $result = $this->ShareUtil->send_buy_percent_msg_job($type, $uid, $share_info, $content, $weshare_id);
         echo json_encode($result);
         return;
     }
 
-    /**
-     * @param $weshare_id
-     * 发送建团消息 采用队列
-     */
-    public function send_new_share_msg($weshare_id)
-    {
-        $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        if (empty($uid)) {
-            echo json_encode(array('success' => false, 'reason' => 'not_login'));
-            return;
-        }
-        if (is_blacklist_user($uid)) {
-            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
-            return;
-        }
-        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
-            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
-            return;
-        }
-        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
-        if (!$checkCanSendMsgResult['success']) {
-            echo json_encode($checkCanSendMsgResult);
-            return;
-        }
-        $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
-        $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
-        $this->WeshareBuy->send_new_share_msg_to_share_manager($weshare_id);
-        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
-        $pageCount = $fansPageInfo['pageCount'];
-        $pageSize = $fansPageInfo['pageSize'];
-        $task_url = "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize;
-        $this->RedisQueue->add_tasks('share', $task_url);
-        echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
-        return;
-    }
+//    /**
+//     * @param $weshare_id
+//     * 发送建团消息 采用队列
+//     */
+//    public function send_new_share_msg($weshare_id)
+//    {
+//        $this->autoRender = false;
+//        $uid = $this->currentUser['id'];
+//        if (empty($uid)) {
+//            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+//            return;
+//        }
+//        if (is_blacklist_user($uid)) {
+//            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
+//            return;
+//        }
+//        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
+//        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
+//            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
+//            return;
+//        }
+//        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
+//        if (!$checkCanSendMsgResult['success']) {
+//            echo json_encode($checkCanSendMsgResult);
+//            return;
+//        }
+//        $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
+//        $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
+//        $this->WeshareBuy->send_new_share_msg_to_share_manager($weshare_id);
+//        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+//        $pageCount = $fansPageInfo['pageCount'];
+//        $pageSize = $fansPageInfo['pageSize'];
+//        $task_url = "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize;
+//        $this->RedisQueue->add_tasks('share', $task_url);
+//        echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
+//        return;
+//    }
+//
+//    /**
+//     * @param $shareId
+//     * @param $pageCount
+//     * @param $pageSize
+//     * 处理 建团消息 task
+//     */
+//    public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
+//    {
+//        $this->autoRender = false;
+//        $tasks = array();
+//        foreach (range(0, $pageCount) as $page) {
+//            $offset = $page * $pageSize;
+//            $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
+//        }
+//        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
+//        echo json_encode(array('success' => true, 'ret' => $ret));
+//        return;
+//    }
 
-    /**
-     * @param $shareId
-     * @param $pageCount
-     * @param $pageSize
-     * 处理 建团消息 task
-     */
-    public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
-    {
-        $this->autoRender = false;
-        $tasks = array();
-        foreach (range(0, $pageCount) as $page) {
-            $offset = $page * $pageSize;
-            $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
-        }
-        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
-        echo json_encode(array('success' => true, 'ret' => $ret));
-        return;
-    }
-
-    /**
-     * @param $shareId
-     * @param $limit
-     * @param $offset
-     * 处理建团消息子任务
-     */
-    public function send_new_share_msg_task($shareId, $limit, $offset)
-    {
-        $this->autoRender = false;
-        $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
-        echo json_encode(array('success' => true));
-        return;
-    }
+//    /**
+//     * @param $shareId
+//     * @param $limit
+//     * @param $offset
+//     * 处理建团消息子任务
+//     */
+//    public function send_new_share_msg_task($shareId, $limit, $offset)
+//    {
+//        $this->autoRender = false;
+//        $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
 
     /**
      * @param $weshareId
@@ -1723,6 +1724,10 @@ class WesharesController extends AppController
         $this->autoRender = false;
         $tasks = array();
         $msg_content = $_REQUEST['content'];
+        if ($pageCount <= 0) {
+            echo json_encode(array('success' => false));
+            return;
+        }
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/weshares/send_buy_percent_msg_task/" . $weshare_id . "/" . $pageSize . "/" . $offset, "postdata" => "content=" . $msg_content);
@@ -1964,22 +1969,22 @@ class WesharesController extends AppController
     }
 
 
-    //菠萝优惠码使用
-    //逻辑不可复用，
-    private function order_use_coupon_code($coupon_id, $order_id)
-    {
-        $this->log('order use coupon' . $coupon_id, LOG_INFO);
-        $reduced = 20;
-        $couponItem = $this->CouponItem->findById($coupon_id);
-        $coupon_code = $couponItem['CouponItem']['code'];
-        $used_cnt = $this->Order->used_code_paid_cnt($coupon_code);
-        if ($used_cnt == 0) {
-            $toUpdate = array('applied_code' => '\'' . $coupon_code . '\'',
-                'coupon_total' => 'coupon_total + 2000',
-                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, total_all_price, total_all_price - ' . $reduced . ')');
-            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
-        }
-    }
+//    //菠萝优惠码使用
+//    //逻辑不可复用，
+//    private function order_use_coupon_code($coupon_id, $order_id)
+//    {
+//        $this->log('order use coupon' . $coupon_id, LOG_INFO);
+//        $reduced = 20;
+//        $couponItem = $this->CouponItem->findById($coupon_id);
+//        $coupon_code = $couponItem['CouponItem']['code'];
+//        $used_cnt = $this->Order->used_code_paid_cnt($coupon_code);
+//        if ($used_cnt == 0) {
+//            $toUpdate = array('applied_code' => '\'' . $coupon_code . '\'',
+//                'coupon_total' => 'coupon_total + 2000',
+//                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, total_all_price, total_all_price - ' . $reduced . ')');
+//            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+//        }
+//    }
 
 
     /**
@@ -2459,7 +2464,7 @@ class WesharesController extends AppController
         $user_info = $this->get_user_info($uid);
         $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
-        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        ///$user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $this->set_share_user_info_weixin_params($uid, $self_id, $user_info['User']);
         $this->set('share_user', $user_info['User']);
         $this->set('user_summary', $user_summary);
@@ -2506,9 +2511,28 @@ class WesharesController extends AppController
         exit();
     }
 
+    /**
+     * 店铺通知
+     */
     public function notice_from_shop()
     {
-        echo json_encode(['ok' => 0 , 'msg' => 'success']);
+        $uid = $this->currentUser['id'];
+        $params = json_decode(file_get_contents('php://input'), true);
+        $title = $params['title'];
+        $r = $this->ShareUtil->send_shop_notify_msg_job($uid, $title);
+        echo json_encode(['ok' => 0, 'msg' => 'success', 'r' => $r]);
         exit();
+    }
+
+    /**
+     * @param $sharer_id
+     * @param $page_size
+     * @param $offset
+     * 店铺通知任务
+     */
+    public function shop_notify_task($sharer_id, $page_size, $offset){
+        $title = $_REQUEST['title'];
+        $shop_name = $_REQUEST['shop_name'];
+
     }
 }

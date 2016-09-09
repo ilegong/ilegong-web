@@ -265,10 +265,22 @@ class UserApiController extends Controller
     public function bind_mobile()
     {
         $mobile = $_REQUEST['mobile'];
+        $mobileUser = $this->User->find('first',
+            array('conditions' => array('mobilephone' => $mobile, 'published' => 1))
+        );
+        if (!empty($mobileUser)) {
+            echo json_encode(['success' => false]);
+            exit;
+        }
         $uid = $this->currentUser['id'];
         $this->User->update(['mobilephone' => "'" . $mobile . "'"], ['id' => $uid]);
+        $this->loadModel('Score');
+        $result = $this->Score->add_score_by_bind_mobile($uid, BIND_MOBILE_AWARD_SCORE, $mobile);
+        if ($result) {
+            $this->User->add_score($uid, BIND_MOBILE_AWARD_SCORE);
+        }
         echo json_encode(['success' => true]);
-        exit();
+        exit;
     }
 
     private function get_user_info($user_id)

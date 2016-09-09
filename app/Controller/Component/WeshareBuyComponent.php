@@ -230,10 +230,10 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
-    public function get()
-    {
-
-    }
+//    public function get()
+//    {
+//
+//    }
 
     public function get_user_provide_shares($uid, $keyword = null){
         $poolProductM = ClassRegistry::init('PoolProduct');
@@ -841,43 +841,43 @@ class WeshareBuyComponent extends Component
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
 
-    /**
-     * @param $shareId
-     * 发送建团消息给分享的创建者
-     */
-    public function send_new_share_msg_to_share_manager($shareId)
-    {
-        $share_manager = $this->ShareAuthority->get_share_manage_auth_users($shareId);
-        $weshareM = ClassRegistry::init('Weshare');
-        $weshare = $weshareM->find('first', array(
-            'conditions' => array(
-                'id' => $shareId
-            )
-        ));
-        if (empty($share_manager)) {
-            $share_manager = array();
-        }
-        $share_manager[] = $weshare['Weshare']['creator'];
-        $this->do_send_new_share_msg($weshare, $share_manager);
-    }
+//    /**
+//     * @param $shareId
+//     * 发送建团消息给分享的创建者
+//     */
+//    public function send_new_share_msg_to_share_manager($shareId)
+//    {
+//        $share_manager = $this->ShareAuthority->get_share_manage_auth_users($shareId);
+//        $weshareM = ClassRegistry::init('Weshare');
+//        $weshare = $weshareM->find('first', array(
+//            'conditions' => array(
+//                'id' => $shareId
+//            )
+//        ));
+//        if (empty($share_manager)) {
+//            $share_manager = array();
+//        }
+//        $share_manager[] = $weshare['Weshare']['creator'];
+//        $this->do_send_new_share_msg($weshare, $share_manager);
+//    }
 
-    /**
-     * @param $weshareId
-     * @param $limit
-     * @param $offset
-     * 创建新的分享之后发送模板消息
-     */
-    public function send_new_share_msg($weshareId, $limit = null, $offset = null)
-    {
-        $this->Weshare = ClassRegistry::init('Weshare');
-        $weshare = $this->Weshare->find('first', array(
-            'conditions' => array(
-                'id' => $weshareId
-            )
-        ));
-        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'], $limit, $offset);
-        $this->do_send_new_share_msg($weshare, $followers);
-    }
+//    /**
+//     * @param $weshareId
+//     * @param $limit
+//     * @param $offset
+//     * 创建新的分享之后发送模板消息
+//     */
+//    public function send_new_share_msg($weshareId, $limit = null, $offset = null)
+//    {
+//        $this->Weshare = ClassRegistry::init('Weshare');
+//        $weshare = $this->Weshare->find('first', array(
+//            'conditions' => array(
+//                'id' => $weshareId
+//            )
+//        ));
+//        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'], $limit, $offset);
+//        $this->do_send_new_share_msg($weshare, $followers);
+//    }
 
     /**
      * @param $share_id
@@ -889,7 +889,7 @@ class WeshareBuyComponent extends Component
     {
         $PintuanConfigM = ClassRegistry::init('PintuanConfig');
         $data = $PintuanConfigM->get_conf_data($share_id);
-        $followers = $this->load_fans_buy_sharer($data['sharer_id'], $limit, $offset);
+        $followers = $this->load_fans_by_sharer($data['sharer_id'], $limit, $offset);
         $this->do_send_new_pintuan_msg($data, $tag_id, $followers);
     }
 
@@ -922,37 +922,37 @@ class WeshareBuyComponent extends Component
         }
     }
 
-    private function do_send_new_share_msg($weshare, $uids)
-    {
-        //add filter
-        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
-        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_NOTIFY_TYPE);
-        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_RECOMMEND_TYPE);
-        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_RECOMMEND_TYPE);
-        $this->save_msg_logs($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
-        $userM = ClassRegistry::init('User');
-        $OauthbindM = ClassRegistry::init('Oauthbind');
-        $sharer_user_info = $userM->find('first', array(
-            'conditions' => array(
-                'id' => $weshare['Weshare']['creator']
-            ),
-            'fields' => array(
-                'id', 'nickname'
-            )
-        ));
-        $detail_url = WX_HOST . '/weshares/view/' . $weshare['Weshare']['id'].'?from=template_msg';
-        $sharer_name = $sharer_user_info['User']['nickname'];
-        $product_name = $weshare['Weshare']['title'];
-        $title = '关注的' . $sharer_name . '发起了';
-        $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
-        $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
-        if ($openIds) {
-            $openIds = array_unique($openIds);
-            foreach ($openIds as $openId) {
-                $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
-            }
-        }
-    }
+//    private function do_send_new_share_msg($weshare, $uids)
+//    {
+//        //add filter
+//        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
+//        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_NOTIFY_TYPE);
+//        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_RECOMMEND_TYPE);
+//        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_RECOMMEND_TYPE);
+//        $this->save_msg_logs($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
+//        $userM = ClassRegistry::init('User');
+//        $OauthbindM = ClassRegistry::init('Oauthbind');
+//        $sharer_user_info = $userM->find('first', array(
+//            'conditions' => array(
+//                'id' => $weshare['Weshare']['creator']
+//            ),
+//            'fields' => array(
+//                'id', 'nickname'
+//            )
+//        ));
+//        $detail_url = WX_HOST . '/weshares/view/' . $weshare['Weshare']['id'].'?from=template_msg';
+//        $sharer_name = $sharer_user_info['User']['nickname'];
+//        $product_name = $weshare['Weshare']['title'];
+//        $title = '关注的' . $sharer_name . '发起了';
+//        $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
+//        $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
+//        if ($openIds) {
+//            $openIds = array_unique($openIds);
+//            foreach ($openIds as $openId) {
+//                $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
+//            }
+//        }
+//    }
 
     /**
      * @param $order_id
@@ -1125,7 +1125,7 @@ class WeshareBuyComponent extends Component
      * @return array
      * 加载粉丝数据
      */
-    public function load_fans_buy_sharer($sharerId, $limit = null, $offset = null)
+    public function load_fans_by_sharer($sharerId, $limit = null, $offset = null)
     {
         $userRelationM = ClassRegistry::init('UserRelation');
         $cond = array(
@@ -2571,7 +2571,7 @@ class WeshareBuyComponent extends Component
     public function send_buy_percent_msg($weshare_info, $msg_content, $limit = null, $offset = null)
     {
         $share_creator = $weshare_info['creator']['id'];
-        $fans_ids = $this->load_fans_buy_sharer($share_creator, $limit, $offset);
+        $fans_ids = $this->load_fans_by_sharer($share_creator, $limit, $offset);
         //filter user
         $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
         $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
@@ -2579,6 +2579,33 @@ class WeshareBuyComponent extends Component
         $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $fans_ids, MSG_LOG_RECOMMEND_TYPE);
         $this->save_msg_logs($weshare_info['id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
         $this->do_send_buy_percent_msg($weshare_info, $fans_ids, $msg_content);
+    }
+
+    /**
+     * @param $sharer_id
+     * @param $title
+     * @param $shop_name
+     * @param null $limit
+     * @param null $offset
+     * @return bool
+     * 店铺通知
+     */
+    public function send_shop_notify($sharer_id, $title, $shop_name, $limit = null, $offset = null)
+    {
+        $fans_ids = $this->load_fans_by_sharer($sharer_id, $limit, $offset);
+        if(empty($fans_ids)){
+            return false;
+        }
+        $fans_open_ids = $this->get_open_ids($fans_ids);
+        if(empty($fans_open_ids)){
+            return false;
+        }
+        $fans_data_nickname = $this->get_users_nickname($fans_ids);
+        $fans_open_ids = array_unique($fans_open_ids);
+        foreach($fans_open_ids as $uid => $open_id){
+            $nTitle = $fans_data_nickname[$uid] . '你好，' . $title;
+            $this->Weixin->send_shop_notify_msg($open_id, $sharer_id, $shop_name, $nTitle);
+        }
     }
 
     /**
@@ -2600,8 +2627,8 @@ class WeshareBuyComponent extends Component
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
             $no_buy_uids = [];
             if(!empty($fans_open_ids)){
+                $fans_open_ids = array_unique($fans_open_ids);
                 foreach ($fans_open_ids as $uid => $open_id) {
-                    $fans_open_ids = array_unique($fans_open_ids);
                     if (!in_array($uid, $already_buy_uids)) {
                         $no_buy_uids[] = $uid;
                         $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
@@ -2609,10 +2636,10 @@ class WeshareBuyComponent extends Component
                     }
                 }
             }
-            $jpush_title = "您好，{$tuan_leader_name}发起一个分享!";
-            foreach ($no_buy_uids as $item) {
-                $this->SharePush->push_share_offered_msg($item, $jpush_title, $remark, $weshare_info['id']);
-            }
+//            $jpush_title = "您好，{$tuan_leader_name}发起一个分享!";
+//            foreach ($no_buy_uids as $item) {
+//                $this->SharePush->push_share_offered_msg($item, $jpush_title, $remark, $weshare_info['id']);
+//            }
         }
     }
 
@@ -2669,7 +2696,7 @@ class WeshareBuyComponent extends Component
         $product_name = $weshare['Weshare']['title'];
         $title = '关注的' . $recommend_name . '推荐了' . $sharer_name . '的';
         $remark = $memo . '，点击赶快加入' . $sharer_name . '的分享！';
-        $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
+        $followers = $this->load_fans_by_sharer($recommend_user, $limit, $offset);
         $hasBuyUsers = $this->get_has_buy_user($weshareId);
         $followers = array_diff($followers, $hasBuyUsers);
         //过滤模板消息
@@ -2818,7 +2845,7 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             )
         ));
-        $pageSize = 5;
+        $pageSize = 50;
         $pageCount = ceil($totalRecords / $pageSize);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
     }
