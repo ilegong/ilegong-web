@@ -15,7 +15,7 @@
         </li>
     </ul>
     <div class="mine-photoshop clearfix" ng-show="vm.top.length > 0">
-        <img ng-click="vm.go(vm.top[0].Weshare.id)" src="&#123;&#123;vm.top[0].Weshare.default_image&#125;&#125;"  fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png">
+        <img ng-click="vm.go(vm.top[0].Weshare.id)" lazy-src="&#123;&#123;vm.top[0].Weshare.default_image&#125;&#125;"  fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png">
         <h3 ng-click="vm.go(vm.top[0].Weshare.id)">&#123;&#123;vm.top[0].Weshare.title&#125;&#125;</h3>
         <ul ng-click="vm.go(vm.top[0].Weshare.id)" class="clearfix">
             <li class="fl story">报名（&#123;&#123;vm.top[0].Weshare.order_count&#125;&#125;）</li>
