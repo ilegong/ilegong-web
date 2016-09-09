@@ -1259,6 +1259,8 @@ class WesharesController extends AppController
 
     public function get_other_info($uid)
     {
+        redirect('/weshares/shop/' . $uid . '.html');
+        die;
         $curr_uid = $this->currentUser['id'];
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
