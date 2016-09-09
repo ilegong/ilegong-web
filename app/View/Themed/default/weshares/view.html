@@ -75,24 +75,9 @@
                     </li>
                 </ul>
                 <div class="image-container"
-                     ng-if="vm.weshare.images.length > 0 && vm.weshare.refer_share_id!=3814 && vm.weshare.id!=3814 && vm.weshare.refer_share_id!=3822 && vm.weshare.id!=3822 && vm.weshare.refer_share_id!=4008 && vm.weshare.id!=4008">
+                     ng-if="vm.weshare.images.length > 0">
                     <img class="image" lazy-src="{{vm.weshare.images[0]}}"
                          fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png">
-                </div>
-                <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
-                    <iframe frameborder="0" width="100%"
-                            ng-src="http://v.qq.com/iframe/player.html?vid=t01719wisq4&tiny=0&auto=0"
-                            allowfullscreen></iframe>
-                </div>
-                <div ng-if="vm.weshare.refer_share_id==3822 || vm.weshare.id==3822">
-                    <iframe frameborder="0" width="100%"
-                            ng-src="http://v.qq.com/iframe/player.html?vid=f0194qcpnvt&tiny=0&auto=0"
-                            allowfullscreen></iframe>
-                </div>
-                <div ng-if="vm.weshare.refer_share_id==4008 || vm.weshare.id==4008">
-                    <iframe frameborder="0" width="100%"
-                            ng-src="http://v.qq.com/iframe/player.html?vid=e0195mejuea&tiny=0&auto=0"
-                            allowfullscreen></iframe>
                 </div>
                 <div class="share-content">
                     <h1 class="share-title" ng-bind="vm.weshare.title"></h1>
@@ -102,19 +87,6 @@
                         </dd>
                         <dd class="fl">浏览(<span ng-bind="vm.weshare.summary.view_count">0</span>)</dd>
                     </dl>
-
-                    <div ng-if="vm.weshare.refer_share_id==3335 || vm.weshare.id==3335">
-                        <iframe height="36" width="100%"
-                                ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670988" frameborder=0
-                                allowfullscreen></iframe>
-                        <iframe height="36" width="100%"
-                                ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670911" frameborder=0
-                                allowfullscreen></iframe>
-                        <iframe height="36" width="100%"
-                                ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670822" frameborder=0
-                                allowfullscreen></iframe>
-                    </div>
-
                     <p class="share-description" ng-hide='_.isEmpty(vm.weshare.description)'>
                         <span ng-bind-html="vm.weshare.description | unsafe"></span>
                     </p>
@@ -577,6 +549,6 @@ $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.6.0'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.6.1'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.6.2'
 ), array('block' => 'scripts'))
 ?>
