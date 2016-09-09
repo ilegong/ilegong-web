@@ -1621,7 +1621,8 @@ class WesharesController extends AppController
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
         $type = $params['type'];
-        $result = $this->ShareUtil->send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id);
+        //建立发送消息任务
+        $result = $this->ShareUtil->send_buy_percent_msg_job($type, $uid, $share_info, $content, $weshare_id);
         echo json_encode($result);
         return;
     }
@@ -1962,22 +1963,22 @@ class WesharesController extends AppController
     }
 
 
-    //菠萝优惠码使用
-    //逻辑不可复用，
-    private function order_use_coupon_code($coupon_id, $order_id)
-    {
-        $this->log('order use coupon' . $coupon_id, LOG_INFO);
-        $reduced = 20;
-        $couponItem = $this->CouponItem->findById($coupon_id);
-        $coupon_code = $couponItem['CouponItem']['code'];
-        $used_cnt = $this->Order->used_code_paid_cnt($coupon_code);
-        if ($used_cnt == 0) {
-            $toUpdate = array('applied_code' => '\'' . $coupon_code . '\'',
-                'coupon_total' => 'coupon_total + 2000',
-                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, total_all_price, total_all_price - ' . $reduced . ')');
-            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
-        }
-    }
+//    //菠萝优惠码使用
+//    //逻辑不可复用，
+//    private function order_use_coupon_code($coupon_id, $order_id)
+//    {
+//        $this->log('order use coupon' . $coupon_id, LOG_INFO);
+//        $reduced = 20;
+//        $couponItem = $this->CouponItem->findById($coupon_id);
+//        $coupon_code = $couponItem['CouponItem']['code'];
+//        $used_cnt = $this->Order->used_code_paid_cnt($coupon_code);
+//        if ($used_cnt == 0) {
+//            $toUpdate = array('applied_code' => '\'' . $coupon_code . '\'',
+//                'coupon_total' => 'coupon_total + 2000',
+//                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, total_all_price, total_all_price - ' . $reduced . ')');
+//            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+//        }
+//    }
 
 
     /**
