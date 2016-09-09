@@ -2457,7 +2457,7 @@ class WesharesController extends AppController
         $user_info = $this->get_user_info($uid);
         $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
-        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        ///$user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $this->set_share_user_info_weixin_params($uid, $self_id, $user_info['User']);
         $this->set('share_user', $user_info['User']);
         $this->set('user_summary', $user_summary);

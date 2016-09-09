@@ -1,6 +1,7 @@
 <?php
 
-class WeixinComponent extends Component {
+class WeixinComponent extends Component
+{
 
     public $wx_curl_option_defaults = array(
         CURLOPT_HEADER => false,
@@ -21,7 +22,8 @@ class WeixinComponent extends Component {
         "TUAN_TIP" => "BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U",
         "JOIN_TUAN" => "P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U",
         "REFUND_ORDER" => "j3mRemwa3yq5fjJCiNx5enCMC8C0YEXLehb2HGIiGkw",
-        "REFUNDING_ORDER" => "0m3XwqqqiUSp0ls830LdL24GHTOVHwHd6hAYDx3xthk"
+        "REFUNDING_ORDER" => "0m3XwqqqiUSp0ls830LdL24GHTOVHwHd6hAYDx3xthk",
+        "SHOP_NOTIFY" => "dvJAx0qKlprACyZ5DGOX-qzrloDwM9PnhLM-DpOll2g"
     );
 
     public $kuaidi100_ship_type = array(
@@ -41,64 +43,83 @@ class WeixinComponent extends Component {
 
     public $kuaidi100_url = "http://m.kuaidi100.com/index_all.html";
 
-    public function get_kuaidi_query_url($ship_type, $ship_code) {
+    public function get_kuaidi_query_url($ship_type, $ship_code)
+    {
         return $this->kuaidi100_url . '?type=' . $this->kuaidi100_ship_type[$ship_type] . '&postid=' . $ship_code;
     }
 
-    public function get_weshare_buy_detail($weshare_id) {
-        return WX_HOST . '/weshares/view/' . $weshare_id.'?from=template_msg';
+    public function get_weshare_buy_detail($weshare_id)
+    {
+        return WX_HOST . '/weshares/view/' . $weshare_id . '?from=template_msg';
     }
 
-    public function get_pintuan_detail($weshare_id, $group_id) {
+    public function get_pintuan_detail($weshare_id, $group_id)
+    {
         return WX_HOST . '/pintuan/detail/' . $weshare_id . '?tag_id=' . $group_id;
     }
 
-    public function get_user_share_info_url($uid) {
+    public function get_user_share_info_url($uid)
+    {
         return WX_HOST . '/weshares/user_share_info/' . $uid;
     }
 
-    public function get_order_query_url($order_no) {
+    public function get_order_query_url($order_no)
+    {
 
         return WX_HOST . '/orders/detail/' . $order_no;
     }
 
-    public function get_seller_order_query_url() {
+    public function get_seller_order_query_url()
+    {
 
         return WX_HOST . '/orders/wait_shipped_orders.html';
     }
 
-    public function get_order_rebate_url() {
+    public function get_order_rebate_url()
+    {
         return WX_HOST . '/users/my_coupons.html';
     }
 
-    public function get_rice_detail_url() {
+    public function get_rice_detail_url()
+    {
         return WX_HOST . '/t/rice_product';
     }
 
-    public function get_coupon_url() {
+    public function get_coupon_url()
+    {
         return WX_HOST . '/users/my_coupons.html';
     }
 
-    public function get_packet_url() {
+    public function get_packet_url()
+    {
         return WX_HOST . '/users/my_offers.html';
     }
 
-    public function get_weshare_packet_url($weshareId) {
+    public function get_weshare_packet_url($weshareId)
+    {
         return WX_HOST . '/weshares/view/' . $weshareId . '?from=template_msg';
     }
 
+    public function get_sharer_shop_url($sharer_id)
+    {
+        return WX_HOST . '/weshares/shop/' . $sharer_id . '.html?from=template_msg';
+    }
 
-    public function get_access_token() {
+
+    public function get_access_token()
+    {
         return ClassRegistry::init('WxOauth')->get_base_access_token();
     }
 
-    public function send_coupon_cake_msg($user_id, $coupon_url, $count = 1, $store = "168元冷链到家的海南千层蛋糕大促，20元优惠券马上领   ", $rule = "有效期至2015年05月1日,不参与团购") {
+    public function send_coupon_cake_msg($user_id, $coupon_url, $count = 1, $store = "168元冷链到家的海南千层蛋糕大促，20元优惠券马上领   ", $rule = "有效期至2015年05月1日,不参与团购")
+    {
         $first_intro = "亲，恭喜您获得" . $count . "张优惠券";
         $click_intro = "点击详情，获得的此优惠券。";
         return $this->send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro);
     }
 
-    public function send_coupon_received_message($user_id, $count = 1, $store = "购买nana家大米时使用", $rule = "有效期至2014年11月15日") {
+    public function send_coupon_received_message($user_id, $count = 1, $store = "购买nana家大米时使用", $rule = "有效期至2014年11月15日")
+    {
         $coupon_url = $this->get_coupon_url();
         $first_intro = "亲，恭喜您获得" . $count . "张优惠券";
         $click_intro = "点击详情，立即购买。";
@@ -106,7 +127,8 @@ class WeixinComponent extends Component {
         return $this->send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro);
     }
 
-    public function send_coupon_timeout_message($user_id, $coupon_name, $timeout_time, $rule = "无金额限制") {
+    public function send_coupon_timeout_message($user_id, $coupon_name, $timeout_time, $rule = "无金额限制")
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -129,7 +151,8 @@ class WeixinComponent extends Component {
     }
 
 
-    public function send_order_ship_info_msg($user_id, $msg, $order_id, $ship_company, $good_info, $good_number, $title = null, $product_num = null, $desc = null, $url = null) {
+    public function send_order_ship_info_msg($user_id, $msg, $order_id, $ship_company, $good_info, $good_number, $title = null, $product_num = null, $desc = null, $url = null)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -166,7 +189,8 @@ class WeixinComponent extends Component {
         return false;
     }
 
-    public function send_tuan_track_log($user_id, $msg, $order_id, $good_info, $good_number) {
+    public function send_tuan_track_log($user_id, $msg, $order_id, $good_info, $good_number)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -191,7 +215,8 @@ class WeixinComponent extends Component {
         return false;
     }
 
-    public function send_order_paid_message($open_id, $order, $good) {
+    public function send_order_paid_message($open_id, $order, $good)
+    {
         $so = ClassRegistry::init('ShareOffer');
         $offer = $so->query_gen_offer($order, $order['Order']['creator']);
 
@@ -220,7 +245,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id']);
     }
 
-    public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info) {
+    public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info)
+    {
         if ($isDone) {
             $msg = $isOrganizer ? "亲，您发起的团购已经成团，请等待收货。" : ($isSelf ? "亲，您参加 $organizerName 发起的团购成功，已经成团，请等待 $organizerName 收货。" : "亲，$newMemberName 刚刚加入了我们的团购，已经成团，请等待 $organizerName 收货。");
         } else {
@@ -247,7 +273,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_order_paid_message_for_seller($seller_open_id, $price, $good_info, $ship_info, $order_no) {
+    public function send_order_paid_message_for_seller($seller_open_id, $price, $good_info, $ship_info, $order_no)
+    {
         $post_data = array(
             "touser" => $seller_open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
@@ -265,7 +292,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_no) {
+    public function send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_no)
+    {
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
@@ -283,7 +311,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price = '******', $paid_time = '刚刚') {
+    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price = '******', $paid_time = '刚刚')
+    {
         $friend_name = empty($buyer_name) ? "神秘人" : $buyer_name;
         $post_data = array(
             "touser" => $open_id,
@@ -302,7 +331,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number, $order_id) {
+    public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number, $order_id)
+    {
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
@@ -323,7 +353,8 @@ class WeixinComponent extends Component {
 
 
     //领取红包
-    public function send_packet_received_message($user_id, $packet_money, $packet_name = "眉县有机猕猴桃红包", $title = null, $detail_url = null, $keyword1 = null, $desc = null) {
+    public function send_packet_received_message($user_id, $packet_money, $packet_name = "眉县有机猕猴桃红包", $title = null, $detail_url = null, $keyword1 = null, $desc = null)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -333,7 +364,8 @@ class WeixinComponent extends Component {
         return false;
     }
 
-    public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name, $title = null, $detail_url = null, $keyword1 = null, $desc = null) {
+    public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name, $title = null, $detail_url = null, $keyword1 = null, $desc = null)
+    {
         $this->log('send msg title ' . $title . ' detail url ' . $detail_url, LOG_INFO);
         if (empty($detail_url)) {
             $detail_url = $this->get_packet_url();
@@ -364,7 +396,8 @@ class WeixinComponent extends Component {
 
 
     //红包被领取
-    public function send_packet_be_got_message($user_id, $got_packet_user_name, $got_packet_money, $packet_name = "眉县有机猕猴桃红包", $detail_url = null) {
+    public function send_packet_be_got_message($user_id, $got_packet_user_name, $got_packet_money, $packet_name = "眉县有机猕猴桃红包", $detail_url = null)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if (empty($detail_url)) {
@@ -389,11 +422,13 @@ class WeixinComponent extends Component {
         return false;
     }
 
-    public function send_weixin_message($post_data) {
+    public function send_weixin_message($post_data)
+    {
         return send_weixin_message($post_data, $this);
     }
 
-    public static function get_order_weshare_product_info($order_info, $carts) {
+    public static function get_order_weshare_product_info($order_info, $carts)
+    {
         $good_info = '';
         $number = 0;
         $send_date = '';
@@ -419,7 +454,8 @@ class WeixinComponent extends Component {
         return array("good_info" => $good_info, "ship_info" => $ship_info, 'weshare_info' => $weshare, 'good_num' => $number, "send_date" => $send_date);
     }
 
-    public static function get_order_good_info($order_info, $carts, $products) {
+    public static function get_order_good_info($order_info, $carts, $products)
+    {
         $good_info = '';
         $number = 0;
         $send_date = '';
@@ -459,7 +495,7 @@ class WeixinComponent extends Component {
      */
     public function notifyPaidDone($order)
     {
-        try{
+        try {
             if ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
                 $this->pintuan_buy_order_paid($order);
                 $this->PintuanHelper->handle_order_paid($order);
@@ -478,8 +514,8 @@ class WeixinComponent extends Component {
                 return;
             }
             $this->on_order_status_change($order);
-        }catch (Exception $e){
-            $this->log('order notify paid done error exception msg '.$e->getMessage());
+        } catch (Exception $e) {
+            $this->log('order notify paid done error exception msg ' . $e->getMessage());
             return;
         }
     }
@@ -488,16 +524,19 @@ class WeixinComponent extends Component {
      * @param $pidList
      * @return bool
      */
-    protected function hasRebates($pidList) {
+    protected function hasRebates($pidList)
+    {
         return !empty($pidList) && array_search(PRODUCT_ID_RICE_10, $pidList) !== false;
     }
 
-    public function get_mihoutao_game_url() {
+    public function get_mihoutao_game_url()
+    {
         return WX_HOST . '/t/ag/xirui1412.html?trid=' . urlencode('2bacv21iiFA4Fva6MF3bIUIAhQ4oYegjmWoxgJbIannTF70I8jpqkjcAMAdV');
     }
 
     //群发猕猴桃活动消息 5000个25元/100元/225元/400元
-    public function send_mihoutao_game_message($user_id) {
+    public function send_mihoutao_game_message($user_id)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -528,7 +567,8 @@ class WeixinComponent extends Component {
      * @param $click_intro
      * @return bool
      */
-    public function send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro) {
+    public function send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -556,7 +596,8 @@ class WeixinComponent extends Component {
      * @return mixed
      * 商场购买或者分享触发红包逻辑
      */
-    private function gen_offer($order_id, $comment_id = null) {
+    private function gen_offer($order_id, $comment_id = null)
+    {
         $so = ClassRegistry::init('ShareOffer');
         $orderM = ClassRegistry::init('Order');
         $orderInfo = $orderM->find('first', array(
@@ -597,7 +638,8 @@ class WeixinComponent extends Component {
      * 分享红包处理逻辑
      * 可能是购买或者评论产生的红包
      */
-    public function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null, $keyword1 = null, $desc = null, $comment_id = null) {
+    public function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null, $keyword1 = null, $desc = null, $comment_id = null)
+    {
         $offer = $this->gen_offer($order_id, $comment_id);
         $number = 0;
         $name = '';
@@ -619,7 +661,8 @@ class WeixinComponent extends Component {
     /**
      * @param $orderId
      */
-    public function check_group_buy_complete($orderId) {
+    public function check_group_buy_complete($orderId)
+    {
         $groupBuyRecordM = ClassRegistry::init('GroupBuyRecord');
         $groupBuyM = ClassRegistry::init('GroupBuy');
         $thisGroupRecord = $groupBuyRecordM->find('first', array(
@@ -676,7 +719,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 团购提示信息
      */
-    public function send_group_buy_complete_msg($user_id, $title, $product_name, $tuan_leader_wx = 'pyshuo@2015', $remark, $deatil_url) {
+    public function send_group_buy_complete_msg($user_id, $title, $product_name, $tuan_leader_wx = 'pyshuo@2015', $remark, $deatil_url)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $r = $oauthBindModel->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source(),)));
         if (empty($r)) {
@@ -713,7 +757,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 分享购买提示信息
      */
-    public function send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $detail_url) {
+    public function send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $detail_url)
+    {
         if (!empty($open_id)) {
             $post_data = array(
                 "touser" => $open_id,
@@ -733,7 +778,8 @@ class WeixinComponent extends Component {
     }
 
 
-    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
+    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date)
+    {
         $ship_way = $order['Order']['ship_mark'];
         if ($ship_way == 'sf') {
             $tail = '，发货时间是' . $send_date . '。';
@@ -770,7 +816,8 @@ class WeixinComponent extends Component {
      * @param $orders
      * 拼团支付成功
      */
-    public function pintuan_buy_order_paid($orders) {
+    public function pintuan_buy_order_paid($orders)
+    {
         if (count($orders) == 1) {
             $orders = array($orders);
         }
@@ -807,7 +854,8 @@ class WeixinComponent extends Component {
      * @param $orders
      * 微分享支付成通知
      */
-    public function weshare_buy_order_paid($orders) {
+    public function weshare_buy_order_paid($orders)
+    {
         if (count($orders) == 1) {
             $orders = array($orders);
         }
@@ -854,7 +902,8 @@ class WeixinComponent extends Component {
      * @param $carts
      * 跟新产品的销量
      */
-    public function update_weshare_product_sell_num($carts){
+    public function update_weshare_product_sell_num($carts)
+    {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         foreach ($carts as $item) {
             $pid = $item['Cart']['product_id'];
@@ -870,7 +919,8 @@ class WeixinComponent extends Component {
      * @param $user
      * 通知购买者和分享者
      */
-    public function send_weshare_buy_wx_msg($openid, $order, $good, $user) {
+    public function send_weshare_buy_wx_msg($openid, $order, $good, $user)
+    {
         if (empty($user) || substr($user['User']['username'], 0, 4) === "pys_") {
             return;
         }
@@ -887,7 +937,8 @@ class WeixinComponent extends Component {
      * @param $user
      * 拼团的通知
      */
-    public function send_pintuan_buy_wx_msg($openid, $order, $good, $user) {
+    public function send_pintuan_buy_wx_msg($openid, $order, $good, $user)
+    {
         if (empty($user) || substr($user['User']['username'], 0, 4) === "pys_") {
             return;
         }
@@ -925,7 +976,8 @@ class WeixinComponent extends Component {
 //        return $this->send_weixin_message($post_data);
 //    }
 
-    public function send_weshare_buy_order_paid_msg($open_id, $order, $good) {
+    public function send_weshare_buy_order_paid_msg($open_id, $order, $good)
+    {
         $weshare_info = $good['weshare_info'];
         $title = $weshare_info['Weshare']['title'];
         $userM = ClassRegistry::init('User');
@@ -959,7 +1011,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id'], $title, $detail_url);
     }
 
-    public function notify_weshare_buy_creator($order, $good) {
+    public function notify_weshare_buy_creator($order, $good)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $userModel = ClassRegistry::init('User');
         $weshare_info = $good['weshare_info'];
@@ -1007,7 +1060,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 报名通知 发送给分享的创建者
      */
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info, $order_creator_name = null, $shipType = '', $order_creator, $cate_id = 0) {
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info, $order_creator_name = null, $shipType = '', $order_creator, $cate_id = 0)
+    {
         $title = $weshare_info['Weshare']['title'];
         $detail_url = $this->get_weshare_buy_detail($weshare_info['Weshare']['id']);
         $userM = ClassRegistry::init('User');
@@ -1057,7 +1111,8 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
-    public function on_order_status_change($orders) {
+    public function on_order_status_change($orders)
+    {
         if (count($orders) == 1) {
             $orders = array($orders);
         }
@@ -1094,7 +1149,8 @@ class WeixinComponent extends Component {
         }
     }
 
-    public function send_wx_msg_sms($openid, $order, $good, $user) {
+    public function send_wx_msg_sms($openid, $order, $good, $user)
+    {
         if (empty($user) || substr($user['User']['username'], 0, 4) === "pys_") {
             return;
         }
@@ -1111,7 +1167,8 @@ class WeixinComponent extends Component {
         }
     }
 
-    public function send_pay_done_sms($order) {
+    public function send_pay_done_sms($order)
+    {
         $mobilephone = $order['Order']['consignee_mobilephone'];
         if ($order['Order']['ship_mark'] == "ziti") {
             $ziti_address = $this->get_ziti_info($order['Order']['consignee_id']);
@@ -1124,7 +1181,8 @@ class WeixinComponent extends Component {
         message_send($msg, $mobilephone);
     }
 
-    private function get_ziti_info($id) {
+    private function get_ziti_info($id)
+    {
         $offlineStoreM = ClassRegistry::init('OfflineStore');
         $ziti_address = $offlineStoreM->find('first', array(
             'conditions' => array('id' => $id)
@@ -1132,7 +1190,8 @@ class WeixinComponent extends Component {
         return $ziti_address['OfflineStore'];
     }
 
-    public function notify_seller_after_paid($order, $good) {
+    public function notify_seller_after_paid($order, $good)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['brand_info']['Brand']['creator']);
         $price = $order['Order']['total_all_price'];
@@ -1158,7 +1217,8 @@ class WeixinComponent extends Component {
         message_send($msg, $bussiness_mobilephone);
     }
 
-    public function send_share_product_arrival($user_open_id, $detail_url, $title, $order_id, $address, $user_info, $desc) {
+    public function send_share_product_arrival($user_open_id, $detail_url, $title, $order_id, $address, $user_info, $desc)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
@@ -1175,7 +1235,8 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
-    public function send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc) {
+    public function send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc)
+    {
         $post_data = array(
             "touser" => $open_id,
             "template_id" => 'ee_aZdUrvl_G4F6qSUgZufwnt8oWs9LpG1K8hZ0l3Yg',
@@ -1191,7 +1252,8 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
-    public function send_comment_template_msg($user_open_id, $detail_url, $title, $order_id, $order_date, $desc) {
+    public function send_comment_template_msg($user_open_id, $detail_url, $title, $order_id, $order_date, $desc)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => '4P1UuxeCmpU4xVZxBWlkUQDsIGbviUQG6zSakNzvUK4',
@@ -1207,7 +1269,8 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
-    public function send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title) {
+    public function send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => 'DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0',
@@ -1225,7 +1288,8 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
-    public function send_recommend_template_msg($user_open_id, $detail_url, $remark, $title, $product_name, $sharer) {
+    public function send_recommend_template_msg($user_open_id, $detail_url, $remark, $title, $product_name, $sharer)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
@@ -1251,7 +1315,8 @@ class WeixinComponent extends Component {
      * @param string $position
      * 推荐的模板消息
      */
-    public function send_recommend_notify_template_msg($user_open_id, $recommend_name, $title, $remark, $detail_url, $basic_info = '团长', $position = '团长') {
+    public function send_recommend_notify_template_msg($user_open_id, $recommend_name, $title, $remark, $detail_url, $basic_info = '团长', $position = '团长')
+    {
         //删除 [推荐报告通知]
         $post_data = array(
             "touser" => $user_open_id,
@@ -1277,7 +1342,8 @@ class WeixinComponent extends Component {
      * @param $share_title
      * 用户和分享者互动的模板消息
      */
-    public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $share_title) {
+    public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $share_title)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => 'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE',
@@ -1304,7 +1370,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 退款成功通知
      */
-    public function send_refund_order_notify($user_id, $title, $product_name, $refund_money, $detail_url, $order_id, $remark) {
+    public function send_refund_order_notify($user_id, $title, $product_name, $refund_money, $detail_url, $order_id, $remark)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $r = $oauthBindModel->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source(),)));
         if (empty($r)) {
@@ -1343,7 +1410,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 退款成功通知
      */
-    public function send_refunding_order_notify($user_id, $title, $product_name, $refund_money, $detail_url, $order_id, $remark) {
+    public function send_refunding_order_notify($user_id, $title, $product_name, $refund_money, $detail_url, $order_id, $remark)
+    {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $r = $oauthBindModel->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source())));
         if (empty($r)) {
@@ -1381,7 +1449,8 @@ class WeixinComponent extends Component {
      * @return send result
      * 尾款提醒通知
      */
-    public function send_remedial_order_msg($user_openid, $title, $detail_url, $price, $mobile, $remark) {
+    public function send_remedial_order_msg($user_openid, $title, $detail_url, $price, $mobile, $remark)
+    {
         //微信公众号 已经删除 [尾款提醒通知]
         $post_data = array(
             "touser" => $user_openid,
@@ -1410,7 +1479,8 @@ class WeixinComponent extends Component {
      * @return send result
      * 物流支付成功通知
      */
-    public function send_logistics_order_paid_msg($user_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $detail_url) {
+    public function send_logistics_order_paid_msg($user_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $detail_url)
+    {
         $post_data = array(
             "touser" => $user_openid,
             "template_id" => 'UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q',
@@ -1439,7 +1509,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 物流订单信息通知
      */
-    public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark) {
+    public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark)
+    {
         $post_data = array(
             "touser" => $user_openid,
             "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
@@ -1466,7 +1537,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 拼团失败消息
      */
-    public function send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url) {
+    public function send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => '0MAsqVfLFyvlZ3LFdhavuq2PXuMxgi1i7rJcmTP31HU',
@@ -1492,7 +1564,8 @@ class WeixinComponent extends Component {
      * @return bool
      * 拼团成功提醒
      */
-    public function send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url) {
+    public function send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
@@ -1535,8 +1608,41 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
+    /**
+     * @param $user_open_id
+     * @param $sharer_id
+     * @param $shop_name
+     * @param $title
+     * @param $desc
+     * @return bool
+     * 发送店铺动态通知
+     */
+    public function send_shop_notify_msg($user_open_id, $sharer_id, $shop_name, $title, $desc)
+    {
+        $post_data = [
+            "touser" => $user_open_id,
+            "template_id" => $this->wx_message_template_ids['SHOP_NOTIFY'],
+            "url" => $this->get_sharer_shop_url($sharer_id),
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => ["value" => $title],
+                "keyword1" => ["value" => $shop_name],
+                "keyword2" => ["value" => $desc],
+                "remark" => ["value" => '', "color" => "#FF8800"]
+            ]
+        ];
+        return $this->send_weixin_message($post_data);
+    }
 
-    public function send_share_paid_msg($user_open_id, $detail_url, $title, $desc) {
+    /**
+     * @param $user_open_id
+     * @param $detail_url
+     * @param $title
+     * @param $desc
+     * 分享打款通知
+     */
+    public function send_share_paid_msg($user_open_id, $detail_url, $title, $desc)
+    {
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => 'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE',
