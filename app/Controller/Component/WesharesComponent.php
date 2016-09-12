@@ -462,9 +462,18 @@ class WesharesComponent extends Component
 
     private function on_weshare_stopped($uid, $weshare_id)
     {
-        delete_redis_data_by_key('_'.$weshare_id);
+        delete_redis_data_by_key('_' . $weshare_id);
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         Cache::write(USER_RECOMMEND_WESHARES_CACHE_KEY . '_' . $uid, '');
+        $indexProductM = ClassRegistry::init('IndexProduct');
+        $indexProduct = $indexProductM->find('first', [
+            'conditions' => ['share_id' => $weshare_id],
+            'fields' => ['id', 'tag_id']
+        ]);
+        if (!empty($indexProduct)) {
+            $tag_id = $indexProduct['IndexProduct']['tag_id'];
+            Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY . '_' . $tag_id, '');
+        }
     }
 
     private function on_weshare_publish($uid, $weshare_id)

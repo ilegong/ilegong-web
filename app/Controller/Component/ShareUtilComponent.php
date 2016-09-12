@@ -2403,6 +2403,7 @@ class ShareUtilComponent extends Component
                 'conditions' => [
                     'IndexProduct.tag_id' => $tag_id,
                     'IndexProduct.deleted' => DELETED_NO,
+                    'Weshare.status' => WESHARE_STATUS_NORMAL
                 ],
                 'fields' => [
                     'IndexProduct.*',
@@ -2423,7 +2424,14 @@ class ShareUtilComponent extends Component
                         'alias' => 'UserLevel',
                         'conditions' => [
                             'User.id = UserLevel.data_id',
-                        ],
+                        ]
+                    ], [
+                        'type' => 'left',
+                        'table' => 'cake_weshares',
+                        'alias' => 'Weshare',
+                        'conditions' => [
+                            'Weshare.id = IndexProduct.share_id'
+                        ]
                     ]
                 ],
                 'order' => array('sort_val ASC')
