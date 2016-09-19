@@ -1,0 +1,36 @@
+<div class="users form">
+{{if $current_action=='admin_add'}}
+<?php 
+echo $this->MForm->create($current_model,array(    
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+ <?php 
+echo $this->MForm->create($current_model,array(
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+{{/if}}
+    <fieldset>
+    <?php
+    echo $this->MForm->input('id');
+        echo $this->MForm->input('role_id');
+        echo $this->MForm->input('mobilephone');
+?>
+{{if $current_action=='admin_add'}}
+    {{$this->MForm->input('password')}}
+{{else}}
+	{{$this->MForm->input('password',array('value'=>'','after'=>'若不修改密码，请留空'))}}
+{{/if}}
+<?php
+        
+        echo $this->MForm->input('nickname');
+		echo $this->MForm->input('sex');
+        echo $this->MForm->input('email');
+        echo $this->MForm->input('website');
+        echo $this->MForm->input('status');
+    ?>
+    </fieldset>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>

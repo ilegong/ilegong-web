@@ -370,6 +370,12 @@ class UtilController extends AppController {
 
 
 
+//    public function gen_password(){
+//        $password = $_REQUEST['password'];
+//    }
+
+
+
     //二维码快捷支付
     public function scan_qr_code_make_order($shareId){
         $uid = $this->currentUser['id'];
