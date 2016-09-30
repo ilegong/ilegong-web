@@ -1,0 +1,1 @@
+create table cake_msg_logs_bak select * from cake_msg_logs;
