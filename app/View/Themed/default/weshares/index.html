@@ -9,7 +9,8 @@
         <li {{if $tag==3}}class="focus"{{/if}}><a href="/weshares/index/3.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '3'});">零食其他</a>
         </li>
     </ul>
-    <div class="banners has-menu-top">
+    <!--has-menu-top-->
+    <div class="banners">
         {{if !empty($banners)}}
         <ul rn-carousel class="image-container" rn-carousel-index="carouselIndex">
             {{loop $banners $index $banner_item}}
