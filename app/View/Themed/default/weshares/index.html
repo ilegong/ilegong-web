@@ -1,5 +1,5 @@
 <div class="index-page" ng-controller="IndexCtrl as vm" ng-click="clickPage();" data-tag="{{$tag}}">
-    <ul class="clearfix menu-top">
+    <ul class="clearfix menu-top" style="display: none;">
         <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '0'});">新品爆款</a>
         </li>
         <li {{if $tag==1}}class="focus"{{/if}}><a href="/weshares/index/1.html" ng-click="vm.addPageClickLog({page:'index', position:'nav-bar', value: '1'});">水果蔬菜</a>
