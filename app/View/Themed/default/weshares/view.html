@@ -4,7 +4,7 @@
         <img ng-src="{{STATIC_HOST}}/static/img/back.png"/>
         <label>返回</label>
     </a>
-    <span class="btn" onclick="window.location.href='/weshares/add.html?from=detail'">我也要分享</span>
+    <span class="btn" ng-click="vm.createMyShare();">我也要分享</span>
 </div>
 <div class="weshare-view-page" ng-controller="WesharesViewCtrl as vm"
      id='weshareView'
@@ -549,6 +549,6 @@ $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.6.1'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.6.2'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.6.3'
 ), array('block' => 'scripts'))
 ?>

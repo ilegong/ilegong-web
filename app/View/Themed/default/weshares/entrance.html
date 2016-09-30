@@ -1,7 +1,7 @@
 <div class="share-entrance-page" ng-controller="DefaultCtrl as vm">
     <img class="entrance-banner" src="{{$STATIC_HOST}}/static/img/shareword.gif"/>
     <ul class="operations clearfix">
-        <li class="operation"><a href="/weshares/add"><img src="{{$STATIC_HOST}}/static/img/fillshareicon.gif"/></a></li>
+        <li class="operation"><a ng-click="vm.createShare();"><img src="{{$STATIC_HOST}}/static/img/fillshareicon.gif"/></a></li>
         <li class="operation"><a href="/weshares/my_shares_list.html"><img src="{{$STATIC_HOST}}/static/img/shareordericon.gif"/></a></li>
         <li class="operation"><a href="/weshares/my_shares_list/1.html"><img src="{{$STATIC_HOST}}/static/img/accrediticon.gif"/></a></li>
         <li class="operation"><a href="/weshares/my_provide_shares_list.html"><img src="{{$STATIC_HOST}}/static/img/fenxiao.png"/></a></li>

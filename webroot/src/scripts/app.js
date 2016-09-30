@@ -58,5 +58,12 @@
     function DefaultCtrl($rootScope) {
         $rootScope.loadingPage = false;
         $rootScope.checkHasUnRead();
+        var vm = this;
+        vm.createShare = createShare;
+        function createShare(){
+            alert("亲，服务器国庆放假维护升级中..");
+            return;
+            window.location.href="/weshares/add";
+        }
     }
 })(window, window.angular);
