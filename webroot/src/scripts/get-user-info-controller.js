@@ -218,6 +218,8 @@
         }
 
         function reOpenShare(id) {
+            alert("亲，服务器国庆放假维护升级中..");
+            return false;
             if (vm.loading) {
                 return false;
             }
