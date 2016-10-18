@@ -938,27 +938,24 @@ class WesharesController extends AppController
      */
     public function cloneShare($shareId)
     {
-        echo json_encode(array('success' => false));
+        $uid = $this->currentUser['id'];
+        $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
+        if (!$is_owner) {
+            echo json_encode(array('success' => false, 'reason' => 'not a proxy user.'));
+            exit();
+        }
+
+        $this->autoRender = false;
+        $this->log('Proxy ' . $uid . ' tries to clone share from share ' . $shareId, LOG_INFO);
+        $result = $this->ShareUtil->cloneShare($shareId, null);
+        if ($result['success']) {
+            $this->log('Proxy ' . $uid . ' clones share ' . $result['shareId'] . ' from share ' . $shareId . ' successfully', LOG_INFO);
+        } else {
+            $this->log('Proxy ' . $uid . ' failed to clone share from share ' . $shareId, LOG_ERR);
+        }
+
+        echo json_encode($result);
         exit();
-//
-//        $uid = $this->currentUser['id'];
-//        $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
-//        if (!$is_owner) {
-//            echo json_encode(array('success' => false, 'reason' => 'not a proxy user.'));
-//            exit();
-//        }
-//
-//        $this->autoRender = false;
-//        $this->log('Proxy ' . $uid . ' tries to clone share from share ' . $shareId, LOG_INFO);
-//        $result = $this->ShareUtil->cloneShare($shareId, null);
-//        if ($result['success']) {
-//            $this->log('Proxy ' . $uid . ' clones share ' . $result['shareId'] . ' from share ' . $shareId . ' successfully', LOG_INFO);
-//        } else {
-//            $this->log('Proxy ' . $uid . ' failed to clone share from share ' . $shareId, LOG_ERR);
-//        }
-//
-//        echo json_encode($result);
-//        exit();
     }
 
     /**

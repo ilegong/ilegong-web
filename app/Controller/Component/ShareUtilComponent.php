@@ -2628,19 +2628,18 @@ class ShareUtilComponent extends Component
         if ($type == 0) {
             //发送给分享的管理者
             //发送给没有购买的粉丝
-            return ['success' => false];
-//            $checkSendMsgResult = $this->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
-//            if (!$checkSendMsgResult['success']) {
-//                return $checkSendMsgResult;
-//            }
-//            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
-//            $this->saveSendMsgLog($send_msg_log_data);
-//            //$this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
-//            $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
-//            $pageCount = $fansPageInfo['pageCount'];
-//            $pageSize = $fansPageInfo['pageSize'];
-//            $this->RedisQueue->add_tasks('share', "/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
-//            return array('success' => true, 'msg' => $checkSendMsgResult['msg']);
+            $checkSendMsgResult = $this->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
+            if (!$checkSendMsgResult['success']) {
+                return $checkSendMsgResult;
+            }
+            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
+            $this->saveSendMsgLog($send_msg_log_data);
+            //$this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
+            $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+            $pageCount = $fansPageInfo['pageCount'];
+            $pageSize = $fansPageInfo['pageSize'];
+            $this->RedisQueue->add_tasks('share', "/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
+            return array('success' => true, 'msg' => $checkSendMsgResult['msg']);
         }
         if ($type == 1) {
             //发送给已购买的用户

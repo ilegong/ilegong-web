@@ -61,8 +61,7 @@
         var vm = this;
         vm.createShare = createShare;
         function createShare(){
-            alert("亲，服务器国庆放假维护升级中..");
-            return;
+            alert("敬请注意，朋友说平台即时起对分享政策进行重新调整，停止分享补贴，分享产品将收取5%的交易佣金，谢谢。");
             window.location.href="/weshares/add";
         }
     }

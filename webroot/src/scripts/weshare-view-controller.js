@@ -1080,8 +1080,7 @@
         }
 
         function createMyShare() {
-            alert("亲，服务器国庆放假维护升级中..");
-            return;
+            alert("敬请注意，朋友说平台即时起对分享政策进行重新调整，停止分享补贴，分享产品将收取5%的交易佣金，谢谢。");
             var wx_article = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209712305&idx=1&sn=ddb8431d97100d7e6305c2bc46d9ae75#rd';
             if (vm.currentUser['mobilephone'] && vm.currentUser['payment']) {
                 window.location.href = '/weshares/add?from=share_view';

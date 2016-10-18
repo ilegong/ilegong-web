@@ -156,25 +156,25 @@ function get_user_level_msg_count($val)
 {
     $settings = array(
         0 => array(
-            'limit' => 2,
+            'limit' => 1,
         ),
         1 => array(
-            'limit' => 2,
+            'limit' => 1,
         ),
         2 => array(
-            'limit' => 4,
+            'limit' => 2,
         ),
         3 => array(
-            'limit' => 4,
+            'limit' => 2,
         ),
         4 => array(
-            'limit' => 4,
+            'limit' => 2,
         ),
         5 => array(
-            'limit' => 4,
+            'limit' => 2,
         ),
         6 => array(
-            'limit' => 4,
+            'limit' => 2,
         )
     );
     return $settings[$val];
