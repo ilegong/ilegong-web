@@ -712,8 +712,8 @@
 
         //重新开团
         function cloneShare() {
-            alert("亲，服务器国庆放假维护升级中..");
-            return false;
+            //alert("亲，服务器国庆放假维护升级中..");
+            //return false;
 
             if (vm.cloneShareProcessing) {
                 return;
