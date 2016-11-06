@@ -193,8 +193,6 @@ class SharerApiController extends Controller
      */
     public function create_share()
     {
-        echo json_encode(array('success' => false));
-        return;
         $uid = $this->currentUser['id'];
         $postDataArray = $this->get_post_raw_data();
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
