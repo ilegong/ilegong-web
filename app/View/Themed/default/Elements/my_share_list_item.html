@@ -7,7 +7,7 @@
     <em ng-if="share.status == 1 && share.settlement == 1" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 1}">已结算</em>
     <label><span>编号：{{share.id}}</span>，<span>{{share.created}}</span></label>
 </a>
-<s>待发货订单<span>{{share.order_count}}，</span>交易金额<span>￥{{share.balance_money}}</span></s>
+<s><span style="color: red;float: left;" ng-if="share.type == 6">来自产品街</span>待发货订单<span>{{share.order_count}}，</span>交易金额<span>￥{{share.balance_money}}</span></s>
 <ul class="clearfix">
     <li ng-if="vm.canManageShareInfo(share)"><a ng-click="vm.delShare(share)">删除</a></li>
     <li ng-if="vm.canManageShareInfo(share)"><a href="/weshares/update/{{share.id}}">修改</a></li>
