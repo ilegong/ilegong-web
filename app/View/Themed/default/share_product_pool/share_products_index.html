@@ -1,4 +1,5 @@
 <div ng-controller="DefaultCtrl as vm">
+    {{if count($categories) > 1}}
     <ul class="menu-top clearfix">
         <?php
         $nav_li_width = 1/count($categories) * 100;
@@ -8,8 +9,9 @@
             href="/share_product_pool/share_products_index/{{$cate['id']}}.html">{{$cate['name']}}</a></li>
         {{/loop}}
     </ul>
+    {{/if}}
 
-    <div class="has-menu-top has-channel-bottom">
+    <div class="{{if count($categories) > 1}}has-menu-top{{/if}} has-channel-bottom">
         {{loop $share_products $product}}
         <div class="mb5">
             <a href="/share_product_pool/share_product_detail/{{$product['weshare_id']}}"><img
