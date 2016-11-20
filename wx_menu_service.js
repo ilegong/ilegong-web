@@ -13,7 +13,7 @@
         {
           "type": "view",
           "name": "我的分享",
-          "url": "http://www.tongshijia.com/weshares/my_shares_list.html?from=weixin"
+          "url": "http://www.tongshijia.com/weshares/entrance.html?from=weixin"
         },
         {
           "type": "view",
