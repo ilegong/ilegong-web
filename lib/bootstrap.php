@@ -168,13 +168,13 @@ function get_user_level_msg_count($val)
             'limit' => 2,
         ),
         4 => array(
-            'limit' => 2,
+            'limit' => 4,
         ),
         5 => array(
-            'limit' => 2,
+            'limit' => 4,
         ),
         6 => array(
-            'limit' => 2,
+            'limit' => 4,
         )
     );
     return $settings[$val];
