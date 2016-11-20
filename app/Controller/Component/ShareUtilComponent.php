@@ -2632,7 +2632,8 @@ class ShareUtilComponent extends Component
             if (!$checkSendMsgResult['success']) {
                 return $checkSendMsgResult;
             }
-            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
+            $logMsgType = $type == 1 ? MSG_LOG_NOTIFY_ORDER_TYPE : ß MSG_LOG_NOTIFY_TYPE;
+            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => $logMsgType, 'status' => SEND_TEMPLATE_MSG_ACTIVE_STATUS);
             $this->saveSendMsgLog($send_msg_log_data);
             //$this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
             $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
