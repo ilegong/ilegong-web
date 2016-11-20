@@ -146,15 +146,17 @@ class ShareManageComponent extends Component
         $data['deleted'] = 1;
 
         ClassRegistry::init('PoolProductCategory')->save($data);
+        Cache::write('pool_category_data_cache_key', '');
     }
 
     public function pool_product_category_add($name)
     {
         $data['category_name'] = $name;
         $data['deleted'] = 0;
-        $model = ClassRegistry::init('PoolProductCategory');
 
+        $model = ClassRegistry::init('PoolProductCategory');
         $model->save($data);
+        Cache::write('pool_category_data_cache_key', '');
 
         return true;
     }
