@@ -2629,6 +2629,12 @@ function is_super_share_manager($uid) {
     return in_array($uid, $super_manager);
 }
 
+
+function is_super_manager($uid){
+    $m = [633345, 141, 544307];
+    return in_array($uid, $m);
+}
+
 function is_product_manager($uid)
 {
     $m = [801447, 633345, 701166, 141, 544307];
