@@ -2802,6 +2802,8 @@ if(!function_exists("add_logs_to_es"))
 {
     function add_logs_to_es($log)
     {
+        return false;
+
         foreach ($log as $index => $item) {
             if (is_numeric($item)) {
                 $log[$index] = floatval($item);
