@@ -181,12 +181,15 @@ class WesharesController extends AppController
     /**
      * @param $uid
      * @param $weshare_id
+     * @param $weshare_creator
+     * @param $from
      * @return array
      * 生成返利日志
      */
-    private function create_rebate_log($uid, $weshare_id, $weshare_creator)
+    private function create_rebate_log($uid, $weshare_id, $weshare_creator, $from)
     {
-        if (empty($uid)) {
+        //lib bootstrap  get_order_from_tag_by_flag
+        if ($from == 2 || $from == 6 || empty($from) || empty($uid)) {
             return [0, 0];
         }
 
@@ -251,7 +254,7 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('weshare_id', $weshare_id);
         //根据粉丝来源生成返利日志
-        list($rebate_log_id, $u_own_id) = $this->create_rebate_log($uid, $weshare_id, $weshare['creator']);
+        list($rebate_log_id, $u_own_id) = $this->create_rebate_log($uid, $weshare_id, $weshare['creator'], $view_from);
         if ($rebate_log_id > 0 && $u_own_id > 0) {
             $this->set('recommend_id', $u_own_id);
             $this->set('rebateLogId', $rebate_log_id);
