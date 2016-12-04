@@ -551,7 +551,7 @@ function hlj_ziti_filter($var){
 }
 
 function has_permission_to_modify_order($user){
-    return in_array($user, array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge', 'huiyan', 'jiangwei'));
+    return in_array($user, array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'haozi'));
 }
 
 function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
