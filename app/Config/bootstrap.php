@@ -2603,7 +2603,7 @@ function replace_urls($string) {
  * 黑名单 乱发消息
  */
 function is_blacklist_user($uid) {
-    $blacklist = array(881026, 886291, 930585);
+    $blacklist = array(881026, 886291, 930585, 938819);
     return in_array($uid, $blacklist);
 }
 
