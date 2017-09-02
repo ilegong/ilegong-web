@@ -36,7 +36,7 @@ class DATABASE_CONFIG {
             'port' => '3306',
             'login' => 'root',
             'password' => '1qaz@WSX',
-            'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : 'database',
+            'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '51daifan',
             'prefix' => 'cake_',
             'encoding'=>'utf8mb4',
         );
@@ -47,7 +47,7 @@ class DATABASE_CONFIG {
             'port' => '3306',
             'login' => 'root',
             'password' => '1qaz@WSX',
-            'database' => 'database',
+            'database' => '51daifan',
             'prefix' => 'cake_',
             'encoding'=>'utf8mb4',
         );
