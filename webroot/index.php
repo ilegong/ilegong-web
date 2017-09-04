@@ -151,8 +151,8 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define("OAUTH2_ID","testclient");
     define("OAUTH2_SECRET","testpass");
 } else {
-    define('STATIC_HOST', 'http://dev.tongshijia.com');
-    define('IMAGES_HOST', 'http://dev.tongshijia.com');
+    define('STATIC_HOST', 'http://47.94.203.109');
+    define('IMAGES_HOST', 'http://47.94.203.109');
     define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
     define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
     define('JPUSH_IS_PRODUCT', false);
